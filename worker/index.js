@@ -23,7 +23,7 @@ export default {
 };
 
 function startSignIn(url, env) {
-  if (!env.GITHUB_CLIENT_ID) return page("error", { message: "Sign-in isn't set up yet: GITHUB_CLIENT_ID is missing on the Worker." });
+  if (!env.GITHUB_CLIENT_ID) return page("error", { error: "Sign-in isn't set up yet: GITHUB_CLIENT_ID is missing on the Worker." });
   const state = crypto.randomUUID();
   const github = new URL("https://github.com/login/oauth/authorize");
   github.searchParams.set("client_id", env.GITHUB_CLIENT_ID);
@@ -45,8 +45,9 @@ async function finishSignIn(request, url, env) {
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
   const cookie = /(?:^|;\s*)bt_oauth_state=([^;]+)/.exec(request.headers.get("Cookie") || "")?.[1];
-  if (!code) return page("error", { message: url.searchParams.get("error_description") || "GitHub didn't return a sign-in code." });
-  if (!state || state !== cookie) return page("error", { message: "Sign-in expired or came from another window. Close this window and try again." });
+  if (!code) return page("error", { error: url.searchParams.get("error_description") || "GitHub didn't return a sign-in code." });
+  if (!state || state !== cookie) return page("error", { error: "Sign-in expired or came from another window. Close this window and try again." });
+  if (!env.GITHUB_CLIENT_SECRET) return page("error", { error: "Sign-in isn't set up yet: GITHUB_CLIENT_SECRET is missing on the Worker." });
 
   const res = await fetch("https://github.com/login/oauth/access_token", {
     method: "POST",
@@ -54,16 +55,18 @@ async function finishSignIn(request, url, env) {
     body: JSON.stringify({ client_id: env.GITHUB_CLIENT_ID, client_secret: env.GITHUB_CLIENT_SECRET, code, redirect_uri: `${url.origin}/callback` }),
   });
   const data = await res.json().catch(() => ({}));
-  if (!data.access_token) return page("error", { message: data.error_description || "GitHub refused the sign-in." });
+  if (!data.access_token) return page("error", { error: `GitHub refused the sign-in: ${data.error_description || data.error || res.status}` });
   return page("success", { token: data.access_token, provider: "github" });
 }
 
-/** The standard Decap/Sveltia hand-off: tell /admin we're ready, then post the result to it only. */
+/** The standard Decap/Sveltia hand-off: tell /admin we're ready, then post the result to it only.
+ *  Success payload: { token, provider }. Error payload: { error, provider } (Sveltia shows `error`). */
 function page(status, payload) {
+  payload = { provider: "github", ...payload };
   const message = `authorization:github:${status}:${JSON.stringify(payload)}`;
   const html = `<!doctype html><meta charset="utf-8"><title>Signing in…</title>
 <body style="font-family:system-ui,sans-serif;padding:2rem;color:#0c2236">
-<p>${status === "success" ? "Signed in. You can close this window." : "Sign-in failed: " + escapeHtml(payload.message)}</p>
+<p>${status === "success" ? "Signed in. You can close this window." : "Sign-in failed: " + escapeHtml(payload.error)}</p>
 <script>
 (function () {
   var allowed = ${JSON.stringify(ALLOWED_ORIGINS)};
