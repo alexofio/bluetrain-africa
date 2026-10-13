@@ -1,0 +1,31 @@
+{
+  "name": "bluetrain-africa-site",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/content.mjs && vite",
+    "build": "node scripts/content.mjs && vite build && node scripts/postbuild.mjs",
+    "preview": "vite preview",
+    "build:single": "./build-single.sh",
+    "deploy": "npm run build && wrangler deploy",
+    "preview:worker": "npm run build && wrangler dev"
+  },
+  "dependencies": {
+    "framer-motion": "^11.11.17",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.3.2",
+    "marked": "^14.1.4",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.15",
+    "vite": "^5.4.11",
+    "vite-plugin-singlefile": "^2.3.3",
+    "wrangler": "^4.150.0"
+  }
+}

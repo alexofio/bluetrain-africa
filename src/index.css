@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Brand faces, self-hosted (Latin subset, woff2) */
+@font-face { font-family: "ITC Avant Garde Gothic Pro"; src: url("./assets/fonts/ITCAvantGardeGothicPro-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "ITC Avant Garde Gothic Pro"; src: url("./assets/fonts/ITCAvantGardeGothicPro-Demi.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "ITC Avant Garde Gothic Pro"; src: url("./assets/fonts/ITCAvantGardeGothicPro-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("./assets/fonts/Inter-Variable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+
+/* Theme tokens (RGB channels). Dark is the default design; light follows the
+   guideline neutrals (#f6f7f7 page, Deep Navy ink). */
+:root,
+:root[data-theme="dark"] {
+  --bg: 16 42 67;        /* Deep Navy #102A43 */
+  --bg-deep: 12 34 54;
+  --fg: 255 255 255;
+  --silver: 219 219 219; /* Bluetrain Light Grey */
+  --steel: 160 160 160;  /* Bluetrain Grey */
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: 246 247 247;
+  --bg-deep: 234 238 242;
+  --fg: 16 42 67;
+  --silver: 51 68 86;
+  --steel: 94 106 119;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg: 246 247 247;
+    --bg-deep: 234 238 242;
+    --fg: 16 42 67;
+    --silver: 51 68 86;
+    --steel: 94 106 119;
+    color-scheme: light;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(6rem + env(safe-area-inset-top, 0px));
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-navy font-sans text-silver antialiased transition-colors duration-300;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  ::selection { background: #2e8eff; color: #fff; }
+  :focus-visible { outline: 2px solid #2e8eff; outline-offset: 3px; border-radius: 6px; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+}
+
+@layer components {
+  /* 10% translucent glass surface (brief: backdrop-blur-md + 10% dark card) */
+  .glass {
+    @apply border border-white/10 bg-brand/10 backdrop-blur-md;
+  }
+  /* Delicate border glow on hover — paired with group/hover on the card */
+  .glow-hover {
+    @apply transition-[border-color,box-shadow] duration-300;
+  }
+  .glow-hover:hover,
+  .glow-hover:focus-within {
+    border-color: rgb(46 142 255 / 0.45);
+    box-shadow: 0 0 0 1px rgb(46 142 255 / 0.15), 0 18px 60px -24px rgb(46 142 255 / 0.45);
+  }
+  /* Film grain — an SVG noise tile at very low opacity, adds depth to flat dark surfaces */
+  .grain {
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  :root[data-theme="light"] .grain { opacity: 0.035; mix-blend-mode: multiply; }
+  .container-site {
+    @apply mx-auto w-full max-w-site px-5 sm:px-8 lg:px-12;
+  }
+}
+
+/* Bluetrain Informed — inline formatting written in the editor (links, bold, italics) */
+@layer components {
+  .informed-body a { color: theme("colors.brand.bright"); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  .informed-body a:hover { text-decoration-thickness: 2px; }
+  .informed-body strong { font-weight: 600; }
+}

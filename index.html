@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Bluetrain Africa — Strategy that moves. Ideas that connect. Work that delivers.</title>
+    <meta name="description" content="Bluetrain is an African strategy, marketing, media and technology consultancy helping brands understand their markets, engage their audiences and turn ideas into measurable business outcomes." />
+    <meta name="theme-color" content="#102A43" />
+    <!-- Carried over from the Wix site so Google Search Console and Meta domain verification keep working -->
+    <meta name="google-site-verification" content="klS3XMc9kbd6MV0WhNVl3N9lWHrquD7dxcg-cJRzia0" />
+    <meta name="facebook-domain-verification" content="n2idiez6wj5zyjariwjyg90ahxubc0" />
+    <!--route-meta-->
+    <!-- Set the theme before first paint to avoid a flash: saved choice, else system setting -->
+    <script>
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem("bluetrain-theme"); } catch (e) {}
+        if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        document.documentElement.dataset.theme = t;
+        document.querySelector('meta[name="theme-color"]').setAttribute("content", t === "light" ? "#f6f7f7" : "#102A43");
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <!--route-noscript--><div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

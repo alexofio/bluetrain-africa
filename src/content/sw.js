@@ -1,0 +1,272 @@
+/**
+ * Bluetrain Africa — Swahili (Kiswahili) content. Same shape as `en` in ./site.js.
+ * Brand and product names (Bluetrain Informed, OmniSEO, We Run Influence, client names)
+ * stay in their original form. Have a native-speaking copy editor review before launch.
+ */
+
+export const sw = {
+  meta: {
+    title: "Bluetrain Africa — Mkakati unaosonga. Mawazo yanayounganisha. Kazi inayoleta matokeo.",
+  },
+  nav: {
+    links: [
+      { label: "Kazi", href: "#work" },
+      { label: "Huduma", href: "#services" },
+      { label: "Kuhusu", href: "#about" },
+      { label: "Informed", href: "#/informed" },
+    ],
+    cta: "Weka Miadi",
+  },
+
+  hero: {
+    headline: ["Mkakati unaosonga.", "Mawazo yanayounganisha.", "Kazi inayoleta matokeo."],
+    body: "Bluetrain ni kampuni ya Kiafrika ya ushauri wa kimkakati, masoko, vyombo vya habari na teknolojia, inayosaidia chapa kuelewa masoko yao, kushirikisha hadhira zao na kugeuza mawazo kuwa matokeo ya kibiashara yanayopimika.",
+    kicker: "Tunafikiri. Tunaunganisha. Tunatekeleza.",
+    stat: null,
+    primaryCta: { label: "Anzisha Mradi", href: "#contact" },
+    secondaryCta: { label: "Tazama Kazi Zetu", href: "#work" },
+  },
+
+  about: {
+    heading: "Tumejengwa kwa namna chapa za kisasa zinavyohitaji kufanya kazi",
+    paragraphs: [
+      "Masoko si tena chaneli moja, kampeni moja au fani moja ya wakala.",
+      "Chapa zinahitaji maarifa. Mkakati. Vyombo vya habari. Maudhui. Teknolojia. Uzoefu. Upimaji. Na, kwa kiasi kinachoongezeka, uwezo wa kuviunganisha vyote.",
+      "Hapo ndipo Bluetrain inapoingia.",
+      "Tunafanya kazi katika safari nzima ya mteja, tukichanganya fikra za kimkakati, ufahamu wa masoko ya ndani, utaalamu wa kidijitali, teknolojia na utekelezaji ili kusaidia taasisi zenye malengo makubwa kukua.",
+      "Tukiwa na makao Dar es Salaam na mtazamo wa Kiafrika, Bluetrain inafanya kazi na biashara kote Tanzania na kanda nzima.",
+    ],
+    experience: "Kazi yetu inahusisha huduma za fedha, mawasiliano ya simu, magari, bidhaa za matumizi ya kila siku (FMCG), vinywaji, mali isiyohamishika, michezo ya kubahatisha, ukarimu, mashirika ya maendeleo na chapa za walaji.",
+  },
+
+  where: {
+    heading: "Tumejengwa Tanzania. Tunafikiri kikanda.",
+    body: [
+      "Bluetrain ilianzishwa Dar es Salaam na imekua ikiwa na azma pana ya Kiafrika.",
+      "Kazi yetu inazidi kuenea Afrika Mashariki na Kusini, ikiungwa mkono na shughuli na ushirikiano kote Tanzania, Kenya, Afrika Kusini, Zambia na masoko mengine ya kanda.",
+    ],
+    closing: "Tunaamini kwamba baadhi ya fursa za kuvutia zaidi duniani katika biashara, teknolojia na walaji zinaibuka Afrika. Tunakusudia kusaidia kuzijenga.",
+    countries: {
+      TZ: { name: "Tanzania", note: "Makao Makuu, Dar es Salaam" },
+      KE: { name: "Kenya", note: "Ofisi, Kenya" },
+      ZA: { name: "Afrika Kusini", note: "Ofisi, Cape Town" },
+      ZM: { name: "Zambia", note: "Soko la kikanda" },
+    },
+  },
+
+  services: {
+    heading: "Mshirika mmoja. Uwezo mwingi.",
+    intro: "Kazi yetu imepangwa kuzunguka uwezo unaoshikamana unaosaidia chapa kuelewa, kufikia, kushawishi na kushirikisha hadhira zao.",
+    items: [
+      {
+        id: "strategy",
+        title: "Mkakati na Ushauri",
+        tagline: "Tambua fursa. Jenga mpango.",
+        body: "Tunasaidia taasisi kufafanua zinakotaka kwenda, kuelewa fursa iliyopo na kujenga mikakati inayotekelezeka ya kufika huko.",
+        capabilities: ["Mkakati wa kuingia sokoni", "Mkakati wa kuingia masoko mapya", "Kubuni safari ya mteja", "Mkakati wa ukuaji"],
+        highlight: { value: "Ramani ya njia", label: "Matokeo si pendekezo tu." },
+      },
+      {
+        id: "growth",
+        title: "Utendaji na Ukuaji wa Kidijitali",
+        tagline: "Matangazo yaliyoundwa kuzunguka matokeo ya biashara",
+        body: "Tunapanga, kununua, kuboresha na kupima matangazo ya kidijitali yaliyoundwa kuleta matokeo ya maana ya kibiashara.",
+        capabilities: ["Google Ads", "Matangazo ya Meta", "Matangazo ya programmatic", "Uchanganuzi na attribution"],
+        highlight: { value: "OmniSEO", label: "Kuwasaidia wateja kuipata chapa popote wanapochagua kutafuta." },
+      },
+      {
+        id: "insights",
+        title: "Maarifa na Usikilizaji",
+        tagline: "Jua kinachosemwa. Elewa maana yake.",
+        body: "Tunasaidia taasisi kuelewa kile watu, vyombo vya habari na masoko vinasema — na maana yake kwa biashara yao.",
+        capabilities: ["Ufuatiliaji wa vyombo vya habari", "Usikilizaji wa mitandao ya kijamii", "Uchambuzi wa hisia", "Uchambuzi wa share of voice"],
+        highlight: { value: "Bluetrain Informed", label: "Nini kilitokea? Kwa nini ni muhimu? Tufanye nini sasa?" },
+      },
+      {
+        id: "influence",
+        title: "Ushawishi na Mitandao ya Kijamii",
+        tagline: "Ushawishi ni zaidi ya washawishi.",
+        body: "Tunaunganisha chapa na jamii, waundaji wa maudhui na mazungumzo yenye umuhimu.",
+        capabilities: ["Mkakati wa washawishi", "Ushirikiano na waundaji maudhui", "Usimamizi wa jamii", "Ripoti za mitandao ya kijamii"],
+        highlight: { value: "We Run Influence", label: "Watu huwashawishi watu." },
+      },
+      {
+        id: "experience",
+        title: "Matukio na Ushirikishaji wa Walaji",
+        tagline: "Unda kitu ambacho watu wanataka kushiriki.",
+        body: "Tunaunda matukio ya chapa ya ana kwa ana yanayogeuza hadhira kuwa washiriki.",
+        capabilities: ["Uamshaji wa chapa", "Usambazaji wa sampuli", "Promosheni kwa walaji", "Maonyesho ya barabarani"],
+        highlight: { value: "1,100+", label: "washiriki katika uamshaji wa Vodacom wa wiki mbili" },
+      },
+      {
+        id: "technology",
+        title: "Teknolojia na Uwezeshaji wa Masoko",
+        tagline: "Teknolojia inapaswa kufanya masoko kuwa rahisi, nadhifu na yanayopimika zaidi.",
+        body: "Tunajenga na kuunganisha zana za kidijitali zinazowezesha kampeni, safari za wateja na shughuli za masoko kufanya kazi.",
+        capabilities: ["Tovuti ndogo za kampeni", "Huduma za USSD", "Muunganisho wa WhatsApp", "Muunganisho wa API"],
+        highlight: { value: "Mamilioni", label: "ya misimbo ya kipekee ya promosheni ya Castle Lite" },
+      },
+    ],
+  },
+
+  work: {
+    heading: "Kugeuza mkakati kuwa utekelezaji",
+    filters: [
+      { id: "all", label: "Zote" },
+      { id: "experience", label: "Matukio" },
+      { id: "technology", label: "Teknolojia" },
+      { id: "growth", label: "Ukuaji" },
+    ],
+    items: {
+      "castle-lite": {
+        title: "Promosheni ya Walaji ya Castle Lite",
+        industry: "FMCG na Vinywaji",
+        metric: "Mamilioni ya misimbo ya kipekee",
+        body: "Promosheni kubwa ya walaji iliyowezeshwa na teknolojia, iliyohitaji mamilioni ya misimbo ya kipekee ya promosheni, mtiririko wa SMS, mantiki ya kikanda, udhibiti wa ustahiki na mbinu za mashindano.",
+      },
+      vodacom: {
+        title: "Ushirikishaji wa Walaji wa Vodacom",
+        industry: "Mawasiliano ya Simu",
+        metric: "Washiriki 1,100+, washindi 200+",
+        body: "Kampeni moja ilileta washiriki zaidi ya 1,100 na washindi zaidi ya 200 ndani ya kipindi cha uamshaji cha wiki mbili.",
+      },
+      "cps-africa": {
+        title: "CPS Africa",
+        industry: "Mali Isiyohamishika",
+        metric: "Masoko 3 ya kimataifa",
+        body: "Kazi hii inachanganya matangazo ya utafutaji yanayolipiwa, matangazo ya utendaji na uboreshaji wa kampeni katika masoko yakiwemo Ulaya, Mashariki ya Kati na Amerika Kaskazini.",
+      },
+    },
+  },
+
+  statement: {
+    heading: "Hatuamini kwamba mkakati unapaswa kuishia kwenye wasilisho.",
+    body: "Jukumu letu ni kusaidia kugeuza fikra kuwa vitendo — na vitendo kuwa matokeo.",
+  },
+
+  testimonials: [],
+
+  contact: {
+    heading: "Tuletee changamoto.",
+    lines: [
+      "Huhitaji kujua hasa ni huduma gani unayohitaji.",
+      "Tueleze unachojaribu kufanikisha.",
+      "Tutakusaidia kubaini yaliyobaki.",
+    ],
+    steps: [
+      { key: "building", question: "Unajenga nini?", options: ["Mkakati", "Kampeni", "Suluhisho la teknolojia", "Mshirika wa vyombo vya habari", "Mtazamo mpya"], allowOther: true },
+      { key: "timeline", question: "Ratiba yako ni ipi?", options: ["Haraka iwezekanavyo", "Ndani ya miezi 3", "Miezi 3–6", "Ninachunguza tu"] },
+      { key: "budget", question: "Bajeti yako ni kiasi gani?", options: ["Chini ya $10k", "$10k–$25k", "$25k–$75k", "$75k+", "Bado sina uhakika"] },
+    ],
+    address: ["Dar Village Office Park", "SNDBX, Ghorofa ya 2", "Rose Garden Road", "Mikocheni", "Dar es Salaam, Tanzania"],
+  },
+
+  footer: {
+    tagline: "Mkakati. Vyombo vya Habari. Ushawishi. Maarifa. Matukio. Teknolojia.",
+    // Add { label, href } entries once Privacy / Terms pages exist (a privacy notice is needed: the forms collect personal data)
+    legal: [],
+    copyright: "© 2026 Bluetrain Africa. Haki zote zimehifadhiwa.",
+  },
+
+  ui: {
+    skip: "Ruka hadi maudhui",
+    backToTop: "Bluetrain Africa, rudi juu",
+    openMenu: "Fungua menyu",
+    closeMenu: "Funga menyu",
+    toLight: "Badili hadi mwonekano mwangavu",
+    toDark: "Badili hadi mwonekano wa giza",
+    language: "Lugha",
+    countriesLink: "Tunakofanya kazi",
+    clientsLabel: "Baadhi ya wateja wetu",
+    signalLabel: "Mawimbi ya ishara yakienea kutoka sehemu moja",
+    filterLabel: "Chuja kazi",
+    showing: (n) => `Inaonyesha kazi ${n}`,
+    statementLabel: "Tunachoamini",
+    prev: "Ushuhuda uliotangulia",
+    next: "Ushuhuda unaofuata",
+    of: (i, n) => `${i} kati ya ${n}`,
+    mapLabel: "Ramani ya Afrika ikionyesha Tanzania, Kenya, Afrika Kusini na Zambia",
+    hq: "Makao Makuu",
+    form: {
+      step: (i, n) => `Hatua ${i} kati ya ${n}`,
+      reassurance: [
+        "Huhitaji kujua hasa ni huduma gani unayohitaji.",
+        "Kuchunguza tu ni jibu zuri kabisa.",
+        "Tunatumia taarifa zako kujibu ombi hili pekee.",
+      ],
+      somethingElse: "Kitu kingine",
+      tellUs: "Tueleze kwa sentensi moja",
+      otherPlaceholder: "mf. Kuzindua huduma Kenya robo ijayo",
+      name: "Jina lako",
+      email: "Barua pepe ya kazini",
+      note: "Kuna jambo jingine tunalopaswa kujua? (si lazima)",
+      back: "Rudi",
+      continue: "Endelea",
+      send: "Tuma ombi",
+      sending: "Inatuma…",
+      errBudget: "Chagua kiwango cha bajeti, au “Bado sina uhakika”.",
+      errName: "Weka jina lako ili tujue tumjibu nani.",
+      errEmail: "Weka barua pepe kama jina@kampuni.com.",
+      sentTitle: "Ombi limetumwa.",
+      sentBody: (name, email) => `Asante, ${name}. Tutakujibu kupitia ${email}.`,
+      mailtoTitle: "Ombi lako liko tayari kutumwa.",
+      mailtoBody: "Programu yako ya barua pepe imefunguka ikiwa na taarifa zote. Litume kutoka hapo nasi tutakujibu.",
+      error: (email) => `Ombi lako halikutumwa. Angalia muunganisho wako kisha ujaribu tena, au tuma barua pepe kwa ${email}.`,
+      talk: "Ungependa kuzungumza nasi moja kwa moja?",
+      bookLong: "Weka miadi ya mazungumzo ya dakika 30",
+      orEmail: "Au tuma barua pepe kwa",
+    },
+    informed: {
+      name: "Bluetrain Informed",
+      kicker: "Nini kilitokea? Kwa nini ni muhimu? Tufanye nini sasa?",
+      intro: "Taarifa za masoko, mafunzo kutoka kwenye kampeni na mitazamo kutoka kwa timu zetu kote Afrika.",
+      readAll: "Makala zote",
+      featured: "Inayoangaziwa",
+      alsoNew: "Mpya pia",
+      all: "Zote",
+      allMarkets: "Masoko yote",
+      search: "Tafuta makala",
+      searchHint: "Bonyeza / kutafuta",
+      results: (n) => `Makala ${n}`,
+      none: "Hakuna makala inayolingana. Jaribu neno jingine au ondoa vichujio.",
+      clear: "Ondoa vichujio",
+      loadMore: "Onyesha zaidi",
+      min: (n) => `Dakika ${n} kusoma`,
+      takeaways: "Mambo muhimu",
+      back: "Makala zote",
+      related: "Endelea kusoma",
+      englishOnly: "Makala hii inapatikana kwa Kiingereza kwa sasa.",
+      filterBy: "Chuja kwa mada",
+      filterMarket: "Chuja kwa soko",
+      progress: "Maendeleo ya kusoma",
+      newsletter: {
+        title: "Pokea Bluetrain Informed kwenye barua pepe yako",
+        body: "Barua pepe moja kwa mwezi. Taarifa za masoko na mafunzo ya kampeni, bila kelele.",
+        placeholder: "Barua pepe ya kazini",
+        cta: "Jiandikishe",
+        invalid: "Weka barua pepe kama jina@kampuni.com.",
+        done: "Umeongezwa kwenye orodha. Tukutane mwezi ujao.",
+        mailto: "Programu yako ya barua pepe imefunguka. Ituma nasi tutakuongeza.",
+      },
+      ctaTitle: "Unashughulikia jambo kama hili?",
+      ctaBody: "Tueleze unachojaribu kufanikisha. Tutakusaidia kubaini yaliyobaki.",
+    },
+    results: {
+      heading: "Matokeo, si shughuli tu",
+      items: [
+        { label: "washiriki", context: "Uamshaji wa Vodacom, kwa wiki mbili" },
+        { label: "washindi", context: "Kampeni hiyo hiyo ya Vodacom" },
+        { label: "masoko ya Afrika", context: "Tanzania, Kenya, Afrika Kusini, Zambia" },
+        { label: "sekta tunazohudumia", context: "Kuanzia huduma za fedha hadi michezo" },
+      ],
+    },
+    clientsWall: {
+      heading: "Chapa tulizofanya nazo kazi",
+      intro: "Benki na kampuni za simu, chapa za vinywaji na mashirika ya maendeleo: kazi yetu inagusa uchumi mzima.",
+      sectors: { finance: "Huduma za fedha", telco: "Mawasiliano ya simu", development: "Maendeleo", fmcg: "FMCG na Vinywaji", auto: "Magari", property: "Mali isiyohamishika", gaming: "Michezo ya kubahatisha", energy: "Nishati" },
+    },
+    notFound: { title: "Ukurasa huu umehamishwa au haupo tena.", body: "Tovuti yetu ina makazi mapya. Ukurasa uliokuwa ukiutafuta huenda umehamishwa. Jaribu mojawapo ya hizi.", home: "Nenda ukurasa wa mwanzo" },
+    sticky: { label: "Hatua za haraka" },
+    footer: { explore: "Gundua", visit: "Tutembelee", follow: "Tufuate", contact: "Wasiliana", offices: "Ofisi zetu", intents: [{ label: "Anzisha mradi", href: "#contact" }, { label: "Jiunge nasi", href: "mailto:info@bluetrain.co.tz?subject=Careers" }, { label: "Vyombo vya habari", href: "mailto:info@bluetrain.co.tz?subject=Press" }, { label: "Tusalimie", href: "mailto:info@bluetrain.co.tz" }] },
+  },
+};
