@@ -5,7 +5,7 @@
 
 backend:
   name: github
-  repo: GITHUB_OWNER/bluetrain-africa # ← set to the real repo, e.g. bluetrain-africa/website
+  repo: alexofio/bluetrain-africa
   branch: main
   base_url: https://bluetrain.africa # sign-in runs on the site's own Worker (/auth, /callback)
   commit_messages:
