@@ -9,7 +9,7 @@
 
 const EFFECTIVE = "2026-10-27";
 const ADDRESS = "Dar Village Office Park, SNDBX, 2nd Floor, Rose Garden Road, Mikocheni, P.O. Box 32329, Kijitonyama, Dar es Salaam, Tanzania";
-const EMAIL = "info@bluetrain.co.tz";
+const EMAIL = "legal@bluetrain.co.tz";
 
 export const legal = {
   en: {

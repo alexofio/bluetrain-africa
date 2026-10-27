@@ -91,6 +91,7 @@ export default function Footer() {
               <a key={l.href} href={to(l.href)} className="block hover:text-white">{l.label}</a>
             ))}
             <a href={to("#contact")} className="block hover:text-white">{L.contact}</a>
+            <a href={config.portalUrl} target="_blank" rel="noopener" className="block hover:text-white">{L.portal} ↗</a>
           </Col>
           <Col title={L.follow}>
             {config.socials.map((s) => (

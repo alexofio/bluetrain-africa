@@ -14,6 +14,7 @@ export const config = {
   // Bluetrain Portal public API: the discovery form and bookings land in the portal's Leads module.
   // If formEndpoint is emptied, the form falls back to a pre-filled email.
   portalApi: PORTAL_API,
+  portalUrl: "https://portal.bluetrain.africa",
   formEndpoint: `${PORTAL_API}/inquiry`,
   email: "info@bluetrain.co.tz",
   web: "bluetrain.africa",
@@ -376,6 +377,6 @@ export const en = {
       taken: "Sorry, that time was just taken. Please choose another.",
       error: (email) => `We couldn't complete the booking. Please try again, or email ${email}.`,
     },
-    footer: { explore: "Explore", visit: "Visit", follow: "Follow", contact: "Contact", offices: "Our offices", intents: [{ label: "Start a project", href: "#contact" }, { label: "Join the team", href: "mailto:info@bluetrain.co.tz?subject=Careers" }, { label: "Press", href: "mailto:info@bluetrain.co.tz?subject=Press" }, { label: "Say hello", href: "mailto:info@bluetrain.co.tz" }] },
+    footer: { explore: "Explore", visit: "Visit", follow: "Follow", contact: "Contact", portal: "Client portal", offices: "Our offices", intents: [{ label: "Start a project", href: "#contact" }, { label: "Join the team", href: "mailto:info@bluetrain.co.tz?subject=Careers" }, { label: "Press", href: "mailto:info@bluetrain.co.tz?subject=Press" }, { label: "Say hello", href: "mailto:info@bluetrain.co.tz" }] },
   },
 };

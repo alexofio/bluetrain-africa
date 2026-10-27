@@ -300,6 +300,6 @@ export const sw = {
       taken: "Samahani, muda huo umechukuliwa sasa hivi. Tafadhali chagua mwingine.",
       error: (email) => `Hatukuweza kukamilisha miadi. Jaribu tena, au tuma barua pepe kwa ${email}.`,
     },
-    footer: { explore: "Gundua", visit: "Tutembelee", follow: "Tufuate", contact: "Wasiliana", offices: "Ofisi zetu", intents: [{ label: "Anzisha mradi", href: "#contact" }, { label: "Jiunge nasi", href: "mailto:info@bluetrain.co.tz?subject=Careers" }, { label: "Vyombo vya habari", href: "mailto:info@bluetrain.co.tz?subject=Press" }, { label: "Tusalimie", href: "mailto:info@bluetrain.co.tz" }] },
+    footer: { explore: "Gundua", visit: "Tutembelee", follow: "Tufuate", contact: "Wasiliana", portal: "Lango la Wateja", offices: "Ofisi zetu", intents: [{ label: "Anzisha mradi", href: "#contact" }, { label: "Jiunge nasi", href: "mailto:info@bluetrain.co.tz?subject=Careers" }, { label: "Vyombo vya habari", href: "mailto:info@bluetrain.co.tz?subject=Press" }, { label: "Tusalimie", href: "mailto:info@bluetrain.co.tz" }] },
   },
 };
