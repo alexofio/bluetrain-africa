@@ -13,6 +13,7 @@ import InformedTeaser from "./components/informed/InformedTeaser";
 import InformedIndex from "./components/informed/InformedIndex";
 import InformedPost from "./components/informed/InformedPost";
 import Contact from "./components/Contact";
+import Booking from "./components/Booking";
 import Footer from "./components/Footer";
 import StickyCTA from "./components/StickyCTA";
 import Ambient from "./components/ui/Ambient";
@@ -74,6 +75,7 @@ export default function App() {
       window.scrollTo(0, 0);
     }
     if (route.name === "home") document.title = t.meta.title;
+    if (route.name === "book") document.title = `${t.ui.book.title} | Bluetrain Africa`;
     if (route.name === "notfound") document.title = `${t.ui.notFound.title} | Bluetrain Africa`;
     // GA4 (only when config.ga4Id is set): count each in-app page change
     if (typeof window.gtag === "function") {
@@ -95,6 +97,7 @@ export default function App() {
               {route.name === "home" && <Home />}
               {route.name === "informed" && <InformedIndex />}
               {route.name === "post" && <InformedPost slug={route.slug} />}
+              {route.name === "book" && <Booking preselect={route.with} />}
               {route.name === "notfound" && <NotFound />}
           </motion.div>
         </main>

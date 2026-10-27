@@ -143,7 +143,7 @@ export default function InformedPost({ slug }) {
               <p className="font-display text-xl font-bold text-white">{ui.ctaTitle}</p>
               <p className="mt-2 text-silver/75">{ui.ctaBody}</p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Button href={config.bookingUrl} target="_blank" rel="noreferrer">{t.nav.cta}</Button>
+                <Button href={config.bookingUrl}>{t.nav.cta}</Button>
                 <Button href="#contact" variant="secondary">{t.hero.primaryCta.label}</Button>
               </div>
             </div>

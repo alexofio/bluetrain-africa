@@ -125,6 +125,14 @@ for (const p of posts) {
   }));
 }
 
+// ---- Discovery-call booking (served at /book; people and times load from the Bluetrain Portal)
+write("book.html", page({
+  path: "/book",
+  title: `${en.ui.book.title} | Bluetrain Africa`,
+  description: en.ui.book.intro,
+  noscript: `<h1>${esc(en.ui.book.title)}</h1><p>${esc(en.ui.book.closedBody)}</p><p>${link(`mailto:${config.email}?subject=Discovery%20call`, config.email)}</p>`,
+}));
+
 // ---- 404 (Cloudflare serves this for any unknown path; the app shows its not-found view)
 write("404.html", page({ path: "/404", title: "Page not found | Bluetrain Africa", description: "This page has moved or no longer exists.", noindex: true }));
 
@@ -132,6 +140,7 @@ write("404.html", page({ path: "/404", title: "Page not found | Bluetrain Africa
 const urls = [
   { loc: "/", lastmod: today, priority: "1.0" },
   { loc: "/informed", lastmod: sorted[0]?.date ?? today, priority: "0.8" },
+  { loc: "/book", lastmod: today, priority: "0.7" },
   ...sorted.map((p) => ({ loc: `/informed/${p.slug}`, lastmod: p.date, priority: "0.6" })),
 ];
 write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
@@ -196,4 +205,4 @@ write("_headers", `/assets/*
   Strict-Transport-Security: max-age=31536000
 `);
 
-console.log(`postbuild: ${posts.length + 3} pages, ${redirects.length + dynamic.length} redirects, sitemap ${urls.length} URLs`);
+console.log(`postbuild: ${posts.length + 4} pages, ${redirects.length + dynamic.length} redirects, sitemap ${urls.length} URLs`);

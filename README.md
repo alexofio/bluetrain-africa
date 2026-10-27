@@ -49,8 +49,8 @@ npm run build:single  # self-contained preview file: dist-single/bluetrain-afric
 
 | What | Where |
 |---|---|
-| Booking link for "Book a Call" | `config.bookingUrl` |
-| Form endpoint (Formspree, Basin, serverless fn). Empty = opens a pre-filled email to info@bluetrain.co.tz | `config.formEndpoint` |
+| Booking page for "Book a Call" (`/book`, `/book?with=alex`) — people, times and invites come from the Bluetrain Portal | `config.bookingUrl` |
+| Discovery form → Bluetrain Portal Leads (`portal.bluetrain.africa/api/public/inquiry`). Empty = opens a pre-filled email | `config.formEndpoint` |
 | Social handles | `config.socials` |
 | Budget bands / currency | `contact.steps[2].options` |
 | Approved testimonials (slider appears automatically) | `testimonials` |

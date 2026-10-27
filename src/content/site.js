@@ -5,11 +5,16 @@
  * Swahili lives in ./sw.js with the identical shape.
  */
 
+// VITE_PORTAL_API lets a local preview talk to a local portal (npm run dev with VITE_PORTAL_API=http://localhost:8787/api/public).
+const PORTAL_API = (typeof import.meta !== "undefined" && import.meta.env?.VITE_PORTAL_API) || "https://portal.bluetrain.africa/api/public";
+
 export const config = {
-  // PLACEHOLDER — replace with the real scheduling link
-  bookingUrl: "https://calendly.com/bluetrain/discovery-call",
-  // PLACEHOLDER — form endpoint. If empty, the form opens a pre-filled email.
-  formEndpoint: "",
+  // Discovery-call booking page on this site (people, times and invites come from the Bluetrain Portal)
+  bookingUrl: "#/book",
+  // Bluetrain Portal public API: the discovery form and bookings land in the portal's Leads module.
+  // If formEndpoint is emptied, the form falls back to a pre-filled email.
+  portalApi: PORTAL_API,
+  formEndpoint: `${PORTAL_API}/inquiry`,
   email: "info@bluetrain.co.tz",
   web: "bluetrain.africa",
   timeZone: "Africa/Dar_es_Salaam",
@@ -337,6 +342,37 @@ export const en = {
     },
     notFound: { title: "This page has moved or no longer exists.", body: "Our website has a new home. The page you were looking for may have moved. Try one of these instead.", home: "Go to the homepage" },
     sticky: { label: "Quick actions" },
+    // ADDED — discovery-call booking page (/book)
+    book: {
+      kicker: "Discovery call",
+      title: "Book a 30-minute discovery call",
+      intro: "Choose who you'd like to speak to, then a time that suits you. You'll get a Google Calendar invitation with a Meet link.",
+      steps: ["Who", "When", "Your details"],
+      whoQ: "Who would you like to speak to?",
+      whenQ: "Pick a day and time",
+      detailsQ: "Your details",
+      loading: "Finding free times…",
+      noTimes: "No free times in the next two weeks. Choose someone else, or send us your brief.",
+      tzNote: (tz) => `Times are in your time zone (${tz}).`,
+      eatNote: "East Africa Time",
+      change: "Change",
+      company: "Company",
+      phone: "Phone (optional)",
+      topic: "What would you like to discuss? (optional)",
+      topicPlaceholder: "e.g. Launching a campaign in Kenya next quarter",
+      confirm: "Confirm booking",
+      booking: "Booking…",
+      duration: (m) => `${m} minutes · Google Meet`,
+      doneTitle: "You're booked.",
+      doneBody: (when, email) => `${when}. A calendar invitation with the Meet link is on its way to ${email}.`,
+      join: "Open the Meet link",
+      home: "Back to the homepage",
+      closedTitle: "Online booking isn't available right now.",
+      closedBody: "Send us your brief and we'll set up a call, or email us.",
+      brief: "Send your brief",
+      taken: "Sorry, that time was just taken. Please choose another.",
+      error: (email) => `We couldn't complete the booking. Please try again, or email ${email}.`,
+    },
     footer: { explore: "Explore", visit: "Visit", follow: "Follow", contact: "Contact", offices: "Our offices", intents: [{ label: "Start a project", href: "#contact" }, { label: "Join the team", href: "mailto:info@bluetrain.co.tz?subject=Careers" }, { label: "Press", href: "mailto:info@bluetrain.co.tz?subject=Press" }, { label: "Say hello", href: "mailto:info@bluetrain.co.tz" }] },
   },
 };

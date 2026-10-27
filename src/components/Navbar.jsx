@@ -85,7 +85,7 @@ export default function Navbar({ route = { name: "home" } }) {
         <div className="flex items-center gap-2">
           <LangToggle className="hidden sm:flex" />
           <ThemeToggle />
-          <Button href={config.bookingUrl} target="_blank" rel="noreferrer" size="sm" className="hidden sm:inline-flex">
+          <Button href={config.bookingUrl} size="sm" className="hidden sm:inline-flex">
             {nav.cta}
           </Button>
           <button
@@ -127,7 +127,7 @@ export default function Navbar({ route = { name: "home" } }) {
               <span className="text-sm text-steel">{t.ui.language}</span>
               <LangToggle layoutId="lang-pill-mobile" />
             </div>
-            <Button href={config.bookingUrl} target="_blank" rel="noreferrer" className="mt-2 w-full">
+            <Button href={config.bookingUrl} className="mt-2 w-full">
               {nav.cta}
             </Button>
           </motion.div>

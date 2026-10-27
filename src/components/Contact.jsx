@@ -5,6 +5,8 @@ import { useLang } from "../lib/i18n";
 import { spring } from "../lib/motion";
 import { Reveal, RevealItem } from "./ui/Reveal";
 import Button from "./ui/Button";
+import { to } from "../lib/router";
+import { attribution } from "../lib/attribution";
 
 function Option({ name, label, checked, onChange }) {
   return (
@@ -29,6 +31,8 @@ function DiscoveryForm() {
   const [data, setData] = useState({ building: -1, other: "", timeline: -1, budget: -1, name: "", email: "", note: "" });
   const [status, setStatus] = useState("idle"); // idle | sending | sent | mailto | error
   const [errors, setErrors] = useState({});
+  const startedAt = useRef(Date.now());
+  const [trap, setTrap] = useState(""); // hidden field: people never see it, bots fill it in
   const headingRef = useRef(null);
   const total = contact.steps.length;
   const current = contact.steps[step];
@@ -69,6 +73,8 @@ function DiscoveryForm() {
       email: data.email,
       note: data.note,
     };
+    // For the portal: spam checks and where the visitor came from (not shown in the email fallback)
+    const extra = { website: trap, elapsed: Date.now() - startedAt.current, ...attribution() };
 
     if (!config.formEndpoint) {
       const body = Object.entries(payload).map(([k, v]) => `${k}: ${v || "-"}`).join("\n");
@@ -81,7 +87,7 @@ function DiscoveryForm() {
       const res = await fetch(config.formEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, ...extra }),
       });
       setStatus(res.ok ? "sent" : "error");
     } catch {
@@ -101,7 +107,7 @@ function DiscoveryForm() {
         <p className="mt-3 max-w-[28rem] leading-relaxed text-silver/75">
           {status === "sent" ? f.sentBody(data.name.split(" ")[0], data.email) : f.mailtoBody}
         </p>
-        <Button href={config.bookingUrl} target="_blank" rel="noreferrer" variant="secondary" className="mt-8">
+        <Button href={config.bookingUrl} variant="secondary" className="mt-8">
           {t.nav.cta}
         </Button>
       </motion.div>
@@ -110,6 +116,9 @@ function DiscoveryForm() {
 
   return (
     <form onSubmit={submit} noValidate>
+      <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+        <label>Website<input tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} name="website" /></label>
+      </div>
       {/* progress — a real 3-step sequence, so numbered */}
       <div className="flex items-center justify-between gap-4">
         <p className="text-sm text-steel">
@@ -241,7 +250,7 @@ export default function Contact() {
           </div>
           <RevealItem className="mt-12 border-t border-white/10 pt-8">
             <p className="text-sm text-steel">{f.talk}</p>
-            <a href={config.bookingUrl} target="_blank" rel="noreferrer" className="mt-2 inline-block font-display text-xl font-semibold text-white underline decoration-brand-bright/60 underline-offset-[6px] hover:decoration-white">
+            <a href={to(config.bookingUrl)} className="mt-2 inline-block font-display text-xl font-semibold text-white underline decoration-brand-bright/60 underline-offset-[6px] hover:decoration-white">
               {f.bookLong}
             </a>
             <p className="mt-6 text-sm text-steel">

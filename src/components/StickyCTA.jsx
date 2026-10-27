@@ -27,7 +27,7 @@ export default function StickyCTA() {
           className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom,0px)+0.75rem)] z-40 flex gap-2 rounded-full border border-white/10 bg-navy/85 p-1.5 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.7)] backdrop-blur-md md:hidden"
         >
           <a href={to("#contact")} className="flex h-11 flex-1 items-center justify-center rounded-full font-display text-sm font-semibold text-white">{t.hero.primaryCta.label}</a>
-          <a href={config.bookingUrl} target="_blank" rel="noreferrer" className="flex h-11 flex-1 items-center justify-center rounded-full bg-white font-display text-sm font-semibold text-navy">{t.nav.cta}</a>
+          <a href={to(config.bookingUrl)} className="flex h-11 flex-1 items-center justify-center rounded-full bg-white font-display text-sm font-semibold text-navy">{t.nav.cta}</a>
         </motion.nav>
       )}
     </AnimatePresence>
