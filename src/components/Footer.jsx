@@ -110,7 +110,7 @@ export default function Footer() {
           <LocalTime />
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-steel">
             {footer.legal.map((l) => (
-              <a key={l.label} href={l.href} className="hover:text-white">{l.label}</a>
+              <a key={l.label} href={to(l.href)} className="hover:text-white">{l.label}</a>
             ))}
             <span>{footer.copyright}</span>
           </div>

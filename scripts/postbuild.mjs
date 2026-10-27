@@ -7,6 +7,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { config, en } from "../src/content/site.js";
 import { posts } from "../src/content/informed.js";
+import { legal } from "../src/content/legal.js";
 
 const DIST = new URL("../dist/", import.meta.url).pathname;
 const SITE = config.siteUrl.replace(/\/$/, "");
@@ -133,6 +134,20 @@ write("book.html", page({
   noscript: `<h1>${esc(en.ui.book.title)}</h1><p>${esc(en.ui.book.closedBody)}</p><p>${link(`mailto:${config.email}?subject=Discovery%20call`, config.email)}</p>`,
 }));
 
+// ---- Privacy Policy and Terms of Use (English is the binding version; the app adds Kiswahili)
+const inline = (t) => esc(t).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\[(.+?)\]\((.+?)\)/g, (_, txt, href) => `<a href="${href.startsWith("#/") ? href.slice(1) : href}" style="color:#8fb8ff">${txt}</a>`);
+for (const doc of ["privacy", "terms"]) {
+  const d = legal.en[doc];
+  const body = d.sections.map((s, i) => `<h2>${i + 1}. ${esc(s.h)}</h2>` + s.body.map((b) =>
+    b.h ? `<h3>${esc(b.h)}</h3>` : b.list ? `<ul>${b.list.map((li) => `<li>${inline(li)}</li>`).join("")}</ul>` : `<p>${inline(b.p)}</p>`).join("")).join("");
+  write(`${doc}.html`, page({
+    path: `/${doc}`,
+    title: `${d.title} | Bluetrain Africa`,
+    description: d.description,
+    noscript: `<h1>${esc(d.title)}</h1><p>Effective ${d.effective}</p>${d.intro.map((p) => `<p>${inline(p)}</p>`).join("")}${body}`,
+  }));
+}
+
 // ---- 404 (Cloudflare serves this for any unknown path; the app shows its not-found view)
 write("404.html", page({ path: "/404", title: "Page not found | Bluetrain Africa", description: "This page has moved or no longer exists.", noindex: true }));
 
@@ -141,6 +156,8 @@ const urls = [
   { loc: "/", lastmod: today, priority: "1.0" },
   { loc: "/informed", lastmod: sorted[0]?.date ?? today, priority: "0.8" },
   { loc: "/book", lastmod: today, priority: "0.7" },
+  { loc: "/privacy", lastmod: legal.en.privacy.effective, priority: "0.3" },
+  { loc: "/terms", lastmod: legal.en.terms.effective, priority: "0.3" },
   ...sorted.map((p) => ({ loc: `/informed/${p.slug}`, lastmod: p.date, priority: "0.6" })),
 ];
 write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>

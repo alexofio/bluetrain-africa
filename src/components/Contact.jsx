@@ -5,6 +5,7 @@ import { useLang } from "../lib/i18n";
 import { spring } from "../lib/motion";
 import { Reveal, RevealItem } from "./ui/Reveal";
 import Button from "./ui/Button";
+import PrivacyNotice from "./ui/PrivacyNotice";
 import { to } from "../lib/router";
 import { attribution } from "../lib/attribution";
 
@@ -223,6 +224,7 @@ function DiscoveryForm() {
           </Button>
         )}
       </div>
+      <PrivacyNotice className="mt-4" />
       {status === "error" && (
         <p role="alert" className="mt-4 text-sm text-amber">
           {f.error(config.email)}

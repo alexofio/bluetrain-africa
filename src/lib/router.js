@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
  *      /informed            → blog index
  *      /informed/<slug>     → article
  *      /book[?with=alex]    → discovery-call booking
+ *      /privacy, /terms     → legal pages
  *      anything else        → not found
  *  - Hash mode (opened as a local file, e.g. the single-file preview): #/informed, #/informed/<slug>
  *
@@ -34,6 +35,7 @@ function parse() {
   path = path.replace(/\/index\.html$/, "/").replace(/\.html$/, "").replace(/\/+$/, "") || "/";
   if (path === "/") return { name: "home", path, anchor };
   if (path === "/informed") return { name: "informed", path };
+  if (path === "/privacy" || path === "/terms") return { name: "legal", path, doc: path.slice(1) };
   if (path === "/book") return { name: "book", path, with: new URLSearchParams(window.location.search).get("with") || "" };
   const m = path.match(/^\/informed\/([\w-]+)$/);
   if (m) return { name: "post", path, slug: m[1] };

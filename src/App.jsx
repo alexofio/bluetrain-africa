@@ -15,6 +15,8 @@ import InformedPost from "./components/informed/InformedPost";
 import Contact from "./components/Contact";
 import Booking from "./components/Booking";
 import Footer from "./components/Footer";
+import Legal from "./components/Legal";
+import { legal } from "./content/legal";
 import StickyCTA from "./components/StickyCTA";
 import Ambient from "./components/ui/Ambient";
 import Button from "./components/ui/Button";
@@ -56,9 +58,18 @@ function Home() {
 }
 
 export default function App() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const route = useRoute();
-  const page = route.name === "post" ? `post-${route.slug}` : route.name;
+  const page = route.name === "post" ? `post-${route.slug}` : route.name === "legal" ? `legal-${route.doc}` : route.name;
+
+  // Titles follow the page and the language (articles set their own in InformedPost)
+  useEffect(() => {
+    if (route.name === "home") document.title = t.meta.title;
+    if (route.name === "informed") document.title = "Bluetrain Informed | Market notes and campaign lessons from Africa";
+    if (route.name === "book") document.title = `${t.ui.book.title} | Bluetrain Africa`;
+    if (route.name === "legal") document.title = `${(legal[lang] || legal.en)[route.doc].title} | Bluetrain Africa`;
+    if (route.name === "notfound") document.title = `${t.ui.notFound.title} | Bluetrain Africa`;
+  }, [page, lang]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Page changes start at the top; #anchors (also when arriving from a blog page) land on their section
   useEffect(() => {
@@ -74,9 +85,6 @@ export default function App() {
     } else if (route.name !== "home" || !route.anchor) {
       window.scrollTo(0, 0);
     }
-    if (route.name === "home") document.title = t.meta.title;
-    if (route.name === "book") document.title = `${t.ui.book.title} | Bluetrain Africa`;
-    if (route.name === "notfound") document.title = `${t.ui.notFound.title} | Bluetrain Africa`;
     // GA4 (only when config.ga4Id is set): count each in-app page change
     if (typeof window.gtag === "function") {
       window.gtag("event", "page_view", { page_path: window.location.pathname, page_location: window.location.href, page_title: document.title });
@@ -98,6 +106,7 @@ export default function App() {
               {route.name === "informed" && <InformedIndex />}
               {route.name === "post" && <InformedPost slug={route.slug} />}
               {route.name === "book" && <Booking preselect={route.with} />}
+              {route.name === "legal" && <Legal doc={route.doc} />}
               {route.name === "notfound" && <NotFound />}
           </motion.div>
         </main>

@@ -237,8 +237,10 @@ export const en = {
 
   footer: {
     tagline: "Strategy. Media. Influence. Insights. Experiences. Technology.",
-    // Add { label, href } entries once Privacy / Terms pages exist (a privacy notice is needed: the forms collect personal data)
-    legal: [],
+    legal: [
+      { label: "Privacy Policy", href: "#/privacy" },
+      { label: "Terms of Use", href: "#/terms" },
+    ],
     copyright: "© 2026 Bluetrain Africa. All rights reserved.",
   },
 
@@ -340,6 +342,7 @@ export const en = {
       intro: "Banks and telcos, beverage brands and development organisations: the work spans the economy.",
       sectors: { finance: "Financial services", telco: "Telecommunications", development: "Development", fmcg: "FMCG & Beverages", auto: "Automotive", property: "Real estate", gaming: "Gaming", energy: "Energy" },
     },
+    privacyNotice: { before: "We use your details only to reply and arrange your call. See our", link: "Privacy Policy", after: "." },
     notFound: { title: "This page has moved or no longer exists.", body: "Our website has a new home. The page you were looking for may have moved. Try one of these instead.", home: "Go to the homepage" },
     sticky: { label: "Quick actions" },
     // ADDED — discovery-call booking page (/book)

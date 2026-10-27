@@ -19,8 +19,7 @@ export function LanguageProvider({ children }) {
   const [lang, setLangState] = useState(initialLang);
 
   useEffect(() => {
-    document.documentElement.lang = lang;
-    document.title = dictionaries[lang].meta.title;
+    document.documentElement.lang = lang; // page titles are set per route in App
   }, [lang]);
 
   const setLang = useCallback((next) => {

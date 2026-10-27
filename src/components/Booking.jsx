@@ -5,6 +5,7 @@ import { useLang } from "../lib/i18n";
 import { spring } from "../lib/motion";
 import { attribution } from "../lib/attribution";
 import Button from "./ui/Button";
+import PrivacyNotice from "./ui/PrivacyNotice";
 
 /**
  * Discovery-call booking (/book, /book?with=alex). People, free times and the calendar invitation all
@@ -287,6 +288,7 @@ export default function Booking({ preselect = "" }) {
                       <button type="button" onClick={() => setStep(1)} className="text-sm text-silver/70 hover:text-white">{f.back}</button>
                       <Button type="submit" disabled={status === "sending"}>{status === "sending" ? b.booking : b.confirm}</Button>
                     </div>
+                    <PrivacyNotice className="mt-4" />
                   </motion.form>
                 )}
               </AnimatePresence>
