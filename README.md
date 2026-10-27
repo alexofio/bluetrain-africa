@@ -81,9 +81,7 @@ Cloudflare Workers Builds watches the GitHub repo: every push to `main` runs `np
 
 - `dist/` is served as static files: one HTML file per page, `404.html`, `sitemap.xml`, `robots.txt`,
   `_redirects` (old Wix URLs → new pages, 301; edit in `scripts/postbuild.mjs`) and `_headers`.
-- `worker/index.js` only handles `/auth` and `/callback`: GitHub sign-in for the editor.
-- Worker secrets: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` (from the GitHub OAuth app whose callback
-  URL is `https://bluetrain.africa/callback`). For local testing put them in `.dev.vars`.
+- `worker/index.js` only handles `/media/…` (portal images).
 - Local check of the whole thing: `npm run preview:worker` → http://localhost:8787
 
 ## Content from the Bluetrain Portal (since 28 Oct 2026)
@@ -101,23 +99,10 @@ Cloudflare deploy hook; the page is live about two minutes later.
   BreadcrumbList structured data, and the portal's slug-change redirects.
 - Local: `PORTAL_URL=http://127.0.0.1:8787 npm run dev` uses a local portal.
 
-## Bluetrain Informed (blog) — the old editor at /admin (being retired; edits there no longer publish)
+## Old editor (retired)
 
-Articles are Markdown files in `content/informed/<slug>.md`. The team edits them at
-**bluetrain.africa/admin** (Sveltia CMS, config in `public/admin/config.yml`), signing in with GitHub.
-Saving commits to `main`, which republishes the site. Editors need a GitHub account with write access
-to the repo.
-
-- `scripts/content.mjs` reads the files before every build, checks the fields (the build stops with a
-  clear message if, say, a category is wrong), and generates `src/content/informed.posts.generated.js`.
-- Front matter: title, standfirst, date, category, format, markets, author, author_role, cover_image,
-  cover_alt, cover_art (1–12), takeaways, sw_title, sw_standfirst, sw_takeaways, sw_body, featured,
-  read_time (blank = from word count), draft (true = not published). The Markdown below is the body.
-- Body: `##` headings, paragraphs with bold/italic/links, bullet and numbered lists, `>` quotes (a last
-  line starting with "—" is the attribution), and images on their own line (`![alt](src "caption")`).
-- Uploaded images go to `public/images/informed/`.
-- Categories, markets and formats are defined in `src/content/informed.js` and must match the editor's
-  options in `public/admin/config.yml`.
+The Sveltia editor at /admin and its GitHub sign-in (/auth, /callback) were removed once the portal had published
+live. The Markdown files in content/informed/ are kept as an archive; the build no longer reads them.
 
 ## Pages
 
