@@ -29,23 +29,8 @@ export const config = {
   ga4Id: "",
   // Live address, used for canonical URLs, the sitemap and share previews
   siteUrl: "https://bluetrain.africa",
-  // Client permissions must be confirmed before launch. Add `logo: "/clients/x.svg"` to use a logo.
-  // `sector` groups the clients wall. `logo` (optional): monochrome SVG in src/assets/clients,
-  // imported in components/ClientWall.jsx — add once written permission is in.
-  clients: [
-    { name: "CRDB Bank", sector: "finance" },
-    { name: "Vodacom", sector: "telco" },
-    { name: "UNICEF", sector: "development" },
-    { name: "Jack Daniel's", sector: "fmcg" },
-    { name: "Castle Lite", sector: "fmcg" },
-    { name: "Changan", sector: "auto" },
-    { name: "CPS Africa", sector: "property" },
-    { name: "Dunlop", sector: "auto" },
-    { name: "Kilombero Sugar", sector: "fmcg" },
-    { name: "Meridianbet", sector: "gaming" },
-    { name: "Auto Inc", sector: "auto" },
-    { name: "Loti Gas", sector: "energy" },
-  ],
+  // Clients (client wall + ticker) and case studies are managed in the Bluetrain Portal → Website Content,
+  // with each client's logo/results/quote permission recorded there. See src/content/cms.js.
   // Results strip — every figure here is from the approved copy. Labels live in each language file.
   results: [
     { value: 1100, suffix: "+" },
@@ -55,12 +40,6 @@ export const config = {
   ],
   // PLACEHOLDER — newsletter signup endpoint (Mailchimp, Brevo…). Empty = opens a pre-filled email.
   newsletterEndpoint: "",
-  // Case-study visuals and filtering are language-independent
-  work: [
-    { id: "castle-lite", categories: ["experience", "technology"], image: null, art: "codes" },
-    { id: "vodacom", categories: ["experience"], image: null, art: "crowd" },
-    { id: "cps-africa", categories: ["growth"], image: null, art: "routes" },
-  ],
   serviceIcons: ["strategy", "growth", "insights", "influence", "experience", "technology"],
   // ADDED — order controls display order; ids match the map paths
   countries: ["TZ", "KE", "ZA", "ZM"],
@@ -183,32 +162,16 @@ export const en = {
 
   work: {
     heading: "Turning strategy into execution",
-    filters: [
-      { id: "all", label: "All" },
-      { id: "experience", label: "Experience" },
-      { id: "technology", label: "Technology" },
-      { id: "growth", label: "Growth" },
-    ],
-    items: {
-      "castle-lite": {
-        title: "Castle Lite Consumer Promotion",
-        industry: "FMCG & Beverages",
-        metric: "Millions of unique codes",
-        body: "A large-scale technology-enabled consumer promotion requiring millions of unique promotional codes, SMS workflows, regional logic, eligibility controls and competition mechanics.",
-      },
-      vodacom: {
-        title: "Vodacom Consumer Engagement",
-        industry: "Telecommunications",
-        metric: "1,100+ participants, 200+ winners",
-        body: "One campaign delivered more than 1,100 consumer participants and over 200 winners across a two-week activation period.",
-      },
-      "cps-africa": {
-        title: "CPS Africa",
-        industry: "Real Estate",
-        metric: "3 international markets",
-        body: "The work combines paid search, performance media and campaign optimisation across markets including Europe, the Middle East and North America.",
-      },
-    },
+    all: "All",
+    // Case-study capabilities (filters), in display order
+    capabilities: { experience: "Experience", technology: "Technology", growth: "Growth", strategy: "Strategy", insights: "Insights", influence: "Influence" },
+    readMore: "Read the case study",
+    back: "All work",
+    results: "Results",
+    gallery: "In pictures",
+    client: "Client",
+    period: "Period",
+    related: "Related reading",
   },
 
   statement: {
@@ -311,6 +274,8 @@ export const en = {
       loadMore: "Load more",
       min: (n) => `${n} min read`,
       takeaways: "Key takeaways",
+      answer: "In short",
+      faq: "Frequently asked questions",
       back: "All articles",
       related: "Keep reading",
       englishOnly: null,
@@ -346,6 +311,7 @@ export const en = {
     privacyNotice: { before: "We use your details only to reply and arrange your call. See our", link: "Privacy Policy", after: "." },
     notFound: { title: "This page has moved or no longer exists.", body: "Our website has a new home. The page you were looking for may have moved. Try one of these instead.", home: "Go to the homepage" },
     sticky: { label: "Quick actions" },
+    preview: { banner: "Draft preview: not published. Only people with this link can see it.", loading: "Loading the draft…", error: "This preview can't be shown." },
     // ADDED — discovery-call booking page (/book)
     book: {
       kicker: "Discovery call",

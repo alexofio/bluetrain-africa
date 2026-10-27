@@ -5,3 +5,4 @@ dist-single/
 .dev.vars
 src/content/informed.posts.generated.js
 .DS_Store
+src/content/cms.generated.js

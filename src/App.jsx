@@ -14,6 +14,8 @@ import InformedIndex from "./components/informed/InformedIndex";
 import InformedPost from "./components/informed/InformedPost";
 import Contact from "./components/Contact";
 import Booking from "./components/Booking";
+import CaseStudy from "./components/CaseStudy";
+import Preview from "./components/Preview";
 import Footer from "./components/Footer";
 import Legal from "./components/Legal";
 import { legal } from "./content/legal";
@@ -60,7 +62,7 @@ function Home() {
 export default function App() {
   const { t, lang } = useLang();
   const route = useRoute();
-  const page = route.name === "post" ? `post-${route.slug}` : route.name === "legal" ? `legal-${route.doc}` : route.name;
+  const page = route.name === "post" ? `post-${route.slug}` : route.name === "work" ? `work-${route.slug}` : route.name === "legal" ? `legal-${route.doc}` : route.name;
 
   // Titles follow the page and the language (articles set their own in InformedPost)
   useEffect(() => {
@@ -105,6 +107,8 @@ export default function App() {
               {route.name === "home" && <Home />}
               {route.name === "informed" && <InformedIndex />}
               {route.name === "post" && <InformedPost slug={route.slug} />}
+              {route.name === "work" && <CaseStudy slug={route.slug} />}
+              {route.name === "preview" && <Preview token={route.token} lang={route.lang} />}
               {route.name === "book" && <Booking preselect={route.with} />}
               {route.name === "legal" && <Legal doc={route.doc} />}
               {route.name === "notfound" && <NotFound />}

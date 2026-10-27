@@ -1,11 +1,11 @@
 /**
  * bluetrain.africa — Cloudflare Worker.
  *
- * Everything on the site is served as static files (dist/). The only code that runs is GitHub
- * sign-in for the Bluetrain Informed editor at /admin (Sveltia CMS):
- *   /auth      → sends the editor to GitHub to approve access
- *   /callback  → swaps GitHub's one-time code for an access token and hands it back to /admin
- * wrangler.jsonc routes just these two paths here; every other request goes straight to the files.
+ * Everything on the site is served as static files (dist/). Code runs only for:
+ *   /media/…   → images published from the Bluetrain Portal (R2), fetched from the portal and cached at the edge,
+ *                so pages never depend on the portal's address
+ *   /auth, /callback → GitHub sign-in for the old editor at /admin (removed once the portal has published live)
+ * wrangler.jsonc routes just these paths here; every other request goes straight to the files.
  *
  * Secrets (Worker → Settings → Variables and Secrets): GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET.
  */
@@ -14,13 +14,35 @@
 const ALLOWED_ORIGINS = ["https://bluetrain.africa", "https://www.bluetrain.africa", "http://localhost:8787", "http://localhost:5173"];
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname.startsWith("/media/")) return media(request, url, env, ctx);
     if (url.pathname === "/auth") return startSignIn(url, env);
     if (url.pathname === "/callback") return finishSignIn(request, url, env);
     return env.ASSETS.fetch(request);
   },
 };
+
+const PORTAL = "https://portal.bluetrain.africa";
+
+async function media(request, url, env, ctx) {
+  if (request.method !== "GET" && request.method !== "HEAD") return new Response("Method not allowed", { status: 405 });
+  if (!/^\/media\/m_[a-f0-9]{20}\/[\w.]+$/.test(url.pathname)) return new Response("Not found", { status: 404 });
+  const cache = caches.default;
+  const key = new Request(url.origin + url.pathname);
+  let res = await cache.match(key);
+  if (!res) {
+    const up = await fetch(`${env.PORTAL_URL || PORTAL}/api/public${url.pathname}`, { cf: { cacheTtl: 86400 } });
+    if (!up.ok) return new Response("Not found", { status: up.status === 404 ? 404 : 502, headers: { "Cache-Control": "no-store" } });
+    const h = new Headers(up.headers);
+    h.set("Cache-Control", up.headers.get("Cache-Control") || "public, max-age=86400");
+    h.delete("Access-Control-Allow-Origin");
+    h.delete("Set-Cookie");
+    res = new Response(up.body, { status: 200, headers: h });
+    ctx.waitUntil(cache.put(key, res.clone()));
+  }
+  return res;
+}
 
 function startSignIn(url, env) {
   if (!env.GITHUB_CLIENT_ID) return page("error", { error: "Sign-in isn't set up yet: GITHUB_CLIENT_ID is missing on the Worker." });

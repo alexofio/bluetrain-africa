@@ -1,4 +1,4 @@
-import { config } from "../content/site";
+import { clients as cmsClients } from "../content/cms";
 import { useLang } from "../lib/i18n";
 import { Reveal, RevealItem } from "./ui/Reveal";
 
@@ -24,7 +24,7 @@ function ClientMark({ client, duplicate }) {
 export default function ClientTicker() {
   const { t } = useLang();
   const about = t.about;
-  const clients = config.clients;
+  const clients = cmsClients;
   const loop = [...clients, ...clients];
   return (
     <section id="about" className="relative border-t border-white/[0.06] py-24 lg:py-32">

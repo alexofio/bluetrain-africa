@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
  *      /                    → home      (/#services etc. scroll to sections)
  *      /informed            → blog index
  *      /informed/<slug>     → article
+ *      /work/<slug>         → case study
+ *      /preview?token=…     → draft preview from the Bluetrain Portal (noindex)
  *      /book[?with=alex]    → discovery-call booking
  *      /privacy, /terms     → legal pages
  *      anything else        → not found
@@ -36,6 +38,9 @@ function parse() {
   if (path === "/") return { name: "home", path, anchor };
   if (path === "/informed") return { name: "informed", path };
   if (path === "/privacy" || path === "/terms") return { name: "legal", path, doc: path.slice(1) };
+  if (path === "/preview") { const q = new URLSearchParams(window.location.search); return { name: "preview", path, token: q.get("token") || "", lang: q.get("lang") || "" }; }
+  const w = path.match(/^\/work\/([\w-]+)$/);
+  if (w) return { name: "work", path, slug: w[1] };
   if (path === "/book") return { name: "book", path, with: new URLSearchParams(window.location.search).get("with") || "" };
   const m = path.match(/^\/informed\/([\w-]+)$/);
   if (m) return { name: "post", path, slug: m[1] };

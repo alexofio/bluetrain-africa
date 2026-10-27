@@ -8,46 +8,13 @@ import Button from "../ui/Button";
 import PostCover from "./PostCover";
 import { PostCard, Tags, Meta, Newsletter, marketLabel } from "./shared";
 import { to } from "../../lib/router";
+import Block from "./Blocks";
 
-// Body blocks come from Markdown (scripts/content.mjs). `html` holds inline formatting only — bold,
-// italics and links written by the team in the editor.
-const H = (html) => ({ dangerouslySetInnerHTML: { __html: html } });
-
-function Block({ b }) {
-  if (b.h) return <h2 className="mt-12 font-display text-2xl font-bold tracking-[-0.015em] text-white sm:text-[1.75rem]">{b.h}</h2>;
-  if (b.list) {
-    const Tag = b.ordered ? "ol" : "ul";
-    return (
-      <Tag className="mt-6 space-y-3">
-        {b.list.map((li, i) => (
-          <li key={i} className="relative pl-6 before:absolute before:left-0 before:top-[0.7em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-brand-bright" {...H(li)} />
-        ))}
-      </Tag>
-    );
-  }
-  if (b.quote)
-    return (
-      <figure className="my-12 border-l-2 border-brand-bright pl-6">
-        <blockquote className="font-display text-2xl font-semibold leading-snug tracking-[-0.015em] text-white sm:text-3xl">
-          “<span {...H(b.quote)} />”
-        </blockquote>
-        {b.by && <figcaption className="mt-3 text-sm text-steel">{b.by}</figcaption>}
-      </figure>
-    );
-  if (b.img)
-    return (
-      <figure className="my-10">
-        <img src={b.img} alt={b.alt} loading="lazy" className="w-full rounded-3xl border border-paper/10" />
-        {b.caption && <figcaption className="mt-3 text-sm text-steel">{b.caption}</figcaption>}
-      </figure>
-    );
-  return <p className="mt-6" {...H(b.html ?? b.p ?? "")} />;
-}
-
-export default function InformedPost({ slug }) {
+/** `draft` = an unpublished article shown on /preview (same layout, no related list). */
+export default function InformedPost({ slug, draft }) {
   const { lang, t } = useLang();
   const ui = t.ui.informed;
-  const post = posts.find((p) => p.slug === slug);
+  const post = draft || posts.find((p) => p.slug === slug);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 30 });
 
@@ -64,7 +31,7 @@ export default function InformedPost({ slug }) {
     );
   }
 
-  const related = posts
+  const related = draft ? [] : posts
     .filter((p) => p.slug !== post.slug)
     .map((p) => ({ p, score: (p.category === post.category ? 2 : 0) + p.markets.filter((m) => post.markets.includes(m)).length }))
     .sort((a, b) => b.score - a.score || b.p.date.localeCompare(a.p.date))
@@ -115,7 +82,7 @@ export default function InformedPost({ slug }) {
           transition={{ ...spring.soft, delay: 0.1 }}
           className="mt-12 aspect-[21/9] overflow-hidden rounded-4xl border border-paper/10"
         >
-          <PostCover seed={post.cover} category={post.category} image={post.coverImage} alt={post.coverAlt} />
+          <PostCover seed={post.cover} category={post.category} image={post.coverImage} srcSet={post.coverSrcset} alt={loc(post, lang, "coverAlt")} />
         </motion.div>
 
         <div className="mt-14 grid gap-12 lg:grid-cols-12">
@@ -136,6 +103,13 @@ export default function InformedPost({ slug }) {
 
           <div className="informed-body max-w-[42rem] text-[1.075rem] leading-[1.75] text-silver/85 lg:col-span-7 lg:col-start-6" lang={englishBody ? "en" : undefined}>
             {englishBody && <p className="mb-8 rounded-2xl border border-amber/30 bg-amber/10 px-4 py-3 text-sm text-silver" lang="sw">{ui.englishOnly}</p>}
+            {/* Direct answer: the 40–60 word summary AI answer engines quote */}
+            {loc(post, lang, "answer") && (
+              <div className="mb-10 rounded-3xl border border-brand-bright/25 bg-brand-bright/[0.07] p-6">
+                <p className="font-display text-xs font-semibold uppercase tracking-[0.14em] text-brand-bright">{ui.answer}</p>
+                <p className="mt-2 text-[1.075rem] leading-relaxed text-white">{loc(post, lang, "answer")}</p>
+              </div>
+            )}
             {(swBody || post.body).map((b, i) => <Block key={i} b={b} />)}
 
             {/* Topic-matched CTA */}
@@ -151,13 +125,13 @@ export default function InformedPost({ slug }) {
         </div>
 
         {/* Related */}
-        <section className="mt-24 border-t border-white/10 pt-14">
+        {!draft && <section className="mt-24 border-t border-white/10 pt-14">
           <h2 className="font-display text-display-md font-bold text-white">{ui.related}</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {related.map((p) => <PostCard key={p.slug} post={p} lang={lang} ui={ui} />)}
             <Newsletter ui={ui} compact />
           </div>
-        </section>
+        </section>}
       </div>
     </article>
   );

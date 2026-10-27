@@ -11,8 +11,8 @@
     "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page",
-    // Only the editor's GitHub sign-in runs code; everything else is served straight from dist/.
-    "run_worker_first": ["/auth", "/callback"]
+    // Code runs only for portal images (/media) and the old editor's GitHub sign-in; everything else is served straight from dist/.
+    "run_worker_first": ["/media/*", "/auth", "/callback"]
   },
   "observability": { "enabled": true }
 }

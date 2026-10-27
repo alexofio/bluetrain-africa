@@ -86,7 +86,22 @@ Cloudflare Workers Builds watches the GitHub repo: every push to `main` runs `np
   URL is `https://bluetrain.africa/callback`). For local testing put them in `.dev.vars`.
 - Local check of the whole thing: `npm run preview:worker` → http://localhost:8787
 
-## Bluetrain Informed (blog) — the editor at /admin
+## Content from the Bluetrain Portal (since 28 Oct 2026)
+
+Bluetrain Informed articles, case studies and the client wall are written, approved and published in the
+**Bluetrain Portal → Website Content** (portal.bluetrain.africa/content). Before every build, `scripts/content.mjs`
+fetches the published items from the portal's public API and writes `src/content/informed.posts.generated.js` and
+`src/content/cms.generated.js` (both git-ignored). If the portal can't be reached or returns no articles, the build
+stops and the live site keeps its previous version. Approving an item in the portal triggers this build through a
+Cloudflare deploy hook; the page is live about two minutes later.
+
+- New pages: `/work/<slug>` (case studies with more than a card) and `/preview?token=…` (private 7-day draft preview, noindex).
+- `/media/…` images are fetched from the portal by `worker/index.js` and cached at the edge.
+- `postbuild.mjs` also writes `llms.txt`, `content-version.json` (the portal reads it to mark items Live), FAQPage and
+  BreadcrumbList structured data, and the portal's slug-change redirects.
+- Local: `PORTAL_URL=http://127.0.0.1:8787 npm run dev` uses a local portal.
+
+## Bluetrain Informed (blog) — the old editor at /admin (being retired; edits there no longer publish)
 
 Articles are Markdown files in `content/informed/<slug>.md`. The team edits them at
 **bluetrain.africa/admin** (Sveltia CMS, config in `public/admin/config.yml`), signing in with GitHub.

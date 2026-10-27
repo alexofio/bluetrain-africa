@@ -111,32 +111,15 @@ export const sw = {
 
   work: {
     heading: "Kugeuza mkakati kuwa utekelezaji",
-    filters: [
-      { id: "all", label: "Zote" },
-      { id: "experience", label: "Matukio" },
-      { id: "technology", label: "Teknolojia" },
-      { id: "growth", label: "Ukuaji" },
-    ],
-    items: {
-      "castle-lite": {
-        title: "Promosheni ya Walaji ya Castle Lite",
-        industry: "FMCG na Vinywaji",
-        metric: "Mamilioni ya misimbo ya kipekee",
-        body: "Promosheni kubwa ya walaji iliyowezeshwa na teknolojia, iliyohitaji mamilioni ya misimbo ya kipekee ya promosheni, mtiririko wa SMS, mantiki ya kikanda, udhibiti wa ustahiki na mbinu za mashindano.",
-      },
-      vodacom: {
-        title: "Ushirikishaji wa Walaji wa Vodacom",
-        industry: "Mawasiliano ya Simu",
-        metric: "Washiriki 1,100+, washindi 200+",
-        body: "Kampeni moja ilileta washiriki zaidi ya 1,100 na washindi zaidi ya 200 ndani ya kipindi cha uamshaji cha wiki mbili.",
-      },
-      "cps-africa": {
-        title: "CPS Africa",
-        industry: "Mali Isiyohamishika",
-        metric: "Masoko 3 ya kimataifa",
-        body: "Kazi hii inachanganya matangazo ya utafutaji yanayolipiwa, matangazo ya utendaji na uboreshaji wa kampeni katika masoko yakiwemo Ulaya, Mashariki ya Kati na Amerika Kaskazini.",
-      },
-    },
+    all: "Zote",
+    capabilities: { experience: "Matukio", technology: "Teknolojia", growth: "Ukuaji", strategy: "Mkakati", insights: "Maarifa", influence: "Ushawishi" },
+    readMore: "Soma kisa kamili",
+    back: "Kazi zote",
+    results: "Matokeo",
+    gallery: "Picha",
+    client: "Mteja",
+    period: "Kipindi",
+    related: "Soma pia",
   },
 
   statement: {
@@ -235,6 +218,8 @@ export const sw = {
       loadMore: "Onyesha zaidi",
       min: (n) => `Dakika ${n} kusoma`,
       takeaways: "Mambo muhimu",
+      answer: "Kwa ufupi",
+      faq: "Maswali yanayoulizwa mara kwa mara",
       back: "Makala zote",
       related: "Endelea kusoma",
       englishOnly: "Makala hii inapatikana kwa Kiingereza kwa sasa.",
@@ -262,6 +247,7 @@ export const sw = {
         { label: "sekta tunazohudumia", context: "Kuanzia huduma za fedha hadi michezo" },
       ],
     },
+    preview: { banner: "Rasimu: haijachapishwa. Ni wenye kiungo hiki tu wanaoweza kuiona.", loading: "Inapakia rasimu…", error: "Rasimu hii haiwezi kuonyeshwa." },
     clientsWall: {
       heading: "Chapa tulizofanya nazo kazi",
       intro: "Benki na kampuni za simu, chapa za vinywaji na mashirika ya maendeleo: kazi yetu inagusa uchumi mzima.",

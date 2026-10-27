@@ -1,14 +1,11 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
-import { config } from "../content/site";
+import { clients } from "../content/cms";
+import { industryLabel } from "../content/cms";
 import { useLang } from "../lib/i18n";
 import { Reveal, RevealItem } from "./ui/Reveal";
 
-// Approved client logos go here once permission is in, e.g.
-//   import vodacom from "../assets/clients/vodacom.svg";
-//   const logos = { Vodacom: vodacom };
-const logos = {};
-
+// Logos come from the Bluetrain Portal and are only sent once the client's logo permission is recorded there.
 function Tile({ client, sector }) {
   const ref = useRef(null);
   const reduce = useReducedMotion();
@@ -25,7 +22,7 @@ function Tile({ client, sector }) {
     ref.current.style.setProperty("--sy", `${y * 100}%`);
   };
   const onLeave = () => { mx.set(0.5); my.set(0.5); };
-  const logo = logos[client.name];
+  const logo = client.logo;
 
   return (
     <RevealItem className="[perspective:900px]">
@@ -56,7 +53,7 @@ function Tile({ client, sector }) {
 }
 
 export default function ClientWall() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const w = t.ui.clientsWall;
   return (
     <section id="clients" className="relative border-t border-white/[0.06] py-24 lg:py-32">
@@ -66,7 +63,7 @@ export default function ClientWall() {
           <RevealItem as="p" className="text-lg leading-relaxed text-silver/75 lg:col-span-4 lg:col-start-9">{w.intro}</RevealItem>
         </Reveal>
         <Reveal gap={0.05} className="mt-12 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          {config.clients.map((c) => <Tile key={c.name} client={c} sector={w.sectors[c.sector]} />)}
+          {clients.map((c) => <Tile key={c.slug || c.name} client={c} sector={industryLabel(c.sector, lang) || w.sectors[c.sector]} />)}
         </Reveal>
       </div>
     </section>

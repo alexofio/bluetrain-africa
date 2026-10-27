@@ -38,7 +38,7 @@ export function PostCard({ post, lang, ui, size = "md" }) {
     <motion.article layout transition={spring.soft} className="glass glow-hover group relative flex h-full flex-col overflow-hidden rounded-3xl">
       <div className={`relative overflow-hidden ${lg ? "aspect-[16/10] lg:aspect-auto lg:min-h-[22rem] lg:flex-1" : "aspect-[16/10]"}`}>
         <div className="absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-[1.06] motion-reduce:group-hover:scale-100">
-          <PostCover seed={post.cover} category={post.category} image={post.coverImage} />
+          <PostCover seed={post.cover} category={post.category} image={post.coverImage} srcSet={post.coverSrcset} />
         </div>
         <span className="absolute bottom-4 left-4 flex gap-1.5">
           {post.markets.slice(0, 3).map((m) => (

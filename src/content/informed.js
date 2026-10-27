@@ -1,9 +1,9 @@
 /**
  * Bluetrain Informed — taxonomy and helpers.
  *
- * Article content is NOT in this file: each article is a Markdown file in content/informed/,
- * written in the editor at /admin (Sveltia CMS) or by hand. See scripts/content.mjs for the fields.
- * Categories, markets and formats below must match the options in public/admin/config.yml.
+ * Article content is NOT in this file: articles are written, approved and published in the Bluetrain Portal
+ * (Website Content). scripts/content.mjs fetches the published ones before every build.
+ * Categories, markets and formats below must match the portal's (public/assets/content/model.js there).
  */
 
 export const categories = [
@@ -24,14 +24,14 @@ export const markets = [
   { id: "AF", en: "Pan-Africa", sw: "Afrika Nzima" },
 ];
 
+// One format per template in the portal: What happened (News), Why it matters (Analysis), What should we do next (Guide).
 export const formats = {
-  article: { en: "Article", sw: "Makala" },
-  brief: { en: "Market Brief", sw: "Muhtasari wa Soko" },
   news: { en: "News", sw: "Habari" },
+  analysis: { en: "Analysis", sw: "Uchambuzi" },
+  guide: { en: "Guide", sw: "Mwongozo" },
 };
 
-// Articles live in content/informed/*.md (edited at bluetrain.africa/admin).
-// scripts/content.mjs turns them into this generated module before every dev run and build.
+// Published articles come from the Bluetrain Portal; scripts/content.mjs writes this module before every dev run and build.
 import generated from "./informed.posts.generated.js";
 export const posts = generated;
 

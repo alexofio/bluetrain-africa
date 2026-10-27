@@ -17,9 +17,9 @@ const tints = {
   news: ["#2e8eff", "#F2B544"],
 };
 
-export default function PostCover({ seed = 1, category = "strategy", className = "", image = "", alt = "" }) {
-  // A cover photo uploaded in the editor replaces the generated art.
-  if (image) return <img src={image} alt={alt} loading="lazy" className={`h-full w-full object-cover ${className}`} />;
+export default function PostCover({ seed = 1, category = "strategy", className = "", image = "", srcSet, alt = "" }) {
+  // A cover photo uploaded in the portal replaces the generated art.
+  if (image) return <img src={image} srcSet={srcSet || undefined} sizes={srcSet ? "(min-width: 1024px) 80vw, 100vw" : undefined} alt={alt} loading="lazy" className={`h-full w-full object-cover ${className}`} />;
   const r = rng(seed);
   const [a, b] = tints[category] || tints.strategy;
   const motif = seed % 3;

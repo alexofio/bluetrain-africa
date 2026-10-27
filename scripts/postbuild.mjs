@@ -2,12 +2,15 @@
  * Runs after `vite build`. Turns dist/ into a Cloudflare-ready site (Worker static assets):
  *  - one HTML file per page (own title, description, canonical, share tags, structured data)
  *  - 404.html, sitemap.xml, robots.txt
- *  - _redirects (old Wix URLs → new pages) and _headers (caching + security)
+ *  - _redirects (old Wix URLs → new pages, plus address changes made in the portal) and _headers (caching + security)
+ *  - llms.txt (a plain index for AI answer engines) and content-version.json (tells the portal which content is live)
  */
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { config, en } from "../src/content/site.js";
 import { posts } from "../src/content/informed.js";
 import { legal } from "../src/content/legal.js";
+import { caseStudies, hasPage, version as contentVersion } from "../src/content/cms.js";
+import { redirects as contentRedirects } from "../src/content/cms.generated.js";
 
 const DIST = new URL("../dist/", import.meta.url).pathname;
 const SITE = config.siteUrl.replace(/\/$/, "");
@@ -38,8 +41,8 @@ function ga4() {
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","${id}",{send_page_view:false});gtag("event","page_view");</script>`;
 }
 
-function page({ path, title, description, type = "website", image = OG, ld = [], noscript = "", noindex = false }) {
-  const url = SITE + (path === "/" ? "/" : path);
+function page({ path, title, description, type = "website", image = OG, ld = [], noscript = "", noindex = false, canonical }) {
+  const url = canonical || SITE + (path === "/" ? "/" : path);
   const head = [
     `<link rel="canonical" href="${esc(url)}" />`,
     noindex ? `<meta name="robots" content="noindex" />` : "",
@@ -98,33 +101,82 @@ write("informed.html", page({
 // ---- Articles (served at /informed/<slug>)
 const abs = (src) => (src ? (/^https?:/.test(src) ? src : SITE + src) : "");
 const isEditorial = (a) => !a.name || a.name === "Bluetrain Informed";
+const blocksHtml = (body) => (body || []).map((b) =>
+  b.h ? `<h2>${esc(b.h)}</h2>` : b.h3 ? `<h3>${esc(b.h3)}</h3>` : b.html ? `<p>${b.html}</p>` : b.quote ? `<blockquote>${b.quote}</blockquote>` : b.callout ? `<p>${b.callout}</p>`
+  : b.list ? `<${b.ordered ? "ol" : "ul"}>${b.list.map((li) => `<li>${li}</li>`).join("")}</${b.ordered ? "ol" : "ul"}>`
+  : b.img ? `<img src="${esc(b.img)}" alt="${esc(b.alt)}" style="max-width:100%" />` : b.gallery ? b.gallery.map((g) => `<img src="${esc(g.img)}" alt="${esc(g.alt)}" style="max-width:100%" />`).join("")
+  : b.table ? `<table>${b.table.head ? `<tr>${b.table.head.map((c) => `<th>${c}</th>`).join("")}</tr>` : ""}${b.table.rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("")}</table>`
+  : b.faq ? `<dl>${b.faq.map((f) => `<dt>${esc(f.q)}</dt><dd>${f.a}</dd>`).join("")}</dl>` : b.embed ? `<p>${link(b.embed.src, b.embed.title || b.embed.provider)}</p>` : "").join("");
+const strip = (h) => String(h).replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+const crumbs = (items) => ({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: items.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: SITE + path })) });
+const faqLd = (faqs) => (faqs?.length ? [{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: strip(f.a) } })) }] : []);
+const publisher = { "@type": "Organization", name: "Bluetrain Africa", url: SITE, logo: { "@type": "ImageObject", url: OG } };
 
 for (const p of posts) {
-  const image = abs(p.coverImage) || OG;
+  const image = abs(p.seo?.shareImage || p.coverImage) || OG;
+  const url = `${SITE}/informed/${p.slug}`;
   write(`informed/${p.slug}.html`, page({
     path: `/informed/${p.slug}`,
     type: "article",
-    title: `${p.title} | Bluetrain Informed`,
-    description: p.standfirst,
+    title: p.metaTitle || `${p.title} | Bluetrain Informed`,
+    description: p.metaDescription || p.standfirst,
     image,
+    canonical: p.seo?.canonical,
+    noindex: !!p.seo?.noindex,
     ld: [{
       "@context": "https://schema.org",
       "@type": "Article",
       headline: p.title,
       description: p.standfirst,
+      abstract: p.answer || undefined,
       datePublished: p.date,
-      dateModified: p.date,
+      dateModified: p.updated && p.updated > p.date ? p.updated : p.date,
       author: isEditorial(p.author) ? { "@type": "Organization", name: "Bluetrain Africa" } : { "@type": "Person", name: p.author.name, jobTitle: p.author.role || undefined },
-      publisher: { "@type": "Organization", name: "Bluetrain Africa", logo: { "@type": "ImageObject", url: OG } },
+      publisher,
       image,
-      mainEntityOfPage: `${SITE}/informed/${p.slug}`,
+      mainEntityOfPage: url,
       inLanguage: "en",
-    }],
-    noscript: `<p>${link("/informed", "← Bluetrain Informed")}</p><h1>${esc(p.title)}</h1><p><em>${esc(p.standfirst)}</em></p>${p.body
-      .map((b) => (b.h ? `<h2>${esc(b.h)}</h2>` : b.html ? `<p>${b.html}</p>` : b.quote ? `<blockquote>${b.quote}</blockquote>` : b.list ? `<ul>${b.list.map((li) => `<li>${li}</li>`).join("")}</ul>` : b.img ? `<img src="${esc(b.img)}" alt="${esc(b.alt)}" style="max-width:100%" />` : ""))
-      .join("")}`,
+      keywords: p.seo?.focus || undefined,
+      mentions: p.entities?.length ? p.entities.map((name) => ({ "@type": "Thing", name })) : undefined,
+    }, crumbs([["Home", "/"], ["Bluetrain Informed", "/informed"], [p.title, `/informed/${p.slug}`]]), ...faqLd(p.faqs)],
+    noscript: `<p>${link("/informed", "← Bluetrain Informed")}</p><h1>${esc(p.title)}</h1><p><em>${esc(p.standfirst)}</em></p>${p.answer ? `<p><strong>${esc(p.answer)}</strong></p>` : ""}${blocksHtml(p.body)}`,
   }));
 }
+
+// ---- Case studies with a page of their own (served at /work/<slug>)
+const casePages = caseStudies.filter(hasPage);
+for (const c of casePages) {
+  const image = abs(c.seo?.shareImage || c.coverImage) || OG;
+  write(`work/${c.slug}.html`, page({
+    path: `/work/${c.slug}`,
+    type: "article",
+    title: c.metaTitle || `${c.title} | Bluetrain Africa`,
+    description: c.metaDescription || c.standfirst,
+    image,
+    canonical: c.seo?.canonical,
+    noindex: !!c.seo?.noindex,
+    ld: [{
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: c.title,
+      description: c.standfirst,
+      abstract: c.answer || undefined,
+      datePublished: c.date,
+      dateModified: c.updated && c.updated > c.date ? c.updated : c.date,
+      author: { "@type": "Organization", name: "Bluetrain Africa" },
+      publisher,
+      image,
+      mainEntityOfPage: `${SITE}/work/${c.slug}`,
+      inLanguage: "en",
+      about: c.client ? { "@type": "Organization", name: c.client.name } : undefined,
+      mentions: c.entities?.length ? c.entities.map((name) => ({ "@type": "Thing", name })) : undefined,
+    }, crumbs([["Home", "/"], ["Work", "/#work"], [c.title, `/work/${c.slug}`]]), ...faqLd(c.faqs)],
+    noscript: `<p>${link("/#work", "← Work")}</p><h1>${esc(c.title)}</h1><p><em>${esc(c.standfirst)}</em></p>${c.metric ? `<p>${esc(c.metric)}</p>` : ""}${(c.results || []).map((r) => `<p><strong>${esc(r.value)}</strong> ${esc(r.label)}</p>`).join("")}${blocksHtml(c.body)}`,
+  }));
+}
+
+// ---- Draft previews (/preview?token=…): one page, never indexed; the editor in the portal frames it.
+write("preview.html", page({ path: "/preview", title: "Draft preview | Bluetrain Africa", description: "Draft preview.", noindex: true }));
 
 // ---- Discovery-call booking (served at /book; people and times load from the Bluetrain Portal)
 write("book.html", page({
@@ -158,14 +210,43 @@ const urls = [
   { loc: "/book", lastmod: today, priority: "0.7" },
   { loc: "/privacy", lastmod: legal.en.privacy.effective, priority: "0.3" },
   { loc: "/terms", lastmod: legal.en.terms.effective, priority: "0.3" },
-  ...sorted.map((p) => ({ loc: `/informed/${p.slug}`, lastmod: p.date, priority: "0.6" })),
+  ...sorted.filter((p) => !p.seo?.noindex && !p.seo?.canonical).map((p) => ({ loc: `/informed/${p.slug}`, lastmod: p.updated && p.updated > p.date ? p.updated : p.date, priority: "0.6" })),
+  ...casePages.filter((c) => !c.seo?.noindex && !c.seo?.canonical).map((c) => ({ loc: `/work/${c.slug}`, lastmod: c.updated || c.date, priority: "0.6" })),
 ];
 write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${SITE}${u.loc}</loc><lastmod>${u.lastmod}</lastmod><priority>${u.priority}</priority></url>`).join("\n")}
 </urlset>
 `);
-write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ${SITE}/sitemap.xml\n`);
+write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /preview\n\nSitemap: ${SITE}/sitemap.xml\n`);
+
+// ---- llms.txt: a plain index of the site for AI answer engines (https://llmstxt.org), rebuilt with every publish
+const line = (title, path, text) => `- [${title}](${SITE}${path})${text ? `: ${String(text).replace(/\s+/g, " ").trim()}` : ""}`;
+write("llms.txt", [
+  "# Bluetrain Africa",
+  "",
+  `> ${en.hero.body}`,
+  "",
+  `Bluetrain Africa (legal name Bluetrain Limited) is based in Dar es Salaam and works across Tanzania, Kenya, South Africa and Zambia. Contact: ${config.email}.`,
+  "",
+  "## Services",
+  ...en.services.items.map((x) => `- ${x.title}: ${x.body}`),
+  "",
+  "## Bluetrain Informed",
+  ...sorted.filter((p) => !p.seo?.noindex).map((p) => line(p.title, `/informed/${p.slug}`, p.answer || p.standfirst)),
+  "",
+  "## Case studies",
+  ...caseStudies.map((c) => line(c.title, hasPage(c) ? `/work/${c.slug}` : "/#work", [c.client?.name, c.metric, c.standfirst].filter(Boolean).join(". "))),
+  "",
+  "## Optional",
+  line("Book a discovery call", "/book", "30 minutes with the team"),
+  line("Privacy Policy", "/privacy"),
+  line("Terms of Use", "/terms"),
+  "",
+].join("\n"));
+
+// ---- What content this build carries: the portal reads it to mark published items "Live".
+write("content-version.json", JSON.stringify({ version: contentVersion, builtAt: new Date().toISOString(), articles: posts.length, caseStudies: caseStudies.length }) + "\n");
 
 // ---- Redirects: every address on the old Wix site → its new home (301 = permanent, keeps rankings)
 const slugs = new Set(posts.map((p) => p.slug));
@@ -203,9 +284,13 @@ const dynamic = [
   ["/blog/*", "/informed"], // categories, paging
   ["/post/*", "/informed"], // any old post not listed above
 ];
+// Address changes made in the portal after an item was published (old → new), skipping any that would loop.
+const portalRedirects = contentRedirects.filter((r) => r.from !== r.to && !redirects.some(([a]) => a === r.from)).map((r) => [r.from, r.to]);
 write("_redirects", [
   "# Old Wix addresses → new site (301 permanent). Static rules first, wildcards last.",
   ...redirects.map(([a, b]) => `${a}  ${b}  301`),
+  "# Address changes made in the Bluetrain Portal",
+  ...portalRedirects.map(([a, b]) => `${a}  ${b}  301`),
   ...dynamic.map(([a, b]) => `${a}  ${b}  301`),
   "",
 ].join("\n"));
@@ -214,12 +299,24 @@ write("_redirects", [
 write("_headers", `/assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+/content-version.json
+  Cache-Control: no-store
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   Strict-Transport-Security: max-age=31536000
+
+/preview
+  ! X-Frame-Options
+  Content-Security-Policy: frame-ancestors 'self' https://portal.bluetrain.africa
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
 `);
 
-console.log(`postbuild: ${posts.length + 4} pages, ${redirects.length + dynamic.length} redirects, sitemap ${urls.length} URLs`);
+console.log(`postbuild: ${posts.length + casePages.length + 5} pages, ${redirects.length + portalRedirects.length + dynamic.length} redirects, sitemap ${urls.length} URLs, llms.txt, content version ${contentVersion}`);
