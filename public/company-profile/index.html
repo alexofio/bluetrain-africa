@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bluetrain Africa Company Profile</title>
+<meta name="description" content="Download the Bluetrain Africa company profile: who we are, what we do, how we work and 26 case studies from Tanzania and East Africa.">
+<link rel="canonical" href="https://bluetrain.africa/company-profile/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:site_name" content="Bluetrain Africa">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bluetrain Africa Company Profile">
+<meta property="og:description" content="Download the Bluetrain Africa company profile: who we are, what we do, how we work and 26 case studies.">
+<meta property="og:url" content="https://bluetrain.africa/company-profile/">
+<meta property="og:image" content="https://bluetrain.africa/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: a route map. The profile is a journey with stops (chapters + page numbers); the hero shows the document itself. */
+:root{
+  --bg:#F5F7FA; --surface:#FFFFFF; --ink:#102A43; --muted:#4A5B6E; --line:#D7E0EA;
+  --blue:#2E619C; --blue-ink:#2E619C; --amber:#F2B544; --on-blue:#F5F7FA; --band:#102A43; --on-band:#E4ECF5; --soft:#DCE6F2;
+  --display:"Poppins","Avenir Next","Century Gothic",Arial,sans-serif;
+  --body:"Inter","Segoe UI",Roboto,Arial,sans-serif;
+  --logo-light:block; --logo-dark:none;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B1B2C; --surface:#12263B; --ink:#EAF1F8; --muted:#A9B9CA; --line:#24405C;
+  --blue:#2E619C; --blue-ink:#8DB6E6; --amber:#F2B544; --on-blue:#F5F7FA; --band:#071422; --on-band:#C9D6E5; --soft:#1B3A5C;
+  --logo-light:none; --logo-dark:block; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1B2C; --surface:#12263B; --ink:#EAF1F8; --muted:#A9B9CA; --line:#24405C;
+  --blue:#2E619C; --blue-ink:#8DB6E6; --amber:#F2B544; --on-blue:#F5F7FA; --band:#071422; --on-band:#C9D6E5; --soft:#1B3A5C;
+  --logo-light:none; --logo-dark:block; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-0.01em}
+p{margin:0}
+a{color:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--blue-ink)}
+.logo-light{display:var(--logo-light)} .logo-dark{display:var(--logo-dark)}
+
+/* top bar */
+.top{padding-block:22px}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.top img{height:34px;width:auto}
+.top a.back{font-size:15px;color:var(--muted);text-decoration:none}
+.top a.back:hover,.top a.back:focus-visible{color:var(--ink);text-decoration:underline}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:12px;font-family:var(--display);font-weight:600;font-size:17px;text-decoration:none;border:0;cursor:pointer;border-radius:999px;padding:16px 26px;transition:transform .15s ease, background .15s ease}
+.btn-primary{background:var(--blue);color:var(--on-blue)}
+.btn-primary:hover{background:#23507F}
+.btn:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.btn svg{width:20px;height:20px;flex:none}
+.btn:active{transform:translateY(1px)}
+.filemeta{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.dl-status{font-size:14px;color:var(--muted);min-height:1.4em}
+
+/* hero */
+.hero{padding-block:40px 72px}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:56px;align-items:center}
+.hero h1{font-size:clamp(44px,6.4vw,84px);font-weight:700;margin-top:18px}
+.hero h1 span{color:var(--blue-ink)}
+.hero .lede{font-size:clamp(18px,1.6vw,20px);color:var(--muted);max-width:34em;margin-top:22px}
+.hero .actions{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:34px}
+.pillars{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:30px;font-family:var(--display);font-weight:600;font-size:15px}
+.pillars span{display:inline-flex;align-items:center;gap:8px}
+.pillars span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--amber)}
+
+.doc{position:relative;padding:18px 0 18px 18px}
+.doc .sheet{border-radius:10px;overflow:hidden;box-shadow:0 1px 2px rgba(16,42,67,.12),0 24px 48px -16px rgba(16,42,67,.35);background:var(--surface)}
+.doc .back1,.doc .back2{position:absolute;inset:0 18px 36px 0;border-radius:10px;background:var(--soft);border:1px solid var(--line)}
+.doc .back1{transform:translate(9px,9px)} .doc .back2{transform:translate(18px,18px);opacity:.6}
+.doc .sheet{position:relative}
+.doc .tag{position:absolute;right:-6px;bottom:-4px;background:var(--amber);color:#102A43;font-family:var(--display);font-weight:700;font-size:14px;padding:8px 14px;border-radius:999px;font-variant-numeric:tabular-nums}
+
+/* route: chapters */
+section.block{padding-block:72px}
+.head{display:flex;flex-direction:column;gap:12px;max-width:720px}
+.head h2{font-size:clamp(30px,3.6vw,44px);font-weight:600}
+.head p{color:var(--muted)}
+.route{list-style:none;margin:44px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:relative}
+.route::before{content:"";position:absolute;left:0;right:0;top:11px;height:4px;background:var(--blue);border-radius:2px}
+.route li{position:relative;padding-top:40px;padding-right:20px;min-width:0}
+.route li::before{content:"";position:absolute;top:0;left:0;width:26px;height:26px;border-radius:50%;background:var(--bg);border:5px solid var(--blue)}
+.route li:last-child::before{background:var(--amber);border-color:var(--amber)}
+.route .pg{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-variant-numeric:tabular-nums}
+.route h3{font-size:20px;font-weight:600;margin-top:6px}
+.route p{font-size:15px;color:var(--muted);margin-top:6px}
+.peek{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:48px}
+.peek figure{margin:0;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:var(--surface)}
+.peek img{aspect-ratio:16/9;object-fit:cover;width:100%}
+.peek figcaption{font-size:13px;color:var(--muted);padding:10px 12px;font-variant-numeric:tabular-nums}
+
+/* services band */
+.band{background:var(--band);color:var(--on-band)}
+.band .eyebrow{color:var(--amber)}
+.band h2{color:#F5F7FA}
+.band .head p{color:var(--on-band)}
+.services{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;margin-top:44px;background:rgba(201,214,229,.18);border:1px solid rgba(201,214,229,.18);border-radius:12px;overflow:hidden}
+.services div{background:var(--band);padding:26px 22px;min-width:0}
+.services h3{font-size:19px;color:#F5F7FA;font-weight:600}
+.services p{font-size:15px;margin-top:10px}
+.platforms{margin-top:32px;font-size:15px}
+.platforms b{color:#F5F7FA;font-weight:600}
+
+/* work */
+.work{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:44px}
+.work article{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.work img{aspect-ratio:3/2;object-fit:cover;width:100%}
+.work .txt{padding:20px 22px 24px;display:flex;flex-direction:column;gap:6px}
+.work .client{font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--blue-ink)}
+.work h3{font-size:21px;font-weight:600}
+.work p{font-size:15px;color:var(--muted)}
+.work .result{margin-top:6px;font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink)}
+.work .result b{color:var(--blue-ink);font-size:22px;margin-right:6px}
+.more{margin-top:28px;color:var(--muted)}
+
+/* sectors */
+.sectors{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 32px;margin-top:40px}
+.sectors div{border-top:2px solid var(--blue);padding-top:14px;min-width:0}
+.sectors h3{font-size:17px;font-weight:600}
+.sectors p{font-size:15px;color:var(--muted);margin-top:6px}
+
+/* offices + cta */
+.cta{background:var(--blue);color:var(--on-blue)}
+.cta .grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:48px;align-items:start}
+.cta h2{font-size:clamp(32px,4vw,52px);font-weight:700;color:#F5F7FA}
+.cta .eyebrow{color:var(--amber)}
+.cta .lede{margin-top:16px;color:#E4ECF5;max-width:30em}
+.cta .actions{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:28px}
+.cta .btn-light{background:#F5F7FA;color:#102A43}
+.cta .btn-light:hover{background:#FFFFFF}
+.cta .filemeta,.cta .dl-status{color:#DCE6F2}
+.offices{display:flex;flex-direction:column;gap:18px}
+.offices div{border-left:3px solid var(--amber);padding-left:16px}
+.offices h3{font-size:17px;font-weight:600;color:#F5F7FA}
+.offices p{font-size:15px;color:#E4ECF5}
+.contact{display:flex;flex-wrap:wrap;gap:12px 36px;margin-top:40px;padding-top:28px;border-top:1px solid rgba(245,247,250,.25)}
+.contact span{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:600;display:block}
+.contact a,.contact p{font-family:var(--display);font-weight:600;font-size:19px;color:#F5F7FA;text-decoration:none;user-select:all}
+footer{padding-block:28px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+
+@media (max-width:960px){
+  .hero .wrap,.cta .grid{grid-template-columns:1fr}
+  .doc{max-width:560px}
+  .services{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .work{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sectors{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .peek{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .route{grid-template-columns:1fr;gap:26px}
+  .route::before{left:11px;right:auto;top:0;bottom:0;width:4px;height:auto}
+  .route li{padding-top:0;padding-left:46px}
+}
+@media (max-width:560px){
+  .services,.work,.sectors{grid-template-columns:1fr}
+  section.block{padding-block:56px}
+}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}}
+</style>
+
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a href="/" aria-label="Bluetrain Africa home">
+      <img class="logo-light" src="/company-profile/assets/logo-main.png" alt="Bluetrain Africa">
+      <img class="logo-dark" src="/company-profile/assets/logo-white.png" alt="Bluetrain Africa">
+    </a>
+    <a class="back" href="/">Back to bluetrain.africa</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Company profile · 2026 edition</p>
+        <h1>Driving brands <span>forward.</span></h1>
+        <p class="lede">Bluetrain Africa is a marketing and technology company that helps brands reach their audiences. Our profile covers who we are, what we do, how we work, and 26 campaigns from Tanzania and the region.</p>
+        <div class="actions">
+          <a class="btn btn-primary js-dl" id="dl-hero" href="/company-profile/Bluetrain-Africa-Company-Profile-2026.pdf" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 11l6 6 6-6M4 21h16"/></svg>
+            Download the profile
+          </a>
+          <p class="filemeta">PDF · 30 pages · 5.2 MB · Updated November 2026</p>
+          <p class="dl-status" aria-live="polite"></p>
+        </div>
+        <div class="pillars" aria-label="Our four pillars"><span>Strategy</span><span>Insights</span><span>Technology</span><span>Real impact</span></div>
+      </div>
+      <div class="doc" aria-hidden="true">
+        <div class="back2"></div><div class="back1"></div>
+        <div class="sheet"><img src="/company-profile/assets/page-1.jpg" alt="" width="1080" height="608"></div>
+        <span class="tag">30 pages</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="inside">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Inside the profile</p>
+        <h2 id="inside">Five stops, from who we are to who we work with.</h2>
+      </div>
+      <ol class="route">
+        <li><p class="pg">Pages 2–5</p><h3>Who we are</h3><p>Our pillars, vision, values and offices in Dar es Salaam, Nairobi and Cape Town.</p></li>
+        <li><p class="pg">Pages 6–10</p><h3>What we do</h3><p>Five service lines, our exclusive media platforms and Sikiliza.</p></li>
+        <li><p class="pg">Pages 11–13</p><h3>How we work</h3><p>Insights first, sharp segments, the right channel at the right moment.</p></li>
+        <li><p class="pg">Pages 14–26</p><h3>Our work</h3><p>26 case studies, plus current work with UNICEF, Equinor and Castle Lite.</p></li>
+        <li><p class="pg">Pages 27–30</p><h3>Clients and team</h3><p>Eight sectors, the leadership team and how to reach us.</p></li>
+      </ol>
+      <div class="peek">
+        <figure><img src="/company-profile/assets/page-6.jpg" alt="Profile page: five service lines" loading="lazy"><figcaption>p. 6 · Services</figcaption></figure>
+        <figure><img src="/company-profile/assets/page-11.jpg" alt="Profile page: three tenets of how we work" loading="lazy"><figcaption>p. 11 · How we work</figcaption></figure>
+        <figure><img src="/company-profile/assets/page-17.jpg" alt="Profile page: Jikave na NIC case study" loading="lazy"><figcaption>p. 17 · NIC case study</figcaption></figure>
+        <figure><img src="/company-profile/assets/page-28.jpg" alt="Profile page: leadership team" loading="lazy"><figcaption>p. 28 · Leadership</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="block band" aria-labelledby="services">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">What we do</p>
+        <h2 id="services">Five service lines, one integrated team.</h2>
+        <p>We combine strategy, specialist media and our own technology so campaigns can be planned, run and measured in one place.</p>
+      </div>
+      <div class="services">
+        <div><h3>Strategy and consultancy</h3><p>Marketing advisory, brand development, market intelligence, workshops and training.</p></div>
+        <div><h3>Media</h3><p>Through-the-line planning and buying, influencer and advocacy programmes.</p></div>
+        <div><h3>Technology</h3><p>Unique-code promotions, SMS, WhatsApp and USSD, websites, SEO and client dashboards.</p></div>
+        <div><h3>Insights</h3><p>Sikiliza AI media monitoring, social listening and human-centred research.</p></div>
+        <div><h3>Creative and production</h3><p>Campaigns, TV and video, photography, events, PR and brand identity.</p></div>
+      </div>
+      <p class="platforms"><b>Exclusive reseller in Tanzania</b> of DStv Media Sales, Eskimi DSP and Seebait Ad Network.</p>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="work">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Selected work</p>
+        <h2 id="work">A few of the 26 case studies in the profile.</h2>
+      </div>
+      <div class="work">
+        <article><img src="/company-profile/assets/cs41.jpg" alt="Jikave na NIC home insurance poster" loading="lazy"><div class="txt"><p class="client">NIC Insurance</p><h3>Jikave na NIC</h3><p>Strategy, creative and media across TV, radio, outdoor and social, nationwide.</p><p class="result"><b>+9%</b>motor insurance sales in three months</p></div></article>
+        <article><img src="/company-profile/assets/cs16.jpg" alt="LSF logo with the justice hand symbol" loading="lazy"><div class="txt"><p class="client">Legal Services Facility</p><h3>From Legal Services Facility to LSF</h3><p>Rebrand strategy, the “Mkono wa Haki” symbol, office branding and launch.</p></div></article>
+        <article><img src="/company-profile/assets/cs27.jpg" alt="Ukiagiza Hujapoteza key visual with a car and motorbikes" loading="lazy"><div class="txt"><p class="client">Silent Ocean</p><h3>Ukiagiza Hujapoteza!</h3><p>A shipping promotion with a car to win: key visual, bus wrap, social and street activation.</p></div></article>
+        <article><img src="/company-profile/assets/cs-changan.jpg" alt="Changan Auto showroom opening" loading="lazy"><div class="txt"><p class="client">Inchcape Tanzania</p><h3>Changan launch</h3><p>Launch event, PR, influencers, video and product photography.</p></div></article>
+        <article><img src="/company-profile/assets/cs-coralbrand.jpg" alt="Uzuri wa Coral Haufichiki billboard at night" loading="lazy"><div class="txt"><p class="client">Insignia · Coral Paints</p><h3>Uzuri wa Coral Haufichiki</h3><p>A brand campaign built from research, strategy and creative.</p></div></article>
+        <article><img src="/company-profile/assets/cs-tigo.jpg" alt="Wakishua wa Tigo campaign poster" loading="lazy"><div class="txt"><p class="client">Tigo Tanzania</p><h3>Wakishua wa Tigo</h3><p>A nationwide youth platform voiced by five micro-influencers.</p></div></article>
+      </div>
+      <p class="more">Also in the profile: CPS (350K users and 5,000+ buyer inquiries in two months), CARE, NMB, NBC, Sanlam, AB InBev, Diageo, DSM Corridor Group and more.</p>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="sectors" style="padding-top:0">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Who we work with</p>
+        <h2 id="sectors">Trusted across eight sectors.</h2>
+      </div>
+      <div class="sectors">
+        <div><h3>Banking</h3><p>NBC Bank, NMB Bank, Exim Bank, BancABC</p></div>
+        <div><h3>Insurance and telco</h3><p>NIC, Sanlam Life, Sanlam General, Tigo, Infinix</p></div>
+        <div><h3>Automotive</h3><p>Inchcape (Changan), Auto Inc, Hero Hunter, At The Wheel, Nas Tyre Services</p></div>
+        <div><h3>Beverages and FMCG</h3><p>TBL / AB InBev, Diageo, Jack Daniel’s, Balimi, Insignia, Kili Bio Chem</p></div>
+        <div><h3>Gaming</h3><p>Betway × Simba SC, SportPesa, Meridianbet, 777bet, Gwalabet, Pigabet</p></div>
+        <div><h3>Development</h3><p>UNICEF, CARE, LSF, Enabel, Water for People, NACONGO</p></div>
+        <div><h3>Manufacturing, energy and logistics</h3><p>Danco Capital, Equinor, DSM Corridor Group, Silent Ocean</p></div>
+        <div><h3>Agri, property and hospitality</h3><p>Seminis, CPS, Dar Ceramica, Le Pristine, Aya Sophia Villa</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block cta" aria-labelledby="talk">
+    <div class="wrap">
+      <div class="grid">
+        <div>
+          <p class="eyebrow">Tanzania · Kenya · South Africa · Zambia</p>
+          <h2 id="talk">Let’s drive your brand forward.</h2>
+          <p class="lede">Take the full profile with you, or get in touch to talk about your next campaign.</p>
+          <div class="actions">
+            <a class="btn btn-light js-dl" id="dl-foot" href="/company-profile/Bluetrain-Africa-Company-Profile-2026.pdf" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 11l6 6 6-6M4 21h16"/></svg>
+              Download the profile (PDF)
+            </a>
+            <p class="filemeta">30 pages · 5.2 MB</p>
+            <p class="dl-status" aria-live="polite"></p>
+          </div>
+        </div>
+        <div class="offices">
+          <div><h3>Dar es Salaam · Head office</h3><p>Dar Village Office Park, SNDBX, 2nd Floor, Rose Garden Road, Mikocheni</p></div>
+          <div><h3>Nairobi</h3><p>Bluetrain Limited Kenya, Gamerock, Seremwai Road</p></div>
+          <div><h3>Cape Town</h3><p>Bluetrain Professionals (Pty) Ltd, Goodwood</p></div>
+        </div>
+      </div>
+      <div class="contact">
+        <div><span>Email</span><a href="mailto:info@bluetrain.co.tz">info@bluetrain.co.tz</a></div>
+        <div><span>Phone</span><a href="tel:+255688555999">+255 688 555 999</a></div>
+        <div><span>Web</span><p>bluetrain.africa</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><p>© 2026 Bluetrain Africa</p><p>Registered with Tanzania’s Personal Data Protection Commission</p></div>
+</footer>
+
+<script>
+(function(){
+  var FILE = "/company-profile/Bluetrain-Africa-Company-Profile-2026.pdf";
+  // On bluetrain.africa the links download directly. Inside the Claude viewer,
+  // links cannot start downloads, so hand the file to the viewer's save prompt.
+  if (!window.claude || typeof window.claude.use !== "function") return;
+  var dlPromise = window.claude.use("downloads");
+  document.querySelectorAll(".js-dl").forEach(function(a){
+    a.addEventListener("click", function(e){
+      e.preventDefault();
+      var status = a.parentNode.querySelector(".dl-status");
+      dlPromise.then(function(dl){
+        if (!dl) { if (status) status.textContent = "Downloads are not available in this view."; return; }
+        if (status) status.textContent = "Preparing the PDF…";
+        return fetch(FILE).then(function(r){ if(!r.ok) throw new Error("fetch"); return r.blob(); })
+          .then(function(blob){ return dl.save({filename: FILE, data: blob}); })
+          .then(function(){ if (status) status.textContent = ""; })
+          .catch(function(err){
+            if (!status) return;
+            status.textContent = (err && err.code === "declined") ? "" : "The download did not start. Please try again.";
+          });
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

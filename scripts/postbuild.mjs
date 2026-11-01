@@ -208,6 +208,7 @@ const urls = [
   { loc: "/", lastmod: today, priority: "1.0" },
   { loc: "/informed", lastmod: sorted[0]?.date ?? today, priority: "0.8" },
   { loc: "/book", lastmod: today, priority: "0.7" },
+  { loc: "/company-profile/", lastmod: today, priority: "0.6" },
   { loc: "/privacy", lastmod: legal.en.privacy.effective, priority: "0.3" },
   { loc: "/terms", lastmod: legal.en.terms.effective, priority: "0.3" },
   ...sorted.filter((p) => !p.seo?.noindex && !p.seo?.canonical).map((p) => ({ loc: `/informed/${p.slug}`, lastmod: p.updated && p.updated > p.date ? p.updated : p.date, priority: "0.6" })),

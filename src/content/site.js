@@ -343,6 +343,6 @@ export const en = {
       taken: "Sorry, that time was just taken. Please choose another.",
       error: (email) => `We couldn't complete the booking. Please try again, or email ${email}.`,
     },
-    footer: { explore: "Explore", visit: "Visit", follow: "Follow", contact: "Contact", portal: "Client portal", offices: "Our offices", intents: [{ label: "Start a project", href: "#contact" }, { label: "Join the team", href: "mailto:info@bluetrain.co.tz?subject=Careers" }, { label: "Press", href: "mailto:info@bluetrain.co.tz?subject=Press" }, { label: "Say hello", href: "mailto:info@bluetrain.co.tz" }] },
+    footer: { explore: "Explore", visit: "Visit", follow: "Follow", contact: "Contact", portal: "Client portal", profile: "Company profile", offices: "Our offices", intents: [{ label: "Start a project", href: "#contact" }, { label: "Join the team", href: "mailto:info@bluetrain.co.tz?subject=Careers" }, { label: "Press", href: "mailto:info@bluetrain.co.tz?subject=Press" }, { label: "Say hello", href: "mailto:info@bluetrain.co.tz" }] },
   },
 };
