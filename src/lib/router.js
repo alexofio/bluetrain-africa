@@ -48,6 +48,9 @@ function parse() {
 }
 
 /** Content href → real href for the current mode. External links, mailto and tel pass through. */
+/** Static HTML pages in public/ that the app must not route (they load with a full page request). */
+const STATIC_PAGES = ["/company-profile"];
+
 export function to(href) {
   if (!href || !href.startsWith("#")) return href;
   if (href.startsWith("#/")) return PATH_MODE ? href.slice(1) : href; // page
@@ -76,6 +79,8 @@ export function useRoute() {
       if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
       const url = new URL(a.href, window.location.href);
       if (url.origin !== window.location.origin) return;
+      // Standalone pages served as static files (not part of the app): load them normally
+      if (STATIC_PAGES.some((p) => url.pathname === p || url.pathname.startsWith(p + "/"))) return;
       // Same page, different section: let the browser scroll normally
       if (url.pathname === window.location.pathname && url.hash) return;
       e.preventDefault();

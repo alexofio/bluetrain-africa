@@ -59,6 +59,11 @@ export default function Hero() {
             <Button href={hero.secondaryCta.href} variant="secondary">
               {hero.secondaryCta.label}
             </Button>
+            {hero.profileCta && (
+              <Button href={hero.profileCta.href} variant="secondary">
+                {hero.profileCta.label}
+              </Button>
+            )}
           </motion.div>
 
           {/* Markets, surfaced in the hero — links to the map section */}

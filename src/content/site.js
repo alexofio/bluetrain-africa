@@ -75,6 +75,7 @@ export const en = {
     stat: null,
     primaryCta: { label: "Start a Project", href: "#contact" }, // BRIEF
     secondaryCta: { label: "View Case Studies", href: "#work" }, // BRIEF
+    profileCta: { label: "Company Profile", href: "/company-profile/" },
   },
 
   about: {

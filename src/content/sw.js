@@ -25,6 +25,7 @@ export const sw = {
     stat: null,
     primaryCta: { label: "Anzisha Mradi", href: "#contact" },
     secondaryCta: { label: "Tazama Kazi Zetu", href: "#work" },
+    profileCta: { label: "Wasifu wa Kampuni", href: "/company-profile/" },
   },
 
   about: {
