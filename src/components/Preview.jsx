@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
-import { config } from "../content/site";
+import { config, en } from "../content/site";
 import { useLang } from "../lib/i18n";
 import InformedPost from "./informed/InformedPost";
 import CaseStudy from "./CaseStudy";
+import { Home } from "../App";
+import { sw } from "../content/sw";
+import { applyText } from "../content/textPaths";
+import { bridge } from "../lib/editBridge";
 
 /**
  * /preview?token=… — one draft from the Bluetrain Portal, rendered with the real page components.
@@ -25,7 +29,11 @@ export default function Preview({ token, lang: want }) {
     if (!token) return setState({ error: t.ui.preview.error });
     fetch(`${config.portalApi}/content/preview?token=${encodeURIComponent(token)}`, { cache: "no-store" })
       .then(async (r) => { const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || t.ui.preview.error); return j; })
-      .then((j) => setState({ data: j }))
+      .then((j) => {
+        // Site text draft: put the draft text over the page's copy, then show the homepage.
+        if (j.type === "site") { applyText(en, j.item?.en); applyText(sw, j.item?.sw); bridge.refresh(); }
+        setState({ data: j });
+      })
       .catch((e) => setState({ error: e.message }));
   }, [token]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -35,7 +43,7 @@ export default function Preview({ token, lang: want }) {
       <div role="status" className="fixed inset-x-0 bottom-0 z-[70] bg-amber px-4 py-2.5 text-center font-display text-sm font-semibold text-navy">{p.banner}</div>
       {state.loading && <p className="container-site pb-32 pt-40 text-silver/80">{p.loading}</p>}
       {state.error && <p className="container-site pb-32 pt-40 text-lg text-silver/80">{state.error}</p>}
-      {state.data && (state.data.type === "case_study" ? <CaseStudy draft={state.data.item} /> : <InformedPost draft={state.data.item} />)}
+      {state.data && (state.data.type === "site" ? <Home /> : state.data.type === "case_study" ? <CaseStudy draft={state.data.item} /> : <InformedPost draft={state.data.item} />)}
     </>
   );
 }

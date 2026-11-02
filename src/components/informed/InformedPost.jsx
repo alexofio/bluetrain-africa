@@ -42,7 +42,7 @@ export default function InformedPost({ slug, draft }) {
   const englishBody = lang === "sw" && !swBody && ui.englishOnly;
 
   return (
-    <article className="relative pb-24 pt-28 sm:pt-32">
+    <article className="relative pb-24 pt-28 sm:pt-32" data-bt-item="informed" data-bt-slug={post.slug}>
       {/* reading progress, pinned under the floating nav */}
       <motion.div
         aria-hidden
@@ -57,8 +57,8 @@ export default function InformedPost({ slug, draft }) {
 
         <motion.header initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={spring.soft} className="mt-8 max-w-[56rem]">
           <Tags post={post} lang={lang} />
-          <h1 className="mt-6 font-display text-display-lg font-bold text-white">{loc(post, lang, "title")}</h1>
-          <p className="mt-6 max-w-[44rem] text-xl leading-relaxed text-silver/80">{loc(post, lang, "standfirst")}</p>
+          <h1 className="mt-6 font-display text-display-lg font-bold text-white" data-bt="title">{loc(post, lang, "title")}</h1>
+          <p className="mt-6 max-w-[44rem] text-xl leading-relaxed text-silver/80" data-bt="summary">{loc(post, lang, "standfirst")}</p>
           <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
             <div className="flex items-center gap-3">
               <span aria-hidden className="grid h-10 w-10 place-items-center rounded-full bg-brand font-display text-sm font-bold text-paper">BI</span>
@@ -81,6 +81,7 @@ export default function InformedPost({ slug, draft }) {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ ...spring.soft, delay: 0.1 }}
           className="mt-12 aspect-[21/9] overflow-hidden rounded-4xl border border-paper/10"
+          data-bt="cover"
         >
           <PostCover seed={post.cover} category={post.category} image={post.coverImage} srcSet={post.coverSrcset} alt={loc(post, lang, "coverAlt")} />
         </motion.div>
@@ -94,7 +95,7 @@ export default function InformedPost({ slug, draft }) {
                 {(post.sw?.takeaways && lang === "sw" ? post.sw.takeaways : post.takeaways).map((k, i) => (
                   <li key={k} className="flex gap-3 text-[0.95rem] leading-relaxed text-silver/85">
                     <span className="font-display font-bold text-amber">{String(i + 1).padStart(2, "0")}</span>
-                    {k}
+                    <span data-bt="takeaway">{k}</span>
                   </li>
                 ))}
               </ol>
@@ -107,7 +108,7 @@ export default function InformedPost({ slug, draft }) {
             {loc(post, lang, "answer") && (
               <div className="mb-10 rounded-3xl border border-brand-bright/25 bg-brand-bright/[0.07] p-6">
                 <p className="font-display text-xs font-semibold uppercase tracking-[0.14em] text-brand-bright">{ui.answer}</p>
-                <p className="mt-2 text-[1.075rem] leading-relaxed text-white">{loc(post, lang, "answer")}</p>
+                <p className="mt-2 text-[1.075rem] leading-relaxed text-white" data-bt="answer">{loc(post, lang, "answer")}</p>
               </div>
             )}
             {(swBody || post.body).map((b, i) => <Block key={i} b={b} />)}

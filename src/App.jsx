@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { bridge } from "./lib/editBridge";
 import { motion } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -42,7 +43,7 @@ function NotFound() {
   );
 }
 
-function Home() {
+export function Home() {
   return (
     <>
       <Hero />
@@ -62,6 +63,10 @@ function Home() {
 export default function App() {
   const { t, lang } = useLang();
   const route = useRoute();
+  // On-page editing: the editor can show an article's or case study's draft in place of the published version.
+  const [drafts, setDrafts] = useState({});
+  bridge.route = () => route;
+  bridge.showDraft = (kind, slug, item) => setDrafts((d) => ({ ...d, [`${kind}:${slug}`]: item || undefined }));
   const page = route.name === "post" ? `post-${route.slug}` : route.name === "work" ? `work-${route.slug}` : route.name === "legal" ? `legal-${route.doc}` : route.name;
 
   // Titles follow the page and the language (articles set their own in InformedPost)
@@ -106,8 +111,8 @@ export default function App() {
           <motion.div key={page} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: [0.2, 0.7, 0.2, 1] }}>
               {route.name === "home" && <Home />}
               {route.name === "informed" && <InformedIndex />}
-              {route.name === "post" && <InformedPost slug={route.slug} />}
-              {route.name === "work" && <CaseStudy slug={route.slug} />}
+              {route.name === "post" && <InformedPost slug={route.slug} draft={drafts[`post:${route.slug}`]} />}
+              {route.name === "work" && <CaseStudy slug={route.slug} draft={drafts[`work:${route.slug}`]} />}
               {route.name === "preview" && <Preview token={route.token} lang={route.lang} />}
               {route.name === "book" && <Booking preselect={route.with} />}
               {route.name === "legal" && <Legal doc={route.doc} />}

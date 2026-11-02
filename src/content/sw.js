@@ -4,6 +4,9 @@
  * stay in their original form. Have a native-speaking copy editor review before launch.
  */
 
+import { siteText } from "./cms.generated.js";
+import { applyText, cloneText } from "./textPaths.js";
+
 export const sw = {
   meta: {
     title: "Bluetrain Africa — Mkakati unaosonga. Mawazo yanayounganisha. Kazi inayoleta matokeo.",
@@ -290,3 +293,7 @@ export const sw = {
     footer: { explore: "Gundua", visit: "Tutembelee", follow: "Tufuate", contact: "Wasiliana", portal: "Lango la Wateja", profile: "Wasifu wa kampuni", offices: "Ofisi zetu", intents: [{ label: "Anzisha mradi", href: "#contact" }, { label: "Jiunge nasi", href: "mailto:info@bluetrain.co.tz?subject=Careers" }, { label: "Vyombo vya habari", href: "mailto:info@bluetrain.co.tz?subject=Press" }, { label: "Tusalimie", href: "mailto:info@bluetrain.co.tz" }] },
   },
 };
+
+// Built-in Kiswahili, kept for the on-page editor; then the published site text from the portal on top.
+export const swDefaults = cloneText(sw);
+applyText(sw, siteText?.sw);

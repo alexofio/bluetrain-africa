@@ -16,6 +16,8 @@ function Card({ item, lead, span }) {
       exit={{ opacity: 0, scale: 0.97 }}
       transition={spring.soft}
       className={`glass glow-hover group relative flex flex-col overflow-hidden rounded-3xl ${span}`}
+      data-bt-item="case_study"
+      data-bt-slug={item.id}
     >
       <div className={`relative overflow-hidden ${lead ? "aspect-[4/3] lg:aspect-auto lg:flex-1" : span.includes("12") ? "aspect-[16/9] lg:aspect-[21/8]" : "aspect-[16/9]"}`}>
         <div className="absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-[1.06] motion-reduce:group-hover:scale-100">
@@ -26,15 +28,15 @@ function Card({ item, lead, span }) {
         </span>
         {item.metric && (
           <span className="absolute bottom-4 left-4 rounded-full bg-paper px-3.5 py-1.5 font-display text-sm font-semibold text-ink">
-            {item.metric}
+            <span data-bt="metric">{item.metric}</span>
           </span>
         )}
       </div>
       <div className="p-6 sm:p-7">
         <h3 className="font-display text-xl font-bold tracking-[-0.015em] text-white sm:text-2xl">
-          {item.href ? <a href={item.href} className="after:absolute after:inset-0 focus-visible:outline-none">{item.title}</a> : item.title}
+          {item.href ? <a href={item.href} className="after:absolute after:inset-0 focus-visible:outline-none" data-bt="title">{item.title}</a> : <span data-bt="title">{item.title}</span>}
         </h3>
-        <p className="mt-2 max-w-[38rem] text-[0.95rem] leading-relaxed text-silver/70">{item.body}</p>
+        <p className="mt-2 max-w-[38rem] text-[0.95rem] leading-relaxed text-silver/70" data-bt="summary">{item.body}</p>
         {item.href && <p className="mt-4 font-display text-sm font-semibold text-brand-bright">{item.more} →</p>}
       </div>
     </motion.article>

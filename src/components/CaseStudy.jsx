@@ -33,7 +33,7 @@ export default function CaseStudy({ slug, draft }) {
   const period = c.period ? [month(c.period.start, lang), month(c.period.end, lang)].filter(Boolean).join(" – ") : "";
 
   return (
-    <article className="relative pb-24 pt-28 sm:pt-32">
+    <article className="relative pb-24 pt-28 sm:pt-32" data-bt-item="case_study" data-bt-slug={c.slug}>
       <div className="container-site">
         <a href={to("#work")} className="inline-flex items-center gap-2 text-sm text-silver/70 transition-colors hover:text-white">
           <span aria-hidden>←</span> {w.back}
@@ -43,17 +43,17 @@ export default function CaseStudy({ slug, draft }) {
             {cloc(c, lang, "industry") && <span className="rounded-full bg-brand-bright/15 px-2.5 py-1 text-[0.72rem] font-medium text-brand-bright">{cloc(c, lang, "industry")}</span>}
             {(c.capabilities || []).map((k) => <span key={k} className="rounded-full border border-white/10 px-2.5 py-1 text-[0.72rem] text-silver/70">{w.capabilities[k] || k}</span>)}
           </div>
-          <h1 className="mt-6 font-display text-display-lg font-bold text-white">{cloc(c, lang, "title")}</h1>
-          <p className="mt-6 max-w-[44rem] text-xl leading-relaxed text-silver/80">{cloc(c, lang, "standfirst")}</p>
+          <h1 className="mt-6 font-display text-display-lg font-bold text-white" data-bt="title">{cloc(c, lang, "title")}</h1>
+          <p className="mt-6 max-w-[44rem] text-xl leading-relaxed text-silver/80" data-bt="summary">{cloc(c, lang, "standfirst")}</p>
           <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-3 text-sm">
             {c.client && <div><dt className="text-steel">{w.client}</dt><dd className="font-medium text-white">{c.client.name}</dd></div>}
             {period && <div><dt className="text-steel">{w.period}</dt><dd className="font-medium text-white">{period}</dd></div>}
           </dl>
         </motion.header>
 
-        <div className="relative mt-12 aspect-[21/9] overflow-hidden rounded-4xl border border-paper/10">
+        <div className="relative mt-12 aspect-[21/9] overflow-hidden rounded-4xl border border-paper/10" data-bt="cover">
           {c.coverImage ? <img src={c.coverImage} srcSet={c.coverSrcset || undefined} alt={cloc(c, lang, "coverAlt") || ""} className="h-full w-full object-cover" /> : <WorkArt kind={c.art || "routes"} />}
-          {cloc(c, lang, "metric") && <span className="absolute bottom-5 left-5 rounded-full bg-paper px-4 py-2 font-display text-base font-semibold text-ink">{cloc(c, lang, "metric")}</span>}
+          {cloc(c, lang, "metric") && <span className="absolute bottom-5 left-5 rounded-full bg-paper px-4 py-2 font-display text-base font-semibold text-ink" data-bt="metric">{cloc(c, lang, "metric")}</span>}
         </div>
 
         {c.results?.length > 0 && (
@@ -72,7 +72,7 @@ export default function CaseStudy({ slug, draft }) {
         )}
 
         <div className="mt-14 max-w-[42rem] text-[1.075rem] leading-[1.75] text-silver/85 lg:ml-[calc(5/12*100%)]">
-          {cloc(c, lang, "answer") && <p className="mb-8 text-xl leading-relaxed text-white">{cloc(c, lang, "answer")}</p>}
+          {cloc(c, lang, "answer") && <p className="mb-8 text-xl leading-relaxed text-white" data-bt="answer">{cloc(c, lang, "answer")}</p>}
           {body.map((b, i) => <Block key={i} b={b} />)}
 
           {c.quote && (

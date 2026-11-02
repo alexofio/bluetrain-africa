@@ -15,3 +15,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </MotionConfig>
   </React.StrictMode>
 );
+
+// Website authors signed in to the Bluetrain Portal can edit the page (loads nothing for visitors).
+import("./lib/editBridge").then((m) => m.maybeStartEditing());

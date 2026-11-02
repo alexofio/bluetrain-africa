@@ -8,6 +8,9 @@
 // VITE_PORTAL_API lets a local preview talk to a local portal (npm run dev with VITE_PORTAL_API=http://localhost:8787/api/public).
 const PORTAL_API = (typeof import.meta !== "undefined" && import.meta.env?.VITE_PORTAL_API) || "https://portal.bluetrain.africa/api/public";
 
+import { siteText } from "./cms.generated.js";
+import { applyText, cloneText } from "./textPaths.js";
+
 export const config = {
   // Discovery-call booking page on this site (people, times and invites come from the Bluetrain Portal)
   bookingUrl: "#/book",
@@ -347,3 +350,7 @@ export const en = {
     footer: { explore: "Explore", visit: "Visit", follow: "Follow", contact: "Contact", portal: "Client portal", profile: "Company profile", offices: "Our offices", intents: [{ label: "Start a project", href: "#contact" }, { label: "Join the team", href: "mailto:info@bluetrain.co.tz?subject=Careers" }, { label: "Press", href: "mailto:info@bluetrain.co.tz?subject=Press" }, { label: "Say hello", href: "mailto:info@bluetrain.co.tz" }] },
   },
 };
+
+// Built-in English, kept for the on-page editor; then the published site text from the portal on top.
+export const enDefaults = cloneText(en);
+applyText(en, siteText?.en);

@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { en } from "../content/site";
 import { sw } from "../content/sw";
+import { bridge } from "./editBridge";
 
 const KEY = "bluetrain-lang";
 const dictionaries = { en, sw };
@@ -17,6 +18,7 @@ function initialLang() {
 
 export function LanguageProvider({ children }) {
   const [lang, setLangState] = useState(initialLang);
+  const [rev, setRev] = useState(0); // bumped by the on-page editor after it changes text in place
 
   useEffect(() => {
     document.documentElement.lang = lang; // page titles are set per route in App
@@ -27,7 +29,10 @@ export function LanguageProvider({ children }) {
     try { localStorage.setItem(KEY, next); } catch {}
   }, []);
 
-  const value = useMemo(() => ({ lang, setLang, t: dictionaries[lang] }), [lang, setLang]);
+  bridge.lang = () => lang;
+  bridge.setLang = setLang;
+  bridge.refresh = () => setRev((r) => r + 1);
+  const value = useMemo(() => ({ lang, setLang, t: dictionaries[lang], rev }), [lang, setLang, rev]);
   return <LangContext.Provider value={value}>{children}</LangContext.Provider>;
 }
 

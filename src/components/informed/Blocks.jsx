@@ -9,11 +9,11 @@ import { useEffect, useRef, useState } from "react";
  */
 const H = (html) => ({ dangerouslySetInnerHTML: { __html: html } });
 
-export function Picture({ b, className = "", sizes = "(min-width: 1024px) 42rem, 100vw" }) {
+export function Picture({ b, className = "", sizes = "(min-width: 1024px) 42rem, 100vw", bt }) {
   return (
     <picture>
       {b.webp && <source type="image/webp" srcSet={b.webp} sizes={sizes} />}
-      <img src={b.img} srcSet={b.srcset || undefined} sizes={b.srcset ? sizes : undefined} alt={b.alt || ""} width={b.w} height={b.h} loading="lazy" decoding="async" className={className} />
+      <img src={b.img} srcSet={b.srcset || undefined} sizes={b.srcset ? sizes : undefined} alt={b.alt || ""} data-bt={bt} width={b.w} height={b.h} loading="lazy" decoding="async" className={className} />
     </picture>
   );
 }
@@ -70,15 +70,15 @@ export function FaqList({ items, title }) {
 }
 
 export default function Block({ b, faqTitle }) {
-  if (b.h) return <h2 className="mt-12 font-display text-2xl font-bold tracking-[-0.015em] text-white sm:text-[1.75rem]">{b.h}</h2>;
-  if (b.h3) return <h3 className="mt-10 font-display text-xl font-bold tracking-[-0.01em] text-white">{b.h3}</h3>;
+  if (b.h) return <h2 data-bt="block" className="mt-12 font-display text-2xl font-bold tracking-[-0.015em] text-white sm:text-[1.75rem]">{b.h}</h2>;
+  if (b.h3) return <h3 data-bt="block" className="mt-10 font-display text-xl font-bold tracking-[-0.01em] text-white">{b.h3}</h3>;
   if (b.list) {
     const Tag = b.ordered ? "ol" : "ul";
     return (
       <Tag className={`mt-6 space-y-3 ${b.ordered ? "list-decimal pl-6 marker:font-display marker:font-bold marker:text-amber" : ""}`}>
         {b.list.map((li, i) =>
-          b.ordered ? <li key={i} className="pl-2" {...H(li)} /> : (
-            <li key={i} className="relative pl-6 before:absolute before:left-0 before:top-[0.7em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-brand-bright" {...H(li)} />
+          b.ordered ? <li key={i} data-bt="listItem" className="pl-2" {...H(li)} /> : (
+            <li key={i} data-bt="listItem" className="relative pl-6 before:absolute before:left-0 before:top-[0.7em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-brand-bright" {...H(li)} />
           ))}
       </Tag>
     );
@@ -87,7 +87,7 @@ export default function Block({ b, faqTitle }) {
     return (
       <figure className="my-12 border-l-2 border-brand-bright pl-6">
         <blockquote className="font-display text-2xl font-semibold leading-snug tracking-[-0.015em] text-white sm:text-3xl">
-          “<span {...H(b.quote)} />”
+          “<span data-bt="block" {...H(b.quote)} />”
         </blockquote>
         {b.by && <figcaption className="mt-3 text-sm text-steel">{b.by}</figcaption>}
       </figure>
@@ -95,7 +95,7 @@ export default function Block({ b, faqTitle }) {
   if (b.callout)
     return (
       <aside className={`my-8 rounded-2xl border px-5 py-4 ${b.tone === "note" ? "border-amber/30 bg-amber/10" : "border-brand-bright/30 bg-brand-bright/10"}`}>
-        <p {...H(b.callout)} />
+        <p data-bt="block" {...H(b.callout)} />
       </aside>
     );
   if (b.table)
@@ -112,7 +112,7 @@ export default function Block({ b, faqTitle }) {
   if (b.img)
     return (
       <figure className="my-10">
-        <Picture b={b} className="w-full rounded-3xl border border-paper/10" />
+        <Picture b={b} bt="image" className="w-full rounded-3xl border border-paper/10" />
         {(b.caption || b.credit) && (
           <figcaption className="mt-3 text-sm text-steel">{b.caption}{b.credit && <span className="text-steel/70">{b.caption ? " · " : ""}{b.credit}</span>}</figcaption>
         )}
@@ -132,5 +132,5 @@ export default function Block({ b, faqTitle }) {
   if (b.embed) return <Embed e={b.embed} />;
   if (b.hr) return <hr className="my-12 border-white/10" />;
   if (b.faq) return <FaqList items={b.faq} title={faqTitle} />;
-  return <p className="mt-6" {...H(b.html ?? b.p ?? "")} />;
+  return <p data-bt="block" className="mt-6" {...H(b.html ?? b.p ?? "")} />;
 }
