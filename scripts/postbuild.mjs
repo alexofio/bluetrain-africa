@@ -5,7 +5,7 @@
  *  - _redirects (old Wix URLs → new pages, plus address changes made in the portal) and _headers (caching + security)
  *  - llms.txt (a plain index for AI answer engines) and content-version.json (tells the portal which content is live)
  */
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { config, en } from "../src/content/site.js";
 import { posts } from "../src/content/informed.js";
 import { legal } from "../src/content/legal.js";
@@ -41,6 +41,17 @@ function ga4() {
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","${id}",{send_page_view:false});gtag("event","page_view");</script>`;
 }
 
+// Google Tag Manager: standard container snippet in <head> and the no-JavaScript iframe right after <body>.
+function gtmHead() {
+  if (!config.gtmId) return "";
+  const id = esc(config.gtmId);
+  return `<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${id}');</script>`;
+}
+function gtmBody() {
+  if (!config.gtmId) return "";
+  return `<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${esc(config.gtmId)}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>`;
+}
+
 function page({ path, title, description, type = "website", image = OG, ld = [], noscript = "", noindex = false, canonical }) {
   const url = canonical || SITE + (path === "/" ? "/" : path);
   const head = [
@@ -59,14 +70,24 @@ function page({ path, title, description, type = "website", image = OG, ld = [],
     `<meta name="twitter:description" content="${esc(description)}" />`,
     `<meta name="twitter:image" content="${esc(image)}" />`,
     ...ld.map(jsonld),
-    ga4(),
+    config.gtmId ? gtmHead() : ga4(),
   ].filter(Boolean).join("\n    ");
   return template
+    .replace(/<body([^>]*)>/, (m) => m + gtmBody())
     .replace(/<title>.*?<\/title>/s, `<title>${esc(title)}</title>`)
     .replace(/<meta name="description" content=".*?" \/>/s, `<meta name="description" content="${esc(description)}" />`)
     .replace("<!--route-meta-->", head)
     // Plain-HTML fallback for visitors and crawlers without JavaScript
     .replace("<!--route-noscript-->", noscript ? `<noscript><main style="max-width:44rem;margin:0 auto;padding:6rem 1.25rem;font-family:Inter,system-ui,sans-serif;color:#dbdbdb">${noscript}</main></noscript>` : "");
+}
+
+// Static pages copied from public/ (not built from the template) get the same Google Tag Manager tags.
+function tagStatic(file) {
+  if (!config.gtmId || !existsSync(DIST + file)) return;
+  let html = readFileSync(DIST + file, "utf8");
+  if (html.includes("googletagmanager.com/gtm.js")) return;
+  html = html.replace("</head>", `  ${gtmHead()}\n</head>`).replace(/<body([^>]*)>/, (m) => m + gtmBody());
+  writeFileSync(DIST + file, html);
 }
 
 function write(file, html) {
@@ -202,6 +223,7 @@ for (const doc of ["privacy", "terms"]) {
 
 // ---- 404 (Cloudflare serves this for any unknown path; the app shows its not-found view)
 write("404.html", page({ path: "/404", title: "Page not found | Bluetrain Africa", description: "This page has moved or no longer exists.", noindex: true }));
+tagStatic("company-profile/index.html");
 
 // ---- sitemap + robots
 const urls = [

@@ -30,6 +30,8 @@ export const config = {
   ],
   // Google Analytics 4 measurement ID, e.g. "G-XXXXXXXXXX". Empty = no tracking script is added.
   ga4Id: "",
+  // Google Tag Manager container. When set, GTM loads on every page and GA4/ads tags are managed in GTM.
+  gtmId: "GTM-MNNHD9WL",
   // Live address, used for canonical URLs, the sitemap and share previews
   siteUrl: "https://bluetrain.africa",
   // Clients (client wall + ticker) and case studies are managed in the Bluetrain Portal → Website Content,

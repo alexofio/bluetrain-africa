@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { track } from "./lib/track";
+import { config } from "./content/site";
 import { bridge } from "./lib/editBridge";
 import { motion } from "framer-motion";
 import Navbar from "./components/Navbar";
@@ -79,6 +81,7 @@ export default function App() {
   }, [page, lang]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Page changes start at the top; #anchors (also when arriving from a blog page) land on their section
+  const firstView = useRef(true);
   useEffect(() => {
     if (route.name === "home" && route.anchor) {
       // the section may not exist until the page transition finishes, so poll briefly
@@ -92,10 +95,9 @@ export default function App() {
     } else if (route.name !== "home" || !route.anchor) {
       window.scrollTo(0, 0);
     }
-    // GA4 (only when config.ga4Id is set): count each in-app page change
-    if (typeof window.gtag === "function") {
-      window.gtag("event", "page_view", { page_path: window.location.pathname, page_location: window.location.href, page_title: document.title });
-    }
+    // Analytics: each in-app page change. The first load is counted by the tag itself (GTM/GA4).
+    if (firstView.current) firstView.current = false;
+    else track(config.gtmId ? "virtual_page_view" : "page_view", { page_path: window.location.pathname, page_location: window.location.href, page_title: document.title });
   }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

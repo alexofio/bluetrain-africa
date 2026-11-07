@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { config } from "../content/site";
+import { track } from "../lib/track";
 import { useLang } from "../lib/i18n";
 import { spring } from "../lib/motion";
 import { attribution } from "../lib/attribution";
@@ -116,7 +117,7 @@ export default function Booking({ preselect = "" }) {
       if (!res.ok) throw new Error(data.error);
       setDone(data); setStatus("done");
       window.scrollTo({ top: 0, behavior: "smooth" });
-      if (typeof window.gtag === "function") window.gtag("event", "generate_lead", { method: "discovery_call" });
+      track("generate_lead", { method: "discovery_call" });
     } catch {
       setStatus("idle"); setNotice(b.error(config.email));
     }
