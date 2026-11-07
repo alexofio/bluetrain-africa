@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { track } from "./lib/track";
 import { config } from "./content/site";
+import { tags } from "./content/tags";
 import { bridge } from "./lib/editBridge";
 import { motion } from "framer-motion";
 import Navbar from "./components/Navbar";
@@ -97,7 +98,7 @@ export default function App() {
     }
     // Analytics: each in-app page change. The first load is counted by the tag itself (GTM/GA4).
     if (firstView.current) firstView.current = false;
-    else track(config.gtmId ? "virtual_page_view" : "page_view", { page_path: window.location.pathname, page_location: window.location.href, page_title: document.title });
+    else track(tags.gtmId ? "virtual_page_view" : "page_view", { page_path: window.location.pathname, page_location: window.location.href, page_title: document.title });
   }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

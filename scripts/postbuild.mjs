@@ -11,6 +11,8 @@ import { posts } from "../src/content/informed.js";
 import { legal } from "../src/content/legal.js";
 import { caseStudies, hasPage, version as contentVersion } from "../src/content/cms.js";
 import { redirects as contentRedirects } from "../src/content/cms.generated.js";
+// Google tags: from the portal (Admin → Settings → Google tags) when set there, else site.js.
+import { tags } from "../src/content/tags.js";
 
 const DIST = new URL("../dist/", import.meta.url).pathname;
 const SITE = config.siteUrl.replace(/\/$/, "");
@@ -35,21 +37,21 @@ const organization = {
 };
 
 function ga4() {
-  if (!config.ga4Id) return "";
-  const id = esc(config.ga4Id);
+  if (!tags.ga4Id) return "";
+  const id = esc(tags.ga4Id);
   return `<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","${id}",{send_page_view:false});gtag("event","page_view");</script>`;
 }
 
 // Google Tag Manager: standard container snippet in <head> and the no-JavaScript iframe right after <body>.
 function gtmHead() {
-  if (!config.gtmId) return "";
-  const id = esc(config.gtmId);
+  if (!tags.gtmId) return "";
+  const id = esc(tags.gtmId);
   return `<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${id}');</script>`;
 }
 function gtmBody() {
-  if (!config.gtmId) return "";
-  return `<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${esc(config.gtmId)}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>`;
+  if (!tags.gtmId) return "";
+  return `<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${esc(tags.gtmId)}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>`;
 }
 
 function page({ path, title, description, type = "website", image = OG, ld = [], noscript = "", noindex = false, canonical }) {
@@ -70,7 +72,7 @@ function page({ path, title, description, type = "website", image = OG, ld = [],
     `<meta name="twitter:description" content="${esc(description)}" />`,
     `<meta name="twitter:image" content="${esc(image)}" />`,
     ...ld.map(jsonld),
-    config.gtmId ? gtmHead() : ga4(),
+    gtmHead(), ga4(),
   ].filter(Boolean).join("\n    ");
   return template
     .replace(/<body([^>]*)>/, (m) => m + gtmBody())
@@ -81,12 +83,12 @@ function page({ path, title, description, type = "website", image = OG, ld = [],
     .replace("<!--route-noscript-->", noscript ? `<noscript><main style="max-width:44rem;margin:0 auto;padding:6rem 1.25rem;font-family:Inter,system-ui,sans-serif;color:#dbdbdb">${noscript}</main></noscript>` : "");
 }
 
-// Static pages copied from public/ (not built from the template) get the same Google Tag Manager tags.
+// Static pages copied from public/ (not built from the template) get the same Google tags.
 function tagStatic(file) {
-  if (!config.gtmId || !existsSync(DIST + file)) return;
+  if (!(tags.gtmId || tags.ga4Id) || !existsSync(DIST + file)) return;
   let html = readFileSync(DIST + file, "utf8");
-  if (html.includes("googletagmanager.com/gtm.js")) return;
-  html = html.replace("</head>", `  ${gtmHead()}\n</head>`).replace(/<body([^>]*)>/, (m) => m + gtmBody());
+  if (html.includes("googletagmanager.com/")) return;
+  html = html.replace("</head>", `  ${gtmHead()}${ga4()}\n</head>`).replace(/<body([^>]*)>/, (m) => m + gtmBody());
   writeFileSync(DIST + file, html);
 }
 

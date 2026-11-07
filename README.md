@@ -128,3 +128,7 @@ desktop licences usually don't.
 - Logo files are the approved white / colour versions, never recoloured or stretched.
 - Blue stays dominant: navy base, one full Bluetrain Blue band (statement section), amber used only for success and highlights.
 - All motion respects `prefers-reduced-motion`; the hero canvas pauses when off-screen.
+
+## Google tags
+
+GA4 and Google Tag Manager IDs come from the Bluetrain Portal (Admin → Settings → Google tags) via `GET /api/public/content/tags` at build time; saving them in the portal rebuilds the site. If the portal has none set, the IDs in `src/content/site.js` are used. Both can load together (GTM first, then GA4). Code: `src/content/tags.js`, `scripts/postbuild.mjs`, `src/lib/track.js`.
