@@ -257,7 +257,7 @@ export const sw = {
       intro: "Benki na kampuni za simu, chapa za vinywaji na mashirika ya maendeleo: kazi yetu inagusa uchumi mzima.",
       sectors: { finance: "Huduma za fedha", telco: "Mawasiliano ya simu", development: "Maendeleo", fmcg: "FMCG na Vinywaji", auto: "Magari", property: "Mali isiyohamishika", gaming: "Michezo ya kubahatisha", energy: "Nishati" },
     },
-    privacyNotice: { before: "Tunatumia taarifa zako kukujibu na kupanga mazungumzo tu. Soma", link: "Sera yetu ya Faragha", after: "." },
+    privacyNotice: { before: "Tunatumia taarifa zako kukujibu na kupanga mazungumzo. Soma", link: "Sera yetu ya Faragha", after: "." },
     notFound: { title: "Ukurasa huu umehamishwa au haupo tena.", body: "Tovuti yetu ina makazi mapya. Ukurasa uliokuwa ukiutafuta huenda umehamishwa. Jaribu mojawapo ya hizi.", home: "Nenda ukurasa wa mwanzo" },
     sticky: { label: "Hatua za haraka" },
     book: {

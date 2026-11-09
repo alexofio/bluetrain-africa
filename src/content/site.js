@@ -32,6 +32,8 @@ export const config = {
   ga4Id: "",
   // Google Tag Manager container. When set, GTM loads on every page and GA4/ads tags are managed in GTM.
   gtmId: "GTM-MNNHD9WL",
+  // Bluetrain Audiences (portal.bluetrain.africa/dmp → Tags & sites). Consent banner first; empty = off.
+  audiencesTag: "https://portal.bluetrain.africa/bt/c5100be7ec9ea6bc70da.js",
   // Live address, used for canonical URLs, the sitemap and share previews
   siteUrl: "https://bluetrain.africa",
   // Clients (client wall + ticker) and case studies are managed in the Bluetrain Portal → Website Content,
@@ -314,7 +316,7 @@ export const en = {
       intro: "Banks and telcos, beverage brands and development organisations: the work spans the economy.",
       sectors: { finance: "Financial services", telco: "Telecommunications", development: "Development", fmcg: "FMCG & Beverages", auto: "Automotive", property: "Real estate", gaming: "Gaming", energy: "Energy" },
     },
-    privacyNotice: { before: "We use your details only to reply and arrange your call. See our", link: "Privacy Policy", after: "." },
+    privacyNotice: { before: "We use your details to reply and arrange your call. See our", link: "Privacy Policy", after: "." },
     notFound: { title: "This page has moved or no longer exists.", body: "Our website has a new home. The page you were looking for may have moved. Try one of these instead.", home: "Go to the homepage" },
     sticky: { label: "Quick actions" },
     preview: { banner: "Draft preview: not published. Only people with this link can see it.", loading: "Loading the draft…", error: "This preview can't be shown." },

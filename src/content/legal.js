@@ -7,7 +7,7 @@
  * Facts here must match the site's real behaviour (forms, storage, providers). Update both languages together.
  */
 
-const EFFECTIVE = "2026-10-27";
+const EFFECTIVE = "2026-11-09";
 const ADDRESS = "Dar Village Office Park, SNDBX, 2nd Floor, Rose Garden Road, Mikocheni, P.O. Box 32329, Kijitonyama, Dar es Salaam, Tanzania";
 const EMAIL = "legal@bluetrain.co.tz";
 
@@ -36,6 +36,8 @@ export const legal = {
             "**Booking a call:** your name and email, your company and phone number if you give them, the topic, the time and team member you choose, your time zone and site language.",
             "**With either form:** the page you sent it from, the website that referred you, and any campaign tags in the link you followed (such as utm_source). We also record a hidden spam-check field and how long the form took to complete.",
             "**When you visit:** our hosting provider, Cloudflare, processes your IP address, browser type and the pages you request, to deliver the site and protect it from attacks.",
+            "**Visit statistics:** Google Analytics, loaded through Google Tag Manager, counts visits and shows which pages and campaigns work.",
+            "**Audience measurement, only if you accept our banner:** your device type, operating system, browser, phone model, screen size, language, connection speed estimate and time zone; your mobile network or internet provider and approximate location (country, region, city), as estimated by Cloudflare; the pages you view, actions such as sending a form, and the campaign or website that brought you. A random ID is stored in your browser to recognise your device. If you then send a form, we add a scrambled (hashed) copy of the email or phone number you typed. We do not store your IP address for this.",
           ] },
           { p: "We do not ask for sensitive personal data, such as health, religious or financial details. Please do not include it in your messages." },
         ] },
@@ -43,16 +45,19 @@ export const legal = {
           { list: [
             "**To do what you asked:** reply to your enquiry, prepare a proposal, and schedule and hold your call. You give us these details so we can take these steps for you.",
             "**To understand which campaigns bring enquiries:** we look at referral and campaign data in summary form to improve our marketing.",
+            "**To understand our audience and improve our advertising, with your consent:** we group visitors by things like device, network, region and the services they looked at. We may show our own ads to these groups, including by matching a scrambled email or phone number with Meta or Google. You can withdraw your consent at any time.",
             "**To keep the site safe:** we block spam and attacks.",
             "**To meet our legal duties:** for example, keeping business records the law requires.",
           ] },
-          { p: "We use your data only for these purposes. We do not sell it, build advertising profiles from it, or make decisions about you by automated means alone." },
+          { p: "We use your data only for these purposes. We do not sell it, and we do not make decisions about you by automated means alone. Audience groups are built only from visitors who accepted audience measurement." },
           { p: "We will only send you newsletters or other marketing if you clearly agree to receive them. You can unsubscribe at any time." },
         ] },
         { id: "sharing", h: "Who we share it with", body: [
           { list: [
             "**Our team:** the Bluetrain staff who handle enquiries and bookings.",
-            "**Service providers working for us:** Cloudflare (website hosting, security, and storing enquiries in our client portal) and Google (Google Workspace email and calendar, used to reply and send call invitations). They may use the data only on our instructions and under contract.",
+            "**Service providers working for us:** Cloudflare (website hosting, security, and storing enquiries and audience data in our client portal) and Google (Google Workspace email and calendar, used to reply and send call invitations, and Google Analytics). They may use the data only on our instructions and under contract.",
+            "**Advertising platforms, only if you accepted audience measurement:** when we run our own ads, we may upload scrambled (hashed) email addresses or phone numbers to Meta or Google so our ads reach the right people. They use them to match accounts and then discard the ones that do not match.",
+            "**Anonymous market figures:** we may combine anonymous totals (for example, the share of visitors on a given network) with other sites we work on to describe a market. These figures never identify you or show small groups.",
             "**Authorities:** when a law or a court requires it.",
           ] },
           { p: "We never sell or rent personal data." },
@@ -65,6 +70,7 @@ export const legal = {
             "**Enquiries and bookings:** 2 years after our last contact with you. We then delete the data or make it anonymous.",
             "**If you become a client:** for the length of our agreement, and afterwards for as long as Tanzanian law requires us to keep business and tax records.",
             "**Hosting and security logs:** for short periods, as needed to run and protect the site.",
+            "**Audience measurement:** page and action records for 90 days; your device profile until 13 months after your last visit. We then delete them.",
           ] },
         ] },
         { id: "security", h: "How we protect it", body: [
@@ -89,12 +95,14 @@ export const legal = {
           { p: "If you are unhappy with how we handle your data, please contact us first so we can put it right. You can also complain to the Personal Data Protection Commission (PDPC), Tanzania's data protection regulator." },
         ] },
         { id: "device-storage", h: "Cookies and storage on your device", body: [
-          { p: "We do not use cookies for tracking or advertising. The site stores a few small items in your browser to work properly:" },
+          { p: "The site stores a few small items in your browser:" },
           { list: [
             "your language and light or dark theme choice (kept until you clear it);",
-            "where you arrived from during your visit, so it can be sent with a form (cleared when you close the tab).",
+            "where you arrived from during your visit, so it can be sent with a form (cleared when you close the tab);",
+            "your answer to our audience measurement banner and, if you accepted, a random device ID and the time of your last visit;",
+            "cookies set by Google Analytics and Google Tag Manager to count visits.",
           ] },
-          { p: "Staff who sign in to edit the blog use a short-lived security cookie. You can clear stored items at any time in your browser settings. If we add analytics in future, we will update this policy first and ask for your consent where the law requires." },
+          { p: "If you say no to the banner, the audience measurement tag collects nothing. To change your mind later, clear this site's data in your browser settings and the banner will ask again, or email us and we will delete what we hold. Staff who sign in to edit the blog use a short-lived security cookie." },
         ] },
         { id: "children", h: "Children", body: [
           { p: `This website is for businesses and is not aimed at children under 18. We do not knowingly collect their data. If you believe a child has sent us personal data, email [${EMAIL}](mailto:${EMAIL}) and we will delete it.` },
@@ -186,6 +194,8 @@ export const legal = {
             "**Kuweka miadi ya mazungumzo:** jina na barua pepe yako, kampuni na namba ya simu ukizitoa, mada, muda na mwanatimu unayemchagua, saa za eneo lako na lugha ya tovuti.",
             "**Kwa fomu yoyote kati ya hizi:** ukurasa ulioitumia kutoka, tovuti iliyokuleta, na alama za kampeni kwenye kiungo ulichofuata (kama utm_source). Pia tunarekodi sehemu iliyofichwa ya kuzuia barua taka na muda uliotumika kujaza fomu.",
             "**Unapotembelea:** mtoa huduma wetu wa uhifadhi, Cloudflare, huchakata anwani yako ya IP, aina ya kivinjari na kurasa unazoomba, ili kuwasilisha tovuti na kuilinda dhidi ya mashambulizi.",
+            "**Takwimu za ziara:** Google Analytics, inayopakiwa kupitia Google Tag Manager, huhesabu ziara na kuonyesha kurasa na kampeni zinazofanya vizuri.",
+            "**Kupima hadhira, ukikubali bango letu tu:** aina ya kifaa chako, mfumo endeshi, kivinjari, modeli ya simu, ukubwa wa skrini, lugha, makadirio ya kasi ya mtandao na saa za eneo lako; mtandao wako wa simu au mtoa huduma wa intaneti na eneo la takriban (nchi, mkoa, mji), kama yanavyokadiriwa na Cloudflare; kurasa unazotazama, hatua kama kutuma fomu, na kampeni au tovuti iliyokuleta. Namba ya utambulisho isiyo na maana huhifadhiwa kwenye kivinjari chako ili kutambua kifaa chako. Ukituma fomu baadaye, tunaongeza nakala iliyofichwa (hashed) ya barua pepe au namba ya simu uliyoandika. Hatuhifadhi anwani yako ya IP kwa ajili ya hili.",
           ] },
           { p: "Hatuombi taarifa binafsi nyeti, kama za afya, dini au fedha. Tafadhali usiziweke kwenye ujumbe wako." },
         ] },
@@ -193,16 +203,19 @@ export const legal = {
           { list: [
             "**Kufanya ulichoomba:** kujibu ombi lako, kuandaa pendekezo, na kupanga na kufanya mazungumzo yako. Unatupa taarifa hizi ili tuchukue hatua hizi kwa ajili yako.",
             "**Kuelewa kampeni zipi zinaleta maombi:** tunaangalia taarifa za kiungo na kampeni kwa muhtasari ili kuboresha masoko yetu.",
+            "**Kuielewa hadhira yetu na kuboresha matangazo yetu, kwa ridhaa yako:** tunawaweka wageni katika makundi kwa mambo kama kifaa, mtandao, mkoa na huduma walizoangalia. Tunaweza kuonyesha matangazo yetu wenyewe kwa makundi haya, ikiwemo kwa kulinganisha barua pepe au namba ya simu iliyofichwa na Meta au Google. Unaweza kuondoa ridhaa yako wakati wowote.",
             "**Kulinda tovuti:** tunazuia barua taka na mashambulizi.",
             "**Kutimiza wajibu wetu kisheria:** kwa mfano, kutunza kumbukumbu za biashara zinazotakiwa na sheria.",
           ] },
-          { p: "Tunatumia taarifa zako kwa madhumuni haya pekee. Hatuziuzi, hatuzitumii kujenga wasifu wa matangazo, wala kufanya maamuzi kukuhusu kwa njia za kiotomatiki pekee." },
+          { p: "Tunatumia taarifa zako kwa madhumuni haya pekee. Hatuziuzi, wala hatufanyi maamuzi kukuhusu kwa njia za kiotomatiki pekee. Makundi ya hadhira hujengwa kutoka kwa wageni waliokubali kupimwa tu." },
           { p: "Tutakutumia jarida au matangazo mengine tu ukikubali waziwazi kuyapokea. Unaweza kujiondoa wakati wowote." },
         ] },
         { id: "sharing", h: "Tunaoshirikiana nao", body: [
           { list: [
             "**Timu yetu:** wafanyakazi wa Bluetrain wanaoshughulikia maombi na miadi.",
-            "**Watoa huduma wanaofanya kazi kwa niaba yetu:** Cloudflare (uhifadhi wa tovuti, usalama, na kuhifadhi maombi kwenye mfumo wetu wa wateja) na Google (barua pepe na kalenda za Google Workspace, kwa kujibu na kutuma mialiko ya mazungumzo). Wanaweza kutumia taarifa kwa maelekezo yetu tu na chini ya mkataba.",
+            "**Watoa huduma wanaofanya kazi kwa niaba yetu:** Cloudflare (uhifadhi wa tovuti, usalama, na kuhifadhi maombi na taarifa za hadhira kwenye mfumo wetu wa wateja) na Google (barua pepe na kalenda za Google Workspace, kwa kujibu na kutuma mialiko ya mazungumzo, na Google Analytics). Wanaweza kutumia taarifa kwa maelekezo yetu tu na chini ya mkataba.",
+            "**Majukwaa ya matangazo, ukikubali kupimwa tu:** tunapoendesha matangazo yetu wenyewe, tunaweza kupakia barua pepe au namba za simu zilizofichwa (hashed) kwa Meta au Google ili matangazo yetu yawafikie watu sahihi. Wao huzitumia kulinganisha akaunti na kisha kuzitupa zisizolingana.",
+            "**Takwimu za soko zisizotambulisha mtu:** tunaweza kuunganisha jumla zisizotambulisha mtu (kwa mfano, sehemu ya wageni walio kwenye mtandao fulani) na tovuti nyingine tunazozifanyia kazi ili kueleza soko. Takwimu hizi kamwe hazikutambulishi wala kuonyesha makundi madogo.",
             "**Mamlaka:** pale sheria au mahakama inapotaka.",
           ] },
           { p: "Kamwe hatuuzi wala kukodisha taarifa binafsi." },
@@ -215,6 +228,7 @@ export const legal = {
             "**Maombi na miadi:** miaka 2 baada ya mawasiliano yetu ya mwisho nawe. Baada ya hapo tunazifuta au kuzifanya zisitambulishe mtu.",
             "**Ukiwa mteja wetu:** kwa muda wote wa makubaliano yetu, na baadaye kwa muda ambao sheria za Tanzania zinatutaka kutunza kumbukumbu za biashara na kodi.",
             "**Kumbukumbu za uhifadhi na usalama:** kwa vipindi vifupi, kadri inavyohitajika kuendesha na kulinda tovuti.",
+            "**Kupima hadhira:** kumbukumbu za kurasa na hatua kwa siku 90; wasifu wa kifaa chako hadi miezi 13 baada ya ziara yako ya mwisho. Kisha tunazifuta.",
           ] },
         ] },
         { id: "security", h: "Jinsi tunavyozilinda", body: [
@@ -239,12 +253,14 @@ export const legal = {
           { p: "Ikiwa hujaridhika na jinsi tunavyoshughulikia taarifa zako, tafadhali wasiliana nasi kwanza ili tulirekebishe. Unaweza pia kuwasilisha malalamiko kwa Tume ya Ulinzi wa Taarifa Binafsi (PDPC), mdhibiti wa ulinzi wa taarifa nchini Tanzania." },
         ] },
         { id: "device-storage", h: "Vidakuzi na uhifadhi kwenye kifaa chako", body: [
-          { p: "Hatutumii vidakuzi (cookies) kufuatilia au kwa matangazo. Tovuti huhifadhi vitu vichache vidogo kwenye kivinjari chako ili ifanye kazi vizuri:" },
+          { p: "Tovuti huhifadhi vitu vichache vidogo kwenye kivinjari chako:" },
           { list: [
             "lugha uliyochagua na mwonekano mwangavu au wa giza (huhifadhiwa hadi uvifute);",
-            "ulikotokea wakati wa ziara yako, ili kutumwa pamoja na fomu (hufutwa unapofunga kichupo).",
+            "ulikotokea wakati wa ziara yako, ili kutumwa pamoja na fomu (hufutwa unapofunga kichupo);",
+            "jibu lako kwa bango letu la kupima hadhira na, ukikubali, namba ya utambulisho ya kifaa isiyo na maana na muda wa ziara yako ya mwisho;",
+            "vidakuzi (cookies) vya Google Analytics na Google Tag Manager vya kuhesabu ziara.",
           ] },
-          { p: "Wafanyakazi wanaoingia kuhariri blogu hutumia kidakuzi cha usalama cha muda mfupi. Unaweza kufuta vitu vilivyohifadhiwa wakati wowote kupitia mipangilio ya kivinjari chako. Tukiongeza takwimu za matumizi siku zijazo, tutasasisha sera hii kwanza na kuomba ridhaa yako pale sheria inapotaka." },
+          { p: "Ukikataa bango, kipimo cha hadhira hakikusanyi chochote. Ukibadili mawazo baadaye, futa taarifa za tovuti hii kwenye mipangilio ya kivinjari chako na bango litakuuliza tena, au tutumie barua pepe nasi tutafuta tulichonacho. Wafanyakazi wanaoingia kuhariri blogu hutumia kidakuzi cha usalama cha muda mfupi." },
         ] },
         { id: "children", h: "Watoto", body: [
           { p: `Tovuti hii ni kwa ajili ya biashara na haikulengwa kwa watoto chini ya miaka 18. Hatukusanyi taarifa zao kwa kujua. Ukiamini mtoto ametutumia taarifa binafsi, tuma barua pepe kwa [${EMAIL}](mailto:${EMAIL}) nasi tutazifuta.` },

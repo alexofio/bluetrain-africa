@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { config } from "../content/site";
-import { track } from "../lib/track";
+import { track, identify } from "../lib/track";
 import { useLang } from "../lib/i18n";
 import { spring } from "../lib/motion";
 import { attribution } from "../lib/attribution";
@@ -118,6 +118,7 @@ export default function Booking({ preselect = "" }) {
       setDone(data); setStatus("done");
       window.scrollTo({ top: 0, behavior: "smooth" });
       track("generate_lead", { method: "discovery_call" });
+      identify({ email: form.email, phone: form.phone });
     } catch {
       setStatus("idle"); setNotice(b.error(config.email));
     }

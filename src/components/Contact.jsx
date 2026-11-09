@@ -8,6 +8,7 @@ import Button from "./ui/Button";
 import PrivacyNotice from "./ui/PrivacyNotice";
 import { to } from "../lib/router";
 import { attribution } from "../lib/attribution";
+import { track, identify } from "../lib/track";
 
 function Option({ name, label, checked, onChange }) {
   return (
@@ -91,6 +92,7 @@ function DiscoveryForm() {
         body: JSON.stringify({ ...payload, ...extra }),
       });
       setStatus(res.ok ? "sent" : "error");
+      if (res.ok) { track("generate_lead", { method: "discovery_form" }); identify({ email: data.email }); }
     } catch {
       setStatus("error");
     }

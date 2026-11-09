@@ -54,6 +54,13 @@ function gtmBody() {
   return `<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${esc(tags.gtmId)}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>`;
 }
 
+// Bluetrain Audiences: asks for consent with its own banner before it collects anything.
+function audiences() {
+  if (!/^https:\/\/portal\.bluetrain\.africa\/bt\/[a-z0-9]{16,40}\.js$/.test(config.audiencesTag || "")) return "";
+  return `<script>window.bt=window.bt||function(){(bt.q=bt.q||[]).push(arguments)};</script>
+    <script async src="${esc(config.audiencesTag)}"></script>`;
+}
+
 function page({ path, title, description, type = "website", image = OG, ld = [], noscript = "", noindex = false, canonical }) {
   const url = canonical || SITE + (path === "/" ? "/" : path);
   const head = [
@@ -72,7 +79,7 @@ function page({ path, title, description, type = "website", image = OG, ld = [],
     `<meta name="twitter:description" content="${esc(description)}" />`,
     `<meta name="twitter:image" content="${esc(image)}" />`,
     ...ld.map(jsonld),
-    gtmHead(), ga4(),
+    gtmHead(), ga4(), audiences(),
   ].filter(Boolean).join("\n    ");
   return template
     .replace(/<body([^>]*)>/, (m) => m + gtmBody())
