@@ -7,6 +7,7 @@
  *   /api/public/content/clients       → the client wall (logos only where the client gave permission)
  *   /api/public/content/redirects     → old article/case-study addresses → new ones (301)
  *   /api/public/content/site          → the site's own text changed on the page (by path, EN + SW)
+ *   /api/public/content/seo           → SEO & AI settings (page titles, organisation, robots.txt, llms.txt intro, verification, IndexNow key)
  *   /api/public/content/tags          → Google tags (GA4 / Tag Manager IDs) set in Portal Admin → Settings
  * and writes src/content/informed.posts.generated.js and src/content/cms.generated.js.
  *
@@ -52,6 +53,10 @@ const site = await fetch(`${PORTAL}/api/public/content/site`, { headers: { Accep
 const tags = await fetch(`${PORTAL}/api/public/content/tags`, { headers: { Accept: "application/json", "User-Agent": "bluetrain-africa-build" }, signal: AbortSignal.timeout(20000) })
   .then((r) => (r.ok ? r.json() : r.status === 404 ? { website: null } : Promise.reject(new Error(`status ${r.status}`))))
   .catch((e) => stop(`the portal couldn't be reached for the Google tags (${e.message}).`));
+// SEO & AI settings (Website Content → SEO & AI). null = not set or an older portal: postbuild keeps its built-in defaults.
+const seo = await fetch(`${PORTAL}/api/public/content/seo`, { headers: { Accept: "application/json", "User-Agent": "bluetrain-africa-build" }, signal: AbortSignal.timeout(20000) })
+  .then((r) => (r.ok ? r.json() : r.status === 404 ? { seo: null } : Promise.reject(new Error(`status ${r.status}`))))
+  .catch((e) => stop(`the portal couldn't be reached for the SEO settings (${e.message}).`));
 const posts = informed.items || [];
 if (!posts.length) stop("the portal returned zero Informed articles.");
 
@@ -93,5 +98,6 @@ writeFileSync(ROOT + "src/content/cms.generated.js",
   `export const caseStudies = ${JSON.stringify(cases.items || [], null, 1)};\n` +
   `export const redirects = ${JSON.stringify(redirects.items || [], null, 1)};\n` +
   `export const siteText = ${JSON.stringify(siteText, null, 1)};\n` +
-  `export const tags = ${JSON.stringify(tags.website ?? null)};\n`);
+  `export const tags = ${JSON.stringify(tags.website ?? null)};\n` +
+  `export const seo = ${JSON.stringify(seo.seo ?? null, null, 1)};\n`);
 console.log(`content: ${Object.keys(siteText.en).length + Object.keys(siteText.sw).length} site texts, ${posts.length} Informed articles, ${(cases.items || []).length} case studies, ${(clients.items || []).length} clients, ${(redirects.items || []).length} redirects (version ${version}, from ${PORTAL})`);

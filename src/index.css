@@ -83,7 +83,7 @@
 
 /* Bluetrain Informed — inline formatting written in the editor (links, bold, italics) */
 @layer components {
-  .informed-body a { color: theme("colors.brand.bright"); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
-  .informed-body a:hover { text-decoration-thickness: 2px; }
+  .informed-body :is(p, li, td, th, blockquote, dd) a { color: theme("colors.brand.bright"); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  .informed-body :is(p, li, td, th, blockquote, dd) a:hover { text-decoration-thickness: 2px; }
   .informed-body strong { font-weight: 600; }
 }

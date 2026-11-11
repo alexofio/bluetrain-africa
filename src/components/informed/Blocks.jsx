@@ -69,6 +69,19 @@ export function FaqList({ items, title }) {
   );
 }
 
+/** Sources the author listed in the portal (SEO tab): shown at the end and given to search/AI engines as citations. */
+export function Sources({ items, title }) {
+  if (!items?.length) return null;
+  return (
+    <section className="mt-14 border-t border-white/10 pt-8" aria-label={title}>
+      <h2 className="font-display text-sm font-semibold uppercase tracking-[0.14em] text-brand-bright">{title}</h2>
+      <ol className="mt-4 list-decimal space-y-2 pl-5 text-[0.95rem] text-silver/80 marker:text-steel">
+        {items.map((x) => <li key={x.url}><a href={x.url} target="_blank" rel="noopener" className="text-brand-bright hover:underline">{x.title}</a></li>)}
+      </ol>
+    </section>
+  );
+}
+
 export default function Block({ b, faqTitle }) {
   if (b.h) return <h2 data-bt="block" className="mt-12 font-display text-2xl font-bold tracking-[-0.015em] text-white sm:text-[1.75rem]">{b.h}</h2>;
   if (b.h3) return <h3 data-bt="block" className="mt-10 font-display text-xl font-bold tracking-[-0.01em] text-white">{b.h3}</h3>;

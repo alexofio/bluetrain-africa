@@ -124,6 +124,9 @@ export const sw = {
     client: "Mteja",
     period: "Kipindi",
     related: "Soma pia",
+    hubTitle: "Visa vya kazi zetu",
+    hubIntro: "Kampeni, mifumo na programu ambazo Bluetrain imetekeleza kwa chapa na mashirika nchini Tanzania, Kenya, Afrika Kusini na Zambia.",
+    seeAll: "Tazama visa vyote",
   },
 
   statement: {
@@ -226,6 +229,8 @@ export const sw = {
       faq: "Maswali yanayoulizwa mara kwa mara",
       back: "Makala zote",
       related: "Endelea kusoma",
+      sources: "Vyanzo",
+      reviewed: "Ilikaguliwa mwisho",
       englishOnly: "Makala hii inapatikana kwa Kiingereza kwa sasa.",
       filterBy: "Chuja kwa mada",
       filterMarket: "Chuja kwa soko",

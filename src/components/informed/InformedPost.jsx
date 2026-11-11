@@ -8,7 +8,7 @@ import Button from "../ui/Button";
 import PostCover from "./PostCover";
 import { PostCard, Tags, Meta, Newsletter, marketLabel } from "./shared";
 import { to } from "../../lib/router";
-import Block from "./Blocks";
+import Block, { Sources } from "./Blocks";
 
 /** `draft` = an unpublished article shown on /preview (same layout, no related list). */
 export default function InformedPost({ slug, draft }) {
@@ -112,6 +112,8 @@ export default function InformedPost({ slug, draft }) {
               </div>
             )}
             {(swBody || post.body).map((b, i) => <Block key={i} b={b} />)}
+
+            <Sources items={post.sources} title={ui.sources} />
 
             {/* Topic-matched CTA */}
             <div className="mt-16 rounded-3xl border border-white/10 bg-gradient-to-br from-brand/30 to-transparent p-7">

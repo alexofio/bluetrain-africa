@@ -180,6 +180,9 @@ export const en = {
     client: "Client",
     period: "Period",
     related: "Related reading",
+    hubTitle: "Case studies",
+    hubIntro: "Campaigns, platforms and programmes Bluetrain has delivered for brands and organisations across Tanzania, Kenya, South Africa and Zambia.",
+    seeAll: "See all case studies",
   },
 
   statement: {
@@ -286,6 +289,8 @@ export const en = {
       faq: "Frequently asked questions",
       back: "All articles",
       related: "Keep reading",
+      sources: "Sources",
+      reviewed: "Last reviewed",
       englishOnly: null,
       filterBy: "Filter by topic",
       filterMarket: "Filter by market",

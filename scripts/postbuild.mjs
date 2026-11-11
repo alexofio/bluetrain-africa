@@ -3,38 +3,59 @@
  *  - one HTML file per page (own title, description, canonical, share tags, structured data)
  *  - 404.html, sitemap.xml, robots.txt
  *  - _redirects (old Wix URLs → new pages, plus address changes made in the portal) and _headers (caching + security)
- *  - llms.txt (a plain index for AI answer engines) and content-version.json (tells the portal which content is live)
+ *  - llms.txt + llms-full.txt (indexes for AI answer engines) and content-version.json (tells the portal which content is live)
+ *  - the /work hub (every case study), the IndexNow key file, search-console verification tags
+ * Titles, organisation details, robots.txt rules for AI crawlers and the llms.txt intro come from the portal
+ * (Website Content → SEO & AI); without them the built-in defaults below are used.
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { config, en } from "../src/content/site.js";
 import { posts } from "../src/content/informed.js";
 import { legal } from "../src/content/legal.js";
 import { caseStudies, hasPage, version as contentVersion } from "../src/content/cms.js";
-import { redirects as contentRedirects } from "../src/content/cms.generated.js";
+import * as generated from "../src/content/cms.generated.js";
 // Google tags: from the portal (Admin → Settings → Google tags) when set there, else site.js.
 import { tags } from "../src/content/tags.js";
 
+const contentRedirects = generated.redirects || [];
+const SEO = generated.seo || null; // null = portal settings not set (or an older portal)
 const DIST = new URL("../dist/", import.meta.url).pathname;
 const SITE = config.siteUrl.replace(/\/$/, "");
-const OG = `${SITE}/og-image.jpg`;
+const absUrl = (src) => (src ? (/^https?:/.test(src) ? src : SITE + src) : "");
+const OG = absUrl(SEO?.shareImage) || `${SITE}/og-image.jpg`;
+const SITE_NAME = SEO?.siteName || "Bluetrain Africa";
+const SUFFIX = SEO?.titleSuffix ?? " | Bluetrain Africa";
+/** Fixed page title/description: from the portal when set, else the built-in text. */
+const pageMeta = (key, title, description) => ({ title: SEO?.pages?.[key]?.title || title, description: SEO?.pages?.[key]?.description || description || SEO?.defaultDescription || "" });
 const today = new Date().toISOString().slice(0, 10);
 const template = readFileSync(DIST + "index.html", "utf8");
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const jsonld = (o) => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, "\\u003c")}</script>`;
 
+const org = SEO?.org || {};
+const COUNTRY = { TZ: "Tanzania", KE: "Kenya", ZA: "South Africa", ZM: "Zambia", UG: "Uganda", RW: "Rwanda", MZ: "Mozambique", MW: "Malawi", BW: "Botswana", NA: "Namibia", NG: "Nigeria", GH: "Ghana", ET: "Ethiopia", CD: "DR Congo" };
 const organization = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "Bluetrain Africa",
-  legalName: "Bluetrain Limited",
+  "@id": `${SITE}/#organization`,
+  name: SITE_NAME,
+  legalName: org.legalName || "Bluetrain Limited",
   url: SITE,
-  logo: `${SITE}/og-image.jpg`,
-  email: config.email,
-  sameAs: config.socials.map((s) => s.href),
+  logo: absUrl(org.logo) || OG,
+  description: org.description || undefined,
+  foundingDate: org.foundingDate || undefined,
+  email: org.email || config.email,
+  telephone: org.phone || undefined,
+  sameAs: [...new Set([...config.socials.map((s) => s.href), ...(org.sameAs || [])])],
+  knowsAbout: org.knowsAbout?.length ? org.knowsAbout : undefined,
   address: config.offices.map((o) => ({ "@type": "PostalAddress", name: o.entity, streetAddress: o.lines.join(", "), addressCountry: o.id })),
-  areaServed: ["TZ", "KE", "ZA", "ZM"],
+  areaServed: (org.areaServed?.length ? org.areaServed : ["TZ", "KE", "ZA", "ZM"]).map((c) => ({ "@type": "Country", name: COUNTRY[c] || c })),
 };
+const website = { "@context": "https://schema.org", "@type": "WebSite", "@id": `${SITE}/#website`, name: SITE_NAME, url: `${SITE}/`, publisher: { "@id": `${SITE}/#organization` }, inLanguage: ["en", "sw"] };
+// Search-console verification codes (Website Content → SEO & AI): on the homepage only, which is all the tools check.
+const VERIFY = { google: "google-site-verification", bing: "msvalidate.01", facebook: "facebook-domain-verification", yandex: "yandex-verification" };
+const verifyTags = () => Object.entries(VERIFY).filter(([k]) => SEO?.verify?.[k]).filter(([k]) => !template.includes(`content="${SEO.verify[k]}"`)).map(([k, n]) => `<meta name="${n}" content="${esc(SEO.verify[k])}" />`);
 
 function ga4() {
   if (!tags.ga4Id) return "";
@@ -61,12 +82,13 @@ function audiences() {
     <script async src="${esc(config.audiencesTag)}"></script>`;
 }
 
-function page({ path, title, description, type = "website", image = OG, ld = [], noscript = "", noindex = false, canonical }) {
+function page({ path, title, description, type = "website", image = OG, ld = [], noscript = "", noindex = false, canonical, extraHead = [] }) {
   const url = canonical || SITE + (path === "/" ? "/" : path);
   const head = [
     `<link rel="canonical" href="${esc(url)}" />`,
-    noindex ? `<meta name="robots" content="noindex" />` : "",
-    `<meta property="og:site_name" content="Bluetrain Africa" />`,
+    noindex ? `<meta name="robots" content="noindex" />` : `<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />`,
+    ...extraHead,
+    `<meta property="og:site_name" content="${esc(SITE_NAME)}" />`,
     `<meta property="og:type" content="${type}" />`,
     `<meta property="og:title" content="${esc(title)}" />`,
     `<meta property="og:description" content="${esc(description)}" />`,
@@ -109,27 +131,33 @@ const link = (href, text) => `<a href="${esc(href)}" style="color:#2e8eff">${esc
 const sorted = [...posts].sort((a, b) => b.date.localeCompare(a.date));
 
 // ---- Home
+const homeMeta = pageMeta("home", en.meta.title, en.hero.body);
 write("index.html", page({
   path: "/",
-  title: en.meta.title,
-  description: en.hero.body,
-  ld: [organization],
+  ...homeMeta,
+  ld: [organization, website],
+  extraHead: [...verifyTags(), `<link rel="alternate" type="text/plain" title="llms.txt" href="${SITE}/llms.txt" />`],
   noscript: `<h1>${esc(en.hero.headline.join(" "))}</h1><p>${esc(en.hero.body)}</p>
     <h2>${esc(en.services.heading)}</h2><ul>${en.services.items.map((s) => `<li><strong>${esc(s.title)}</strong>: ${esc(s.body)}</li>`).join("")}</ul>
-    <p>${link("/informed", "Bluetrain Informed")} · ${link(`mailto:${config.email}`, config.email)}</p>`,
+    <p>${link("/work", "Case studies")} · ${link("/informed", "Bluetrain Informed")} · ${link(`mailto:${config.email}`, config.email)}</p>`,
 }));
 
 // ---- Blog index (served at /informed)
 write("informed.html", page({
   path: "/informed",
-  title: "Bluetrain Informed | Market notes and campaign lessons from Africa",
-  description: en.ui.informed.intro,
+  ...pageMeta("informed", "Bluetrain Informed | Market notes and campaign lessons from Africa", en.ui.informed.intro),
   ld: [{ "@context": "https://schema.org", "@type": "Blog", name: "Bluetrain Informed", url: `${SITE}/informed`, publisher: { "@type": "Organization", name: "Bluetrain Africa" } }],
   noscript: `<h1>Bluetrain Informed</h1><p>${esc(en.ui.informed.intro)}</p><ul>${sorted.map((p) => `<li>${link(`/informed/${p.slug}`, p.title)}</li>`).join("")}</ul>`,
 }));
 
 // ---- Articles (served at /informed/<slug>)
-const abs = (src) => (src ? (/^https?:/.test(src) ? src : SITE + src) : "");
+const abs = absUrl;
+// Structured-data type: set per item in the portal (SEO tab), else News → NewsArticle and everything else → Article.
+const schemaType = (x) => x.seo?.schema || (x.format === "news" ? "NewsArticle" : "Article");
+const modified = (x) => [x.reviewed, x.updated, x.date].filter(Boolean).sort().at(-1);
+const citations = (x) => (x.sources?.length ? x.sources.map((c) => ({ "@type": "CreativeWork", name: c.title, url: c.url })) : undefined);
+const keywords = (x) => [x.seo?.focus, ...(x.seo?.keywords || [])].filter(Boolean).join(", ") || undefined;
+const sourcesHtml = (x) => (x.sources?.length ? `<h2>Sources</h2><ol>${x.sources.map((c) => `<li>${link(c.url, c.title)}</li>`).join("")}</ol>` : "");
 const isEditorial = (a) => !a.name || a.name === "Bluetrain Informed";
 const blocksHtml = (body) => (body || []).map((b) =>
   b.h ? `<h2>${esc(b.h)}</h2>` : b.h3 ? `<h3>${esc(b.h3)}</h3>` : b.html ? `<p>${b.html}</p>` : b.quote ? `<blockquote>${b.quote}</blockquote>` : b.callout ? `<p>${b.callout}</p>`
@@ -149,27 +177,31 @@ for (const p of posts) {
     path: `/informed/${p.slug}`,
     type: "article",
     title: p.metaTitle || `${p.title} | Bluetrain Informed`,
+    extraHead: [`<meta property="article:published_time" content="${p.date}" />`, `<meta property="article:modified_time" content="${modified(p)}" />`],
     description: p.metaDescription || p.standfirst,
     image,
     canonical: p.seo?.canonical,
     noindex: !!p.seo?.noindex,
     ld: [{
       "@context": "https://schema.org",
-      "@type": "Article",
+      "@type": schemaType(p),
       headline: p.title,
       description: p.standfirst,
-      abstract: p.answer || undefined,
+      abstract: p.aiSummary || p.answer || undefined,
       datePublished: p.date,
-      dateModified: p.updated && p.updated > p.date ? p.updated : p.date,
-      author: isEditorial(p.author) ? { "@type": "Organization", name: "Bluetrain Africa" } : { "@type": "Person", name: p.author.name, jobTitle: p.author.role || undefined },
+      dateModified: modified(p),
+      author: isEditorial(p.author) ? { "@type": "Organization", name: SITE_NAME, url: SITE } : { "@type": "Person", name: p.author.name, jobTitle: p.author.role || undefined, worksFor: { "@id": `${SITE}/#organization` } },
       publisher,
+      isPartOf: { "@id": `${SITE}/#website` },
+      citation: citations(p),
+      articleSection: p.category || undefined,
       image,
       mainEntityOfPage: url,
       inLanguage: "en",
-      keywords: p.seo?.focus || undefined,
+      keywords: keywords(p),
       mentions: p.entities?.length ? p.entities.map((name) => ({ "@type": "Thing", name })) : undefined,
     }, crumbs([["Home", "/"], ["Bluetrain Informed", "/informed"], [p.title, `/informed/${p.slug}`]]), ...faqLd(p.faqs)],
-    noscript: `<p>${link("/informed", "← Bluetrain Informed")}</p><h1>${esc(p.title)}</h1><p><em>${esc(p.standfirst)}</em></p>${p.answer ? `<p><strong>${esc(p.answer)}</strong></p>` : ""}${blocksHtml(p.body)}`,
+    noscript: `<p>${link("/informed", "← Bluetrain Informed")}</p><h1>${esc(p.title)}</h1><p><em>${esc(p.standfirst)}</em></p>${p.answer ? `<p><strong>${esc(p.answer)}</strong></p>` : ""}${blocksHtml(p.body)}${sourcesHtml(p)}`,
   }));
 }
 
@@ -180,30 +212,47 @@ for (const c of casePages) {
   write(`work/${c.slug}.html`, page({
     path: `/work/${c.slug}`,
     type: "article",
-    title: c.metaTitle || `${c.title} | Bluetrain Africa`,
+    title: c.metaTitle || `${c.title}${SUFFIX}`,
     description: c.metaDescription || c.standfirst,
     image,
     canonical: c.seo?.canonical,
     noindex: !!c.seo?.noindex,
     ld: [{
       "@context": "https://schema.org",
-      "@type": "Article",
+      "@type": c.seo?.schema || "Article",
       headline: c.title,
       description: c.standfirst,
-      abstract: c.answer || undefined,
+      abstract: c.aiSummary || c.answer || undefined,
       datePublished: c.date,
-      dateModified: c.updated && c.updated > c.date ? c.updated : c.date,
-      author: { "@type": "Organization", name: "Bluetrain Africa" },
+      dateModified: modified(c),
+      author: { "@type": "Organization", name: SITE_NAME, url: SITE },
       publisher,
+      isPartOf: { "@id": `${SITE}/#website` },
+      citation: citations(c),
+      keywords: keywords(c),
       image,
       mainEntityOfPage: `${SITE}/work/${c.slug}`,
       inLanguage: "en",
       about: c.client ? { "@type": "Organization", name: c.client.name } : undefined,
       mentions: c.entities?.length ? c.entities.map((name) => ({ "@type": "Thing", name })) : undefined,
-    }, crumbs([["Home", "/"], ["Work", "/#work"], [c.title, `/work/${c.slug}`]]), ...faqLd(c.faqs)],
-    noscript: `<p>${link("/#work", "← Work")}</p><h1>${esc(c.title)}</h1><p><em>${esc(c.standfirst)}</em></p>${c.metric ? `<p>${esc(c.metric)}</p>` : ""}${(c.results || []).map((r) => `<p><strong>${esc(r.value)}</strong> ${esc(r.label)}</p>`).join("")}${blocksHtml(c.body)}`,
+    }, crumbs([["Home", "/"], ["Case studies", "/work"], [c.title, `/work/${c.slug}`]]), ...faqLd(c.faqs)],
+    noscript: `<p>${link("/work", "← All case studies")}</p><h1>${esc(c.title)}</h1><p><em>${esc(c.standfirst)}</em></p>${c.metric ? `<p>${esc(c.metric)}</p>` : ""}${(c.results || []).map((r) => `<p><strong>${esc(r.value)}</strong> ${esc(r.label)}</p>`).join("")}${blocksHtml(c.body)}${sourcesHtml(c)}`,
   }));
 }
+
+// ---- Case-studies hub (served at /work): every case study, with or without a page of its own
+const caseHref = (c) => (hasPage(c) ? `/work/${c.slug}` : "/work");
+const workMeta = pageMeta("work", `${en.work.hubTitle}${SUFFIX}`, en.work.hubIntro);
+write("work.html", page({
+  path: "/work",
+  ...workMeta,
+  ld: [{
+    "@context": "https://schema.org", "@type": "CollectionPage", name: en.work.hubTitle, url: `${SITE}/work`, description: workMeta.description,
+    isPartOf: { "@id": `${SITE}/#website` }, about: { "@id": `${SITE}/#organization` },
+    mainEntity: { "@type": "ItemList", itemListElement: caseStudies.map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.title, url: SITE + caseHref(c) })) },
+  }, crumbs([["Home", "/"], ["Case studies", "/work"]])],
+  noscript: `<h1>${esc(en.work.hubTitle)}</h1><p>${esc(en.work.hubIntro)}</p><ul>${caseStudies.map((c) => `<li>${hasPage(c) ? link(`/work/${c.slug}`, c.title) : `<strong>${esc(c.title)}</strong>`}${c.client ? ` (${esc(c.client.name)})` : ""}: ${esc(c.standfirst || "")}${c.metric ? ` ${esc(c.metric)}.` : ""}</li>`).join("")}</ul>`,
+}));
 
 // ---- Draft previews (/preview?token=…): one page, never indexed; the editor in the portal frames it.
 write("preview.html", page({ path: "/preview", title: "Draft preview | Bluetrain Africa", description: "Draft preview.", noindex: true }));
@@ -211,8 +260,7 @@ write("preview.html", page({ path: "/preview", title: "Draft preview | Bluetrain
 // ---- Discovery-call booking (served at /book; people and times load from the Bluetrain Portal)
 write("book.html", page({
   path: "/book",
-  title: `${en.ui.book.title} | Bluetrain Africa`,
-  description: en.ui.book.intro,
+  ...pageMeta("book", `${en.ui.book.title}${SUFFIX}`, en.ui.book.intro),
   noscript: `<h1>${esc(en.ui.book.title)}</h1><p>${esc(en.ui.book.closedBody)}</p><p>${link(`mailto:${config.email}?subject=Discovery%20call`, config.email)}</p>`,
 }));
 
@@ -238,44 +286,90 @@ tagStatic("company-profile/index.html");
 const urls = [
   { loc: "/", lastmod: today, priority: "1.0" },
   { loc: "/informed", lastmod: sorted[0]?.date ?? today, priority: "0.8" },
+  { loc: "/work", lastmod: caseStudies.map(modified).filter(Boolean).sort().at(-1) || today, priority: "0.8" },
   { loc: "/book", lastmod: today, priority: "0.7" },
   { loc: "/company-profile/", lastmod: today, priority: "0.6" },
   { loc: "/privacy", lastmod: legal.en.privacy.effective, priority: "0.3" },
   { loc: "/terms", lastmod: legal.en.terms.effective, priority: "0.3" },
-  ...sorted.filter((p) => !p.seo?.noindex && !p.seo?.canonical).map((p) => ({ loc: `/informed/${p.slug}`, lastmod: p.updated && p.updated > p.date ? p.updated : p.date, priority: "0.6" })),
-  ...casePages.filter((c) => !c.seo?.noindex && !c.seo?.canonical).map((c) => ({ loc: `/work/${c.slug}`, lastmod: c.updated || c.date, priority: "0.6" })),
+  ...sorted.filter((p) => !p.seo?.noindex && !p.seo?.canonical).map((p) => ({ loc: `/informed/${p.slug}`, lastmod: modified(p), priority: "0.6" })),
+  ...casePages.filter((c) => !c.seo?.noindex && !c.seo?.canonical).map((c) => ({ loc: `/work/${c.slug}`, lastmod: modified(c), priority: "0.6" })),
 ];
 write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${SITE}${u.loc}</loc><lastmod>${u.lastmod}</lastmod><priority>${u.priority}</priority></url>`).join("\n")}
 </urlset>
 `);
-write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /preview\n\nSitemap: ${SITE}/sitemap.xml\n`);
+// robots.txt: built by the portal from Website Content → SEO & AI (which AI crawlers may read the site).
+// Without portal settings: everyone allowed, and the main AI crawlers named explicitly so a blanket rule elsewhere can't shut them out.
+const AI_DEFAULT = ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "PerplexityBot", "Perplexity-User", "Google-Extended", "ClaudeBot", "Claude-SearchBot", "Claude-User", "Applebot-Extended"];
+write("robots.txt", SEO?.robots || [
+  "User-agent: *", "Allow: /", "Disallow: /admin/", "Disallow: /preview", "",
+  "# AI crawlers: allowed", ...AI_DEFAULT.map((b) => `User-agent: ${b}`), "Allow: /", "Disallow: /admin/", "Disallow: /preview", "",
+  `Sitemap: ${SITE}/sitemap.xml`, "",
+].join("\n"));
 
-// ---- llms.txt: a plain index of the site for AI answer engines (https://llmstxt.org), rebuilt with every publish
-const line = (title, path, text) => `- [${title}](${SITE}${path})${text ? `: ${String(text).replace(/\s+/g, " ").trim()}` : ""}`;
+// IndexNow key file (tells Bing, Yandex and others the portal's change notices are really from this site)
+if (SEO?.indexnow?.on && /^[a-f0-9]{32}$/.test(SEO.indexnow.key || "")) write(`${SEO.indexnow.key}.txt`, SEO.indexnow.key);
+
+// ---- llms.txt: a plain index of the site for AI answer engines (https://llmstxt.org), rebuilt with every publish.
+// Intro and "about" come from the portal (Website Content → SEO & AI); items can be left out there (SEO tab).
+const one = (t) => String(t || "").replace(/\s+/g, " ").trim();
+const line = (title, path, text) => `- [${title}](${SITE}${path})${text ? `: ${one(text)}` : ""}`;
+const inLlms = (x) => x.seo?.llms !== false && !x.seo?.noindex;
+const aiLine = (x) => x.aiSummary || x.answer || x.standfirst;
+const fullOn = SEO?.llms?.full !== false;
 write("llms.txt", [
-  "# Bluetrain Africa",
+  `# ${SITE_NAME}`,
   "",
-  `> ${en.hero.body}`,
+  `> ${one(SEO?.llms?.summary || en.hero.body)}`,
   "",
-  `Bluetrain Africa (legal name Bluetrain Limited) is based in Dar es Salaam and works across Tanzania, Kenya, South Africa and Zambia. Contact: ${config.email}.`,
+  one(SEO?.llms?.about) || `${SITE_NAME} (legal name ${org.legalName || "Bluetrain Limited"}) is based in Dar es Salaam and works across Tanzania, Kenya, South Africa and Zambia. Contact: ${org.email || config.email}.`,
+  ...(org.knowsAbout?.length ? ["", `Expertise: ${org.knowsAbout.join(", ")}.`] : []),
   "",
   "## Services",
   ...en.services.items.map((x) => `- ${x.title}: ${x.body}`),
   "",
-  "## Bluetrain Informed",
-  ...sorted.filter((p) => !p.seo?.noindex).map((p) => line(p.title, `/informed/${p.slug}`, p.answer || p.standfirst)),
-  "",
   "## Case studies",
-  ...caseStudies.map((c) => line(c.title, hasPage(c) ? `/work/${c.slug}` : "/#work", [c.client?.name, c.metric, c.standfirst].filter(Boolean).join(". "))),
+  line(en.work.hubTitle, "/work", `All ${caseStudies.length} case studies. ${en.work.hubIntro}`),
+  ...caseStudies.filter(inLlms).map((c) => line(c.title, caseHref(c), [c.client?.name, c.metric, aiLine(c)].filter(Boolean).join(". "))),
+  "",
+  "## Bluetrain Informed",
+  line("Bluetrain Informed", "/informed", en.ui.informed.intro),
+  ...sorted.filter(inLlms).map((p) => line(p.title, `/informed/${p.slug}`, aiLine(p))),
   "",
   "## Optional",
+  ...(fullOn ? [line("Full text of every article and case study", "/llms-full.txt")] : []),
+  line("This index", "/llms.txt"),
   line("Book a discovery call", "/book", "30 minutes with the team"),
+  line("Company profile", "/company-profile/"),
   line("Privacy Policy", "/privacy"),
   line("Terms of Use", "/terms"),
   "",
 ].join("\n"));
+
+// ---- llms-full.txt: the full text of every article and case study, as plain Markdown, for AI engines to read in one go.
+const md = (h) => strip(String(h).replace(/<a href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g, (_, href, t) => `[${t}](${href.startsWith("/") ? SITE + href : href})`).replace(/<br\s*\/?>/g, "\n").replace(/<\/?(strong|b)>/g, "**").replace(/<\/?(em|i)>/g, "_"));
+const mdBlocks = (body) => (body || []).map((b) =>
+  b.h ? `## ${b.h}` : b.h3 ? `### ${b.h3}` : b.html ? md(b.html) : b.quote ? `> ${md(b.quote)}${b.by ? ` — ${b.by}` : ""}` : b.callout ? `> ${md(b.callout)}`
+  : b.list ? b.list.map((li, i) => `${b.ordered ? `${i + 1}.` : "-"} ${md(li)}`).join("\n")
+  : b.table ? [b.table.head, ...b.table.rows].filter(Boolean).map((r, i) => `| ${r.map(md).join(" | ")} |${i === 0 && b.table.head ? `\n|${r.map(() => " --- |").join("")}` : ""}`).join("\n")
+  : b.faq ? b.faq.map((f) => `**${f.q}**\n${md(f.a)}`).join("\n\n") : b.img ? (b.alt ? `[Image: ${b.alt}]` : "") : b.embed ? `[${b.embed.title || b.embed.provider}](${b.embed.src})` : "").filter(Boolean).join("\n\n");
+const mdSources = (x) => (x.sources?.length ? `\n\n### Sources\n${x.sources.map((c) => `- [${c.title}](${c.url})`).join("\n")}` : "");
+if (fullOn) write("llms-full.txt", [
+  `# ${SITE_NAME}: full text`, "", `> ${one(SEO?.llms?.summary || en.hero.body)}`, "",
+  `Index: ${SITE}/llms.txt`, "",
+  "# Case studies", "",
+  ...caseStudies.filter(inLlms).map((c) => [`## ${c.title}`, `URL: ${SITE}${caseHref(c)}`,
+    [c.client && `Client: ${c.client.name}`, c.industry && `Industry: ${c.industry}`, c.period?.start && `Period: ${c.period.start}${c.period.end ? ` to ${c.period.end}` : ""}`, c.metric && `Headline: ${c.metric}`].filter(Boolean).join(" · "), "",
+    one(c.standfirst), c.answer ? `\n${one(c.answer)}` : "",
+    (c.results || []).length ? `\nResults:\n${c.results.map((r) => `- ${r.value} ${r.label}${r.source ? ` (source: ${r.source})` : ""}`).join("\n")}` : "",
+    c.body?.length ? `\n${mdBlocks(c.body)}` : "", c.quote ? `\n> ${c.quote.text} — ${c.quote.name}${c.quote.title ? `, ${c.quote.title}` : ""}` : "", mdSources(c), ""].join("\n")),
+  "# Bluetrain Informed", "",
+  ...sorted.filter(inLlms).map((p) => [`## ${p.title}`, `URL: ${SITE}/informed/${p.slug}`,
+    `Published ${p.date}${modified(p) !== p.date ? ` · updated ${modified(p)}` : ""}${isEditorial(p.author) ? "" : ` · by ${p.author.name}${p.author.role ? `, ${p.author.role}` : ""}`}`, "",
+    one(p.standfirst), p.answer ? `\n${one(p.answer)}` : "", p.takeaways?.length ? `\nKey takeaways:\n${p.takeaways.map((t) => `- ${t}`).join("\n")}` : "",
+    `\n${mdBlocks(p.body)}`, mdSources(p), ""].join("\n")),
+].join("\n").replace(/\n{3,}/g, "\n\n"));
 
 // ---- What content this build carries: the portal reads it to mark published items "Live".
 write("content-version.json", JSON.stringify({ version: contentVersion, builtAt: new Date().toISOString(), articles: posts.length, caseStudies: caseStudies.length }) + "\n");
@@ -337,6 +431,9 @@ write("_headers", `/assets/*
 /llms.txt
   Content-Type: text/plain; charset=utf-8
 
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
@@ -351,4 +448,4 @@ write("_headers", `/assets/*
   Cache-Control: no-store
 `);
 
-console.log(`postbuild: ${posts.length + casePages.length + 5} pages, ${redirects.length + portalRedirects.length + dynamic.length} redirects, sitemap ${urls.length} URLs, llms.txt, content version ${contentVersion}`);
+console.log(`postbuild: ${posts.length + casePages.length + 6} pages, ${redirects.length + portalRedirects.length + dynamic.length} redirects, sitemap ${urls.length} URLs, llms.txt${fullOn ? " + llms-full.txt" : ""}, robots from ${SEO?.robots ? "portal" : "defaults"}, content version ${contentVersion}`);

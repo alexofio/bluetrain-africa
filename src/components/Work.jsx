@@ -43,7 +43,8 @@ function Card({ item, lead, span }) {
   );
 }
 
-export default function Work() {
+/** The home page's Work section, or with `hub` the /work page listing every case study. */
+export default function Work({ hub = false }) {
   const { t, lang } = useLang();
   const work = t.work;
   const [filter, setFilter] = useState("all");
@@ -57,15 +58,23 @@ export default function Work() {
       title: cloc(c, lang, "title"), body: cloc(c, lang, "standfirst"), industry: cloc(c, lang, "industry"), metric: cloc(c, lang, "metric"),
       href: hasPage(c) ? to(`#/work/${c.slug}`) : null, more: work.readMore,
     }));
-  if (!caseStudies.length) return null;
+  if (!caseStudies.length && !hub) return null;
+  const layout = (i) => hub ? "lg:col-span-6" : items.length === 3 ? (i === 0 ? "lg:col-span-7 lg:row-span-2" : "lg:col-span-5") : items.length === 2 ? "lg:col-span-6" : "lg:col-span-12";
 
   return (
-    <section id="work" className="relative border-t border-white/[0.06] py-24 lg:py-32">
+    <section id={hub ? undefined : "work"} className={hub ? "relative pb-24 pt-32 sm:pt-36" : "relative border-t border-white/[0.06] py-24 lg:py-32"}>
       <div className="container-site">
         <Reveal className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          <RevealItem as="h2" className="max-w-[40rem] font-display text-display-lg font-bold text-white">
-            {work.heading}
-          </RevealItem>
+          {hub ? (
+            <RevealItem className="max-w-[44rem]">
+              <h1 className="font-display text-display-lg font-bold text-white">{work.hubTitle}</h1>
+              <p className="mt-5 text-lg leading-relaxed text-silver/80">{work.hubIntro}</p>
+            </RevealItem>
+          ) : (
+            <RevealItem as="h2" className="max-w-[40rem] font-display text-display-lg font-bold text-white">
+              {work.heading}
+            </RevealItem>
+          )}
           <RevealItem>
             <div role="group" aria-label={t.ui.filterLabel} className="flex flex-wrap gap-1 rounded-full border border-white/10 p-1">
               {filters.map((f) => (
@@ -91,13 +100,18 @@ export default function Work() {
                 <Card
                   key={item.id}
                   item={item}
-                  lead={items.length === 3 && i === 0}
-                  span={items.length === 3 ? (i === 0 ? "lg:col-span-7 lg:row-span-2" : "lg:col-span-5") : items.length === 2 ? "lg:col-span-6" : "lg:col-span-12"}
+                  lead={!hub && items.length === 3 && i === 0}
+                  span={layout(i)}
                 />
               ))}
             </AnimatePresence>
           </motion.div>
         </LayoutGroup>
+        {!hub && (
+          <p className="mt-10">
+            <a href={to("#/work")} className="font-display text-sm font-semibold text-brand-bright hover:underline">{work.seeAll} →</a>
+          </p>
+        )}
         <p aria-live="polite" className="sr-only">
           {t.ui.showing(items.length)}
         </p>

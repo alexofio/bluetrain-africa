@@ -7,7 +7,7 @@ import { spring } from "../lib/motion";
 import { to, postHref } from "../lib/router";
 import Button from "./ui/Button";
 import WorkArt from "./WorkArt";
-import Block, { Picture, Embed } from "./informed/Blocks";
+import Block, { Picture, Embed, Sources } from "./informed/Blocks";
 
 const month = (ym, lang) => (ym ? new Intl.DateTimeFormat(lang === "sw" ? "sw-TZ" : "en-GB", { month: "short", year: "numeric" }).format(new Date(`${ym}-01T12:00:00Z`)) : "");
 
@@ -25,7 +25,7 @@ export default function CaseStudy({ slug, draft }) {
     return (
       <section className="container-site pb-32 pt-40">
         <p className="text-lg text-silver/80">{t.ui.notFound.title}</p>
-        <a href={to("#work")} className="mt-6 inline-block text-brand-bright">← {w.back}</a>
+        <a href={to("#/work")} className="mt-6 inline-block text-brand-bright">← {w.back}</a>
       </section>
     );
   }
@@ -35,7 +35,7 @@ export default function CaseStudy({ slug, draft }) {
   return (
     <article className="relative pb-24 pt-28 sm:pt-32" data-bt-item="case_study" data-bt-slug={c.slug}>
       <div className="container-site">
-        <a href={to("#work")} className="inline-flex items-center gap-2 text-sm text-silver/70 transition-colors hover:text-white">
+        <a href={to("#/work")} className="inline-flex items-center gap-2 text-sm text-silver/70 transition-colors hover:text-white">
           <span aria-hidden>←</span> {w.back}
         </a>
         <motion.header initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={spring.soft} className="mt-8 max-w-[56rem]">
@@ -82,6 +82,8 @@ export default function CaseStudy({ slug, draft }) {
             </figure>
           )}
         </div>
+
+        <div className="max-w-[42rem] lg:ml-[calc(5/12*100%)]"><Sources items={c.sources} title={t.ui.informed.sources} /></div>
 
         {c.gallery?.length > 0 && (
           <section className="mt-16">
