@@ -74,6 +74,7 @@ const en = {
   },
   budget: { label: "Currency", note: "Shown in your market's currency; switch to USD any time. Indicative bands." },
   footer: { whatsapp: "WhatsApp" },
+  pass: { title: (m) => `Boarding pass · ${m}-min discovery call · Google Meet`, from: "From", you: "You", to: "To", growth: "Growth", with: "With", date: "Date", seat: "Seat", continue: "Continue", confirmed: "Confirmed" },
 };
 
 const sw = {
@@ -146,6 +147,7 @@ const sw = {
   },
   budget: { label: "Sarafu", note: "Inaonyeshwa kwa sarafu ya soko lako; badilisha kuwa USD wakati wowote. Viwango ni makadirio." },
   footer: { whatsapp: "WhatsApp" },
+  pass: { title: (m) => `Tiketi · mazungumzo ya dakika ${m} · Google Meet`, from: "Kutoka", you: "Wewe", to: "Kwenda", growth: "Ukuaji", with: "Na", date: "Tarehe", seat: "Kiti", continue: "Endelea", confirmed: "Imethibitishwa" },
 };
 
 export const redesign = { en, sw };
