@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 const KEY = "bluetrain-theme";
-const META = { dark: "#102A43", light: "#f6f7f7" };
+const META = { dark: "#0B1C2E", light: "#F5F3EE" };
 
 function apply(theme) {
   document.documentElement.dataset.theme = theme;

@@ -3,6 +3,7 @@ import { config } from "../content/site";
 import { useLang } from "../lib/i18n";
 import Logo from "./ui/Logo";
 import { to } from "../lib/router";
+import { redesign, whatsapp } from "../content/redesign";
 
 function LocalTime() {
   const fmt = () =>
@@ -54,7 +55,7 @@ function Offices({ t }) {
 }
 
 export default function Footer() {
-  const { t } = useLang();
+  const { lang, t } = useLang();
   const { footer, nav } = t;
   const L = t.ui.footer;
   return (
@@ -90,6 +91,8 @@ export default function Footer() {
             {nav.links.map((l) => (
               <a key={l.href} href={to(l.href)} className="block hover:text-white">{l.label}</a>
             ))}
+            <a href={to("#creators")} className="block hover:text-white">{redesign[lang].menu.links[3].label}</a>
+            <a href={to("#where")} className="block hover:text-white">{redesign[lang].menu.secondary[0].label}</a>
             <a href={to("#contact")} className="block hover:text-white">{L.contact}</a>
             <a href="/company-profile/" className="block hover:text-white">{L.profile}</a>
             <a href={config.portalUrl} target="_blank" rel="noopener" className="block hover:text-white">{L.portal} ↗</a>
@@ -98,7 +101,8 @@ export default function Footer() {
             {config.socials.map((s) => (
               <a key={s.label} href={s.href} target="_blank" rel="noreferrer" className="block hover:text-white">{s.label}</a>
             ))}
-            <a href={`mailto:${config.email}`} className="block pt-2 hover:text-white">{config.email}</a>
+            <a href={whatsapp.href} target="_blank" rel="noopener" className="block pt-2 hover:text-white">{redesign[lang].footer.whatsapp} {whatsapp.label}</a>
+            <a href={`mailto:${config.email}`} className="block hover:text-white">{config.email}</a>
           </Col>
         </div>
         <div className="md:col-span-5">

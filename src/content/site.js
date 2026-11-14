@@ -25,8 +25,10 @@ export const config = {
   timeZoneLabel: "EAT",
   // From the current bluetrain.africa footer — update if the accounts are renamed for the rebrand
   socials: [
-    { label: "LinkedIn", handle: "Bluetrain Limited", href: "https://www.linkedin.com/company/bluetrain-limited/" },
-    { label: "Instagram", handle: "@bluetrain_consultancy", href: "https://www.instagram.com/bluetrain_consultancy/" },
+    { label: "Facebook", handle: "BluetrainAfrica", href: "https://www.facebook.com/BluetrainAfrica/" },
+    { label: "Instagram", handle: "@bluetrain_africa", href: "https://www.instagram.com/bluetrain_africa/" },
+    { label: "LinkedIn", handle: "Bluetrain Limited", href: "https://www.linkedin.com/company/bluetrain-limited" },
+    { label: "YouTube", handle: "@Bluetrainafrica", href: "https://www.youtube.com/@Bluetrainafrica" },
   ],
   // Google Analytics 4 measurement ID, e.g. "G-XXXXXXXXXX". Empty = no tracking script is added.
   ga4Id: "",

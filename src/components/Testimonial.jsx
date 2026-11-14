@@ -63,6 +63,8 @@ function Slider({ testimonials, ui }) {
 export default function Testimonial() {
   const { t } = useLang();
   const { statement, testimonials } = t;
+  // The statement now opens the page (Bluetrain Way), so this band waits for approved testimonials
+  if (!testimonials.length) return null;
   return (
     // The one large Bluetrain Blue field on the page — keeps the primary colour dominant per the guidelines
     <section aria-label={t.ui.statementLabel} className="relative overflow-hidden bg-brand py-24 lg:py-36">

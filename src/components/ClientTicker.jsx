@@ -1,6 +1,7 @@
 import { clients as cmsClients } from "../content/cms";
 import { useLang } from "../lib/i18n";
 import { Reveal, RevealItem } from "./ui/Reveal";
+import Words from "./redesign/Words";
 
 function ClientMark({ client, duplicate }) {
   return (
@@ -27,17 +28,21 @@ export default function ClientTicker() {
   const clients = cmsClients;
   const loop = [...clients, ...clients];
   return (
-    <section id="about" className="relative border-t border-white/[0.06] py-24 lg:py-32">
+    <section id="about" className="bt-intro relative py-24 lg:py-32">
       <Reveal className="container-site grid gap-10 lg:grid-cols-12">
         <RevealItem as="h2" className="font-display text-display-md font-bold text-white lg:col-span-5">
           {about.heading}
         </RevealItem>
         <div className="space-y-5 text-lg leading-relaxed text-silver/75 lg:col-span-6 lg:col-start-7">
-          {about.paragraphs.map((p, i) => (
-            <RevealItem as="p" key={i} className={i === 2 ? "font-display font-semibold text-white" : ""}>
-              {p}
-            </RevealItem>
-          ))}
+          {about.paragraphs.map((p, i) => {
+            // word index runs on across paragraphs so the darkening sweeps through the whole block
+            const start = about.paragraphs.slice(0, i).reduce((n, x) => n + x.split(/\s+/).length, 0);
+            return (
+              <p key={i} className={i === 2 ? "font-display font-semibold text-white" : "text-white"}>
+                <Words text={p} className="bt-rw" start={start} />
+              </p>
+            );
+          })}
         </div>
       </Reveal>
 

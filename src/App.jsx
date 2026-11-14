@@ -17,6 +17,9 @@ import InformedTeaser from "./components/informed/InformedTeaser";
 import InformedIndex from "./components/informed/InformedIndex";
 import InformedPost from "./components/informed/InformedPost";
 import Contact from "./components/Contact";
+import BluetrainWay from "./components/redesign/BluetrainWay";
+import Creators from "./components/redesign/Creators";
+import Journey from "./components/redesign/Journey";
 import Booking from "./components/Booking";
 import CaseStudy from "./components/CaseStudy";
 import Preview from "./components/Preview";
@@ -50,11 +53,14 @@ export function Home() {
   return (
     <>
       <Hero />
+      <BluetrainWay />
       <ClientTicker />
       <Results />
       <WhereWeWork />
       <Services />
       <Work />
+      <Creators />
+      <Journey />
       <ClientWall />
       <Testimonial />
       <InformedTeaser />

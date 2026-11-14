@@ -12,16 +12,16 @@
    guideline neutrals (#f6f7f7 page, Deep Navy ink). */
 :root,
 :root[data-theme="dark"] {
-  --bg: 16 42 67;        /* Deep Navy #102A43 */
-  --bg-deep: 12 34 54;
+  --bg: 11 28 46;        /* Night Rail #0B1C2E */
+  --bg-deep: 8 21 36;
   --fg: 255 255 255;
   --silver: 219 219 219; /* Bluetrain Light Grey */
   --steel: 160 160 160;  /* Bluetrain Grey */
   color-scheme: dark;
 }
 :root[data-theme="light"] {
-  --bg: 246 247 247;
-  --bg-deep: 234 238 242;
+  --bg: 245 243 238;     /* Platform Paper #F5F3EE */
+  --bg-deep: 236 233 225;
   --fg: 16 42 67;
   --silver: 51 68 86;
   --steel: 94 106 119;
@@ -29,8 +29,8 @@
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
-    --bg: 246 247 247;
-    --bg-deep: 234 238 242;
+    --bg: 245 243 238;
+    --bg-deep: 236 233 225;
     --fg: 16 42 67;
     --silver: 51 68 86;
     --steel: 94 106 119;
@@ -87,3 +87,71 @@
   .informed-body :is(p, li, td, th, blockquote, dd) a:hover { text-decoration-thickness: 2px; }
   .informed-body strong { font-weight: 600; }
 }
+
+/* ───────── 2026 redesign: train, scroll motion, menu ───────── */
+@layer components {
+  .kicker { @apply font-mono text-[0.8rem] uppercase tracking-[0.16em] text-amber; }
+}
+
+/* Train: arrives once from far left to close right, then holds; the wheels keep turning inside the SVG */
+.bt-approach { transform-origin: -48% 74%; animation: bt-approach 3.6s cubic-bezier(.22,.6,.25,1) .3s both; }
+@keyframes bt-approach { 0% { transform: scale(.1); opacity: 0 } 12% { opacity: 1 } 100% { transform: scale(1); opacity: 1 } }
+
+/* Hero headline lines rise once on load */
+.bt-line { display: block; animation: bt-lineup .9s cubic-bezier(.2,.7,.2,1) both; }
+.bt-up { animation: bt-fadeup .8s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes bt-lineup { from { opacity: 0; transform: translateY(40px) } to { opacity: 1; transform: none } }
+@keyframes bt-fadeup { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: none } }
+
+/* Pinned "Bluetrain Way" statement — static fallback height */
+.bt-way { position: relative; }
+.bt-way-pin { position: relative; }
+
+@supports (animation-timeline: view()) {
+  /* Hero shrinks into a rounded card as it leaves */
+  .bt-hero { animation: bt-shrink linear both; animation-timeline: view(); animation-range: exit 0% exit 70%; }
+  @keyframes bt-shrink { from { clip-path: inset(0 0 0 0 round 0px) } to { clip-path: inset(0 22px 56px 22px round 28px) } }
+  /* Big header fades out, compact pill nav arrives */
+  .bt-hero-head { animation: bt-headout linear both; animation-timeline: scroll(root); animation-range: 0px 220px; }
+  @keyframes bt-headout { to { opacity: 0; transform: translateY(-12px) } }
+  .bt-pillnav { animation: bt-navin linear both; animation-timeline: scroll(root); animation-range: 260px 380px; }
+  @keyframes bt-navin { from { opacity: 0; transform: translate(-50%, -28px); visibility: hidden } to { opacity: 1; transform: translate(-50%, 0); visibility: visible } }
+
+  .bt-way { height: 2600px; view-timeline: --bt-way block; }
+  .bt-way-pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+  .bt-way-word { animation: bt-wordup linear both; animation-timeline: --bt-way; animation-range: contain calc(var(--i) * 3.4%) contain calc(var(--i) * 3.4% + 9%); }
+  @keyframes bt-wordup { from { opacity: 0; transform: translateY(34px) } to { opacity: 1; transform: none } }
+  .bt-way-card { animation: bt-cardup linear both; animation-timeline: --bt-way; animation-range: contain calc(40% + var(--i) * 6%) contain calc(62% + var(--i) * 6%); }
+  @keyframes bt-cardup { from { transform: translateY(110vh) scale(.982) } to { transform: none } }
+  .bt-way-bw { animation: bt-wordup linear both; animation-timeline: --bt-way; animation-range: contain calc(76% + var(--i) * 1.4%) contain calc(80% + var(--i) * 1.4%); }
+
+  /* Paragraph darkens word by word as it crosses the screen */
+  .bt-intro { view-timeline: --bt-intro block; }
+  .bt-rw { animation: bt-rw linear both; animation-timeline: --bt-intro; animation-range: cover calc(22% + var(--i) * .75%) cover calc(26% + var(--i) * .75%); }
+  @keyframes bt-rw { from { opacity: .16 } to { opacity: 1 } }
+
+  /* Cards rise in as they enter */
+  .bt-rise { animation: bt-rise linear both; animation-timeline: view(); animation-range: entry calc(var(--i, 0) * 7%) entry calc(65% + var(--i, 0) * 7%); }
+  @keyframes bt-rise { from { opacity: 0; transform: translateY(64px) scale(.98) } to { opacity: 1; transform: none } }
+}
+/* Browsers without scroll timelines: the pill nav follows a class set from JS */
+@supports not (animation-timeline: view()) {
+  .bt-pillnav { opacity: 0; visibility: hidden; transform: translate(-50%, -28px); transition: opacity .3s, transform .3s, visibility .3s; }
+  .bt-pillnav.is-on { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+}
+@media (max-width: 767px) {
+  .bt-way { height: auto !important; }
+  .bt-way-pin { position: relative !important; height: auto !important; }
+  .bt-way-card, .bt-way-word, .bt-way-bw { animation: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bt-approach, .bt-line, .bt-up, .bt-hero, .bt-hero-head, .bt-way-word, .bt-way-card, .bt-way-bw, .bt-rw, .bt-rise { animation: none !important; }
+  .bt-way { height: auto !important; }
+  .bt-way-pin { position: relative !important; height: auto !important; }
+}
+
+/* Menu: links grow an amber underline */
+.bt-ul { background: linear-gradient(#F2B544, #F2B544) left bottom / 0 2px no-repeat; transition: background-size .35s cubic-bezier(.2,.7,.2,1); }
+.bt-ul:hover, .bt-ul:focus-visible { background-size: 100% 2px; }
+/* Amber kicker text is darkened on the light page for contrast */
+:root[data-theme="light"] .kicker { color: #9a6408; }

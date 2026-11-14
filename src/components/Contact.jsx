@@ -9,6 +9,7 @@ import PrivacyNotice from "./ui/PrivacyNotice";
 import { to } from "../lib/router";
 import { attribution } from "../lib/attribution";
 import { track, identify } from "../lib/track";
+import { redesign, budgetBands, localCurrency } from "../content/redesign";
 
 function Option({ name, label, checked, onChange }) {
   return (
@@ -38,6 +39,10 @@ function DiscoveryForm() {
   const headingRef = useRef(null);
   const total = contact.steps.length;
   const current = contact.steps[step];
+  // Budget bands show in the visitor's market currency (TZS/KES/ZAR/ZMW), USD elsewhere; toggle to USD
+  const [market] = useState(localCurrency);
+  const [currency, setCurrency] = useState(market);
+  const bandLabels = (key, options) => (key === "budget" ? options.map((o, i) => budgetBands[currency][i] || o) : options);
 
   // Move focus to the new question so keyboard and screen-reader users follow the step change
   useEffect(() => { headingRef.current?.focus({ preventScroll: true }); }, [step]);
@@ -69,7 +74,8 @@ function DiscoveryForm() {
     const payload = {
       building: data.building === otherIndex ? data.other : opts("building")[data.building],
       timeline: opts("timeline")[data.timeline],
-      budget: opts("budget")[data.budget],
+      budget: currency !== "USD" && budgetBands[currency][data.budget] ? `${budgetBands[currency][data.budget]} (≈ ${opts("budget")[data.budget]})` : opts("budget")[data.budget],
+      ...((() => { try { return sessionStorage.getItem("bt-intent"); } catch { return null; } })() === "creators" ? { tag: "Creators" } : {}),
       language: lang === "sw" ? "Swahili" : "English",
       name: data.name,
       email: data.email,
@@ -149,10 +155,20 @@ function DiscoveryForm() {
             <p className="mt-2 text-sm text-steel">{f.reassurance[step]}</p>
 
             <div className="mt-6 flex flex-wrap gap-2" role="radiogroup" aria-label={current.question}>
-              {[...current.options, ...(current.allowOther ? [f.somethingElse] : [])].map((o, i) => (
+              {[...bandLabels(current.key, current.options), ...(current.allowOther ? [f.somethingElse] : [])].map((o, i) => (
                 <Option key={i} name={current.key} label={o} checked={data[current.key] === i} onChange={() => choose(current.key, i)} />
               ))}
             </div>
+            {current.key === "budget" && market !== "USD" && (
+              <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-steel">
+                <div role="group" aria-label={redesign[lang].budget.label} className="flex rounded-full border border-white/15 p-1">
+                  {[market, "USD"].map((c) => (
+                    <button key={c} type="button" aria-pressed={currency === c} onClick={() => setCurrency(c)} className={`rounded-full px-3 py-1 font-mono text-xs ${currency === c ? "bg-white text-navy" : "text-silver"}`}>{c}</button>
+                  ))}
+                </div>
+                <span>{redesign[lang].budget.note}</span>
+              </div>
+            )}
             {errors.budget && step === 2 && <p className="mt-3 text-sm text-amber">{f[errors.budget]}</p>}
 
             {step === 0 && data.building === otherIndex && (

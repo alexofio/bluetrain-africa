@@ -17,6 +17,8 @@ export default {
         paper: "#ffffff",
         ink: "#102A43",
         night: "#0c2236",
+        rail: "#0B1C2E", // Night Rail — hero and dark bands
+        platform: "#F5F3EE", // Platform Paper — light page
         teal: "#167D8D",
         amber: "#F2B544",
         // Neutrals
@@ -27,6 +29,7 @@ export default {
       fontFamily: {
         // ITC Avant Garde (brand) and Inter, self-hosted from src/assets/fonts.
         display: ['"ITC Avant Garde Gothic Pro"', '"Jost"', "Century Gothic", "system-ui", "sans-serif"],
+        mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
         sans: ['"Inter"', "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
       },
       fontSize: {

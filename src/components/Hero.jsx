@@ -1,98 +1,59 @@
-import { motion } from "framer-motion";
 import { useLang } from "../lib/i18n";
 import { config } from "../content/site";
-import { spring } from "../lib/motion";
-import Button from "./ui/Button";
-import SignalField from "./SignalField";
+import { redesign } from "../content/redesign";
 import { to } from "../lib/router";
+import { HeroHead } from "./Navbar";
 
-const line = {
-  hidden: { y: "105%" },
-  show: (i) => ({ y: "0%", transition: { ...spring.soft, delay: 0.25 + i * 0.14 } }),
-};
-const after = (d) => ({
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { ...spring.soft, delay: d } },
-});
-
+/**
+ * Night Rail hero: header, kinetic three-line headline, CTAs, then Alex's layered locomotive.
+ * The train arrives once (far left → close right) and holds; only its wheels and rods keep moving.
+ * On scroll the whole hero shrinks into a rounded card (CSS scroll timeline, see index.css).
+ */
 export default function Hero() {
   const { lang, t } = useLang();
   const hero = t.hero;
+  const r = redesign[lang];
   return (
-    <section id="top" className="relative overflow-hidden pb-20 pt-32 sm:pt-36 lg:pb-28 lg:pt-40">
-      <div className="container-site grid items-center gap-12 lg:grid-cols-12 lg:gap-10">
-        <motion.div initial="hidden" animate="show" className="lg:col-span-7">
-          {/* Kinetic headline: each sentence rises out of its own mask — the page's one load moment */}
-          <motion.h1
-            key={lang}
-            initial="hidden"
-            animate="show"
-            // Swahili runs ~20% longer per line, so it steps down one notch to hold three lines
-            className={`font-display font-bold text-white ${lang === "sw" ? "text-[clamp(2.1rem,3.7vw,4rem)] leading-[1.02] tracking-[-0.035em]" : "text-display-xl"}`}
-          >
-            {hero.headline.map((text, i) => (
-              <span key={text} className="block overflow-hidden pb-[0.08em]">
-                <motion.span custom={i} variants={line} className="block">
-                  {text}
-                </motion.span>
-              </span>
-            ))}
-          </motion.h1>
+    <section id="top" className="bt-hero relative overflow-hidden bg-rail text-[#fff]">
+      <HeroHead />
 
-          <motion.p variants={after(0.75)} className="mt-8 max-w-[34rem] text-lg leading-relaxed text-silver/80">
-            {hero.body}
-          </motion.p>
-
-          <motion.p variants={after(0.85)} className="mt-5 font-display text-lg font-semibold text-white">
-            {hero.kicker}
-          </motion.p>
-
-          {hero.stat && (
-            <motion.p variants={after(0.9)} className="mt-6 flex items-baseline gap-3">
-              <span className="font-display text-4xl font-bold text-amber">{hero.stat.value}</span>
-              <span className="text-sm text-silver/70">{hero.stat.label}</span>
-            </motion.p>
-          )}
-
-          <motion.div variants={after(0.95)} className="mt-10 flex flex-wrap gap-3">
-            <Button href={hero.primaryCta.href}>{hero.primaryCta.label}</Button>
-            <Button href={hero.secondaryCta.href} variant="secondary">
-              {hero.secondaryCta.label}
-            </Button>
-            {hero.profileCta && (
-              <Button href={hero.profileCta.href} variant="secondary">
-                {hero.profileCta.label}
-              </Button>
-            )}
-          </motion.div>
-
-          {/* Markets, surfaced in the hero — links to the map section */}
-          <motion.a
-            variants={after(1.05)}
-            href={to("#where")}
-            aria-label={t.ui.countriesLink}
-            className="group mt-10 inline-flex flex-wrap items-center gap-x-5 gap-y-2 rounded-2xl py-1 text-[0.95rem] text-silver/80"
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" className="text-amber" aria-hidden>
-              <path d="M8 14.5s4.5-4.2 4.5-8a4.5 4.5 0 0 0-9 0c0 3.8 4.5 8 4.5 8z" />
-              <circle cx="8" cy="6.5" r="1.6" />
-            </svg>
-            {config.countries.map((id) => (
-              <span key={id} className="font-display font-semibold text-white transition-colors group-hover:text-brand-bright">
-                {t.where.countries[id].name}
-              </span>
-            ))}
-          </motion.a>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ ...spring.soft, delay: 0.45 }}
-          className="h-[22rem] sm:h-[28rem] lg:col-span-5 lg:h-[36rem]"
+      <div className="relative z-10 mx-auto max-w-site px-5 pb-4 pt-14 sm:px-8 sm:pt-20 lg:px-12 lg:pt-24">
+        <p className="kicker bt-up mb-6">{r.hero.kicker}</p>
+        <h1
+          key={lang}
+          className={`font-display font-bold ${lang === "sw" ? "text-[clamp(2.3rem,6.4vw,5.8rem)]" : "text-[clamp(2.6rem,7.6vw,7rem)]"} leading-[0.98] tracking-[-0.03em]`}
         >
-          <SignalField />
-        </motion.div>
+          {hero.headline.map((text, i) => (
+            <span key={text} className={`bt-line ${i === 1 ? "text-brand-bright" : ""}`} style={{ animationDelay: `${0.1 + i * 0.25}s` }}>
+              {text}
+            </span>
+          ))}
+        </h1>
+
+        <div className="mt-10 flex flex-wrap items-end justify-between gap-8">
+          <div className="max-w-[32rem]">
+            <p className="bt-up text-base leading-relaxed text-[#C9D6E3] sm:text-lg" style={{ animationDelay: ".9s" }}>{hero.body}</p>
+            <p className="bt-up mt-4 font-display font-semibold" style={{ animationDelay: "1s" }}>{hero.kicker}</p>
+          </div>
+          <div className="bt-up flex flex-wrap items-center gap-3" style={{ animationDelay: "1.1s" }}>
+            <a href={to(hero.primaryCta.href)} className="rounded-full bg-amber px-6 py-4 font-display font-semibold text-rail transition-transform hover:-translate-y-0.5">{hero.primaryCta.label} →</a>
+            <a href={to(hero.secondaryCta.href)} className="rounded-full border-[1.5px] border-brand-bright px-6 py-4 font-display font-semibold transition-colors hover:bg-brand-bright/15">{hero.secondaryCta.label}</a>
+            {hero.profileCta && (
+              <a href={to(hero.profileCta.href)} className="px-2 py-4 font-display font-semibold text-[#C9D6E3] hover:text-[#fff]">{hero.profileCta.label}</a>
+            )}
+          </div>
+        </div>
+
+        <a href={to("#where")} aria-label={t.ui.countriesLink} className="bt-up mt-8 inline-flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs uppercase tracking-[0.14em] text-[#9FB3C8] hover:text-[#fff]" style={{ animationDelay: "1.2s" }}>
+          {config.countries.map((id) => <span key={id}>{t.where.countries[id].name}</span>)}
+        </a>
+      </div>
+
+      {/* Locomotive (decorative) */}
+      <div aria-hidden className="relative h-[clamp(200px,38vw,480px)] overflow-hidden">
+        <div className="bt-approach absolute bottom-0 right-[3%] w-[92%] max-w-[920px] sm:w-[72%] lg:w-[64%]">
+          <img src="/train/loco.svg" alt="" width="1774" height="887" decoding="async" className="block h-auto w-full" />
+        </div>
       </div>
     </section>
   );
