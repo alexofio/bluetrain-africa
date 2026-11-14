@@ -26,7 +26,9 @@ const OG = absUrl(SEO?.shareImage) || `${SITE}/og-image.jpg`;
 const SITE_NAME = SEO?.siteName || "Bluetrain Africa";
 const SUFFIX = SEO?.titleSuffix ?? " | Bluetrain Africa";
 /** Fixed page title/description: from the portal when set, else the built-in text. */
-const pageMeta = (key, title, description) => ({ title: SEO?.pages?.[key]?.title || title, description: SEO?.pages?.[key]?.description || description || SEO?.defaultDescription || "" });
+const pageMeta = (key, title, description) => ({ title: SEO?.pages?.[key]?.title || title, description: SEO?.pages?.[key]?.description || description || SEO?.defaultDescription || "", extraLd: SEO?.pages?.[key]?.jsonld || [] });
+// Custom schema markup (JSON-LD) pasted in the portal: for every page (SEO & AI tab) and per item (its SEO tab).
+const customLd = (x) => (Array.isArray(x?.seo?.jsonld) ? x.seo.jsonld : []);
 const today = new Date().toISOString().slice(0, 10);
 const template = readFileSync(DIST + "index.html", "utf8");
 
@@ -82,7 +84,7 @@ function audiences() {
     <script async src="${esc(config.audiencesTag)}"></script>`;
 }
 
-function page({ path, title, description, type = "website", image = OG, ld = [], noscript = "", noindex = false, canonical, extraHead = [] }) {
+function page({ path, title, description, type = "website", image = OG, ld = [], noscript = "", noindex = false, canonical, extraHead = [], extraLd = [] }) {
   const url = canonical || SITE + (path === "/" ? "/" : path);
   const head = [
     `<link rel="canonical" href="${esc(url)}" />`,
@@ -100,7 +102,7 @@ function page({ path, title, description, type = "website", image = OG, ld = [],
     `<meta name="twitter:title" content="${esc(title)}" />`,
     `<meta name="twitter:description" content="${esc(description)}" />`,
     `<meta name="twitter:image" content="${esc(image)}" />`,
-    ...ld.map(jsonld),
+    ...[...ld, ...extraLd, ...(Array.isArray(SEO?.jsonld) ? SEO.jsonld : [])].map(jsonld),
     gtmHead(), ga4(), audiences(),
   ].filter(Boolean).join("\n    ");
   return template
@@ -200,7 +202,7 @@ for (const p of posts) {
       inLanguage: "en",
       keywords: keywords(p),
       mentions: p.entities?.length ? p.entities.map((name) => ({ "@type": "Thing", name })) : undefined,
-    }, crumbs([["Home", "/"], ["Bluetrain Informed", "/informed"], [p.title, `/informed/${p.slug}`]]), ...faqLd(p.faqs)],
+    }, crumbs([["Home", "/"], ["Bluetrain Informed", "/informed"], [p.title, `/informed/${p.slug}`]]), ...faqLd(p.faqs), ...customLd(p)],
     noscript: `<p>${link("/informed", "← Bluetrain Informed")}</p><h1>${esc(p.title)}</h1><p><em>${esc(p.standfirst)}</em></p>${p.answer ? `<p><strong>${esc(p.answer)}</strong></p>` : ""}${blocksHtml(p.body)}${sourcesHtml(p)}`,
   }));
 }
@@ -235,7 +237,7 @@ for (const c of casePages) {
       inLanguage: "en",
       about: c.client ? { "@type": "Organization", name: c.client.name } : undefined,
       mentions: c.entities?.length ? c.entities.map((name) => ({ "@type": "Thing", name })) : undefined,
-    }, crumbs([["Home", "/"], ["Case studies", "/work"], [c.title, `/work/${c.slug}`]]), ...faqLd(c.faqs)],
+    }, crumbs([["Home", "/"], ["Case studies", "/work"], [c.title, `/work/${c.slug}`]]), ...faqLd(c.faqs), ...customLd(c)],
     noscript: `<p>${link("/work", "← All case studies")}</p><h1>${esc(c.title)}</h1><p><em>${esc(c.standfirst)}</em></p>${c.metric ? `<p>${esc(c.metric)}</p>` : ""}${(c.results || []).map((r) => `<p><strong>${esc(r.value)}</strong> ${esc(r.label)}</p>`).join("")}${blocksHtml(c.body)}${sourcesHtml(c)}`,
   }));
 }
