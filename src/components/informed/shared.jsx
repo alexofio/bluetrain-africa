@@ -1,3 +1,4 @@
+import { leadFromRead } from "../../lib/readStats";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { categories, markets, formats, loc } from "../../content/informed";
@@ -76,6 +77,7 @@ export function Newsletter({ ui, compact = false }) {
     try {
       await fetch(config.newsletterEndpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
       setState("done");
+      leadFromRead("newsletter"); // portal Statistics: sign-up after reading
     } catch {
       setState("mailto");
     }
@@ -89,7 +91,7 @@ export function Newsletter({ ui, compact = false }) {
       {state === "done" || state === "mailto" ? (
         <p role="status" className="mt-6 font-medium text-amber">{state === "done" ? n.done : n.mailto}</p>
       ) : (
-        <form onSubmit={submit} noValidate className="mt-6 flex flex-col gap-2 sm:flex-row">
+        <form onSubmit={submit} noValidate data-stat="newsletter" className="mt-6 flex flex-col gap-2 sm:flex-row">
           <label className="sr-only" htmlFor={`nl-${compact ? "c" : "f"}`}>{n.placeholder}</label>
           <input
             id={`nl-${compact ? "c" : "f"}`}
