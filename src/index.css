@@ -156,9 +156,9 @@
 /* Amber kicker text is darkened on the light page for contrast */
 :root[data-theme="light"] .kicker { color: #9a6408; }
 
-/* Client logos: one-colour by default, the brand's real colours on hover/focus */
-.bt-logo { filter: brightness(0); opacity: .5; transition: filter .35s ease, opacity .35s ease, transform .35s ease; }
+/* Client logos: one-colour by default, the brand's real colours on hover/focus, on a plate that suits the file */
+.bt-logo { filter: brightness(0); opacity: .5; border-radius: 8px; transition: filter .35s ease, opacity .35s ease, transform .35s ease, background-color .35s ease, box-shadow .35s ease; }
 [data-theme="dark"] .bt-logo { filter: brightness(0) invert(1); }
 .bt-logo-hover:hover .bt-logo, .bt-logo-hover:focus-within .bt-logo, .bt-logo:hover { filter: none !important; opacity: 1; transform: scale(1.04); }
-/* On dark backgrounds a colour logo gets a soft light plate so dark brand colours stay readable */
-[data-theme="dark"] .bt-logo-hover:hover .bt-logo, [data-theme="dark"] .bt-logo:hover { background: #fff; border-radius: 8px; padding: 4px 8px; box-sizing: content-box; margin: -4px -8px; }
+.bt-logo-hover:hover .bt-logo[data-plate="light"], .bt-logo[data-plate="light"]:hover { background-color: #fff; box-shadow: 0 0 0 6px #fff; }
+.bt-logo-hover:hover .bt-logo[data-plate="dark"], .bt-logo[data-plate="dark"]:hover { background-color: #0B1C2E; box-shadow: 0 0 0 6px #0B1C2E; }
