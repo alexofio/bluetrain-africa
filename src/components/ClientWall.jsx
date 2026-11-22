@@ -31,7 +31,7 @@ function Tile({ client, sector }) {
         onPointerMove={onMove}
         onPointerLeave={onLeave}
         style={reduce ? undefined : { rotateX: rx, rotateY: ry }}
-        className="glass glow-hover group relative flex aspect-[5/3] flex-col items-center justify-center overflow-hidden rounded-3xl p-5 text-center [transform-style:preserve-3d]"
+        className="bt-logo-hover glass glow-hover group relative flex aspect-[5/3] flex-col items-center justify-center overflow-hidden rounded-3xl p-5 text-center [transform-style:preserve-3d]"
       >
         {/* spotlight that follows the cursor inside the tile */}
         <span
@@ -40,7 +40,7 @@ function Tile({ client, sector }) {
           style={{ background: "radial-gradient(220px circle at var(--sx,50%) var(--sy,50%), rgb(46 142 255 / 0.22), transparent 70%)" }}
         />
         {logo ? (
-          <img src={logo} alt={client.name} className="relative h-10 w-auto max-w-[70%] opacity-60 brightness-0 transition-all duration-300 group-hover:opacity-100 group-hover:brightness-100 dark:invert group-hover:dark:invert-0" />
+          <img src={logo} alt={client.name} className="bt-logo relative h-10 w-auto max-w-[70%]" />
         ) : (
           <span className="relative font-display text-xl font-bold tracking-[-0.02em] text-white/55 transition-colors duration-300 group-hover:text-white sm:text-2xl [transform:translateZ(30px)]">
             {client.name}

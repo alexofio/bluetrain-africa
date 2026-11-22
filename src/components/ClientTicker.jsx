@@ -5,12 +5,12 @@ import Words from "./redesign/Words";
 
 function ClientMark({ client, duplicate }) {
   return (
-    <li aria-hidden={duplicate || undefined} className={`shrink-0 px-8 sm:px-10 ${duplicate ? "motion-reduce:hidden" : ""}`}>
+    <li aria-hidden={duplicate || undefined} className={`bt-logo-hover shrink-0 px-8 sm:px-10 ${duplicate ? "motion-reduce:hidden" : ""}`}>
       {client.logo ? (
         <img
           src={client.logo}
           alt={client.name}
-          className="h-7 w-auto opacity-40 brightness-0 dark:invert transition-opacity duration-300 hover:opacity-100"
+          className="bt-logo h-7 w-auto"
         />
       ) : (
         // Typeset fallback until approved monochrome logo files are supplied
