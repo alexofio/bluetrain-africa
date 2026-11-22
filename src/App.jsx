@@ -22,6 +22,7 @@ import Creators from "./components/redesign/Creators";
 import Journey from "./components/redesign/Journey";
 import Booking from "./components/Booking";
 import CaseStudy from "./components/CaseStudy";
+import ClientPage from "./components/ClientPage";
 import Preview from "./components/Preview";
 import Footer from "./components/Footer";
 import Legal from "./components/Legal";
@@ -76,7 +77,7 @@ export default function App() {
   const [drafts, setDrafts] = useState({});
   bridge.route = () => route;
   bridge.showDraft = (kind, slug, item) => setDrafts((d) => ({ ...d, [`${kind}:${slug}`]: item || undefined }));
-  const page = route.name === "post" ? `post-${route.slug}` : route.name === "work" ? `work-${route.slug}` : route.name === "legal" ? `legal-${route.doc}` : route.name;
+  const page = route.name === "post" ? `post-${route.slug}` : route.name === "work" ? `work-${route.slug}` : route.name === "client" ? `client-${route.slug}` : route.name === "legal" ? `legal-${route.doc}` : route.name;
 
   // Titles follow the page and the language (articles set their own in InformedPost)
   useEffect(() => {
@@ -123,6 +124,7 @@ export default function App() {
               {route.name === "informed" && <InformedIndex />}
               {route.name === "post" && <InformedPost slug={route.slug} draft={drafts[`post:${route.slug}`]} />}
               {route.name === "workIndex" && <Work hub />}
+              {route.name === "client" && <ClientPage slug={route.slug} />}
               {route.name === "work" && <CaseStudy slug={route.slug} draft={drafts[`work:${route.slug}`]} />}
               {route.name === "preview" && <Preview token={route.token} lang={route.lang} />}
               {route.name === "book" && <Booking preselect={route.with} />}

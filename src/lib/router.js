@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
  *      /informed/<slug>     → article
  *      /work                → all case studies (hub)
  *      /work/<slug>         → case study
+ *      /clients/<slug>      → client page (case studies + work done)
  *      /preview?token=…     → draft preview from the Bluetrain Portal (noindex)
  *      /book[?with=alex]    → discovery-call booking
  *      /privacy, /terms     → legal pages
@@ -43,6 +44,8 @@ function parse() {
   if (path === "/work") return { name: "workIndex", path };
   const w = path.match(/^\/work\/([\w-]+)$/);
   if (w) return { name: "work", path, slug: w[1] };
+  const cl = path.match(/^\/clients\/([\w-]+)$/);
+  if (cl) return { name: "client", path, slug: cl[1] };
   if (path === "/book") return { name: "book", path, with: new URLSearchParams(window.location.search).get("with") || "" };
   const m = path.match(/^\/informed\/([\w-]+)$/);
   if (m) return { name: "post", path, slug: m[1] };

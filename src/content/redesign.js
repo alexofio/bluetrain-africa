@@ -74,6 +74,12 @@ const en = {
   },
   budget: { label: "Currency", note: "Shown in your market's currency; switch to USD any time. Indicative bands." },
   footer: { whatsapp: "WhatsApp" },
+  clientPage: {
+    titleSuffix: "Client", all: "All clients", client: "Client", since: "Working together", markets: "Markets", caseCount: "Case studies", website: "Website",
+    partOf: "Part of", casesKicker: "● Case studies", casesHeading: (n) => `Our work with ${n}`, read: "Read the case study",
+    noCases: "The case study for this partnership is on its way. Ask us about the work in a discovery call.",
+    workKicker: "● Work done", cta: "Want results like these for your brand?", allWork: "All case studies", more: (s) => `● More clients${s ? ` in ${s}` : ""}`,
+  },
   pass: { title: (m) => `Boarding pass · ${m}-min discovery call · Google Meet`, from: "From", you: "You", to: "To", growth: "Growth", with: "With", date: "Date", seat: "Seat", continue: "Continue", confirmed: "Confirmed" },
 };
 
@@ -147,6 +153,12 @@ const sw = {
   },
   budget: { label: "Sarafu", note: "Inaonyeshwa kwa sarafu ya soko lako; badilisha kuwa USD wakati wowote. Viwango ni makadirio." },
   footer: { whatsapp: "WhatsApp" },
+  clientPage: {
+    titleSuffix: "Mteja", all: "Wateja wote", client: "Mteja", since: "Tumefanya kazi pamoja", markets: "Masoko", caseCount: "Visa vya kazi", website: "Tovuti",
+    partOf: "Sehemu ya", casesKicker: "● Visa vya kazi", casesHeading: (n) => `Kazi yetu na ${n}`, read: "Soma zaidi",
+    noCases: "Maelezo ya kazi hii yanakuja hivi karibuni. Tuulize kuhusu kazi hii kwenye mazungumzo ya awali.",
+    workKicker: "● Kazi tuliyofanya", cta: "Unataka matokeo kama haya kwa chapa yako?", allWork: "Visa vyote vya kazi", more: (s) => `● Wateja wengine${s ? ` wa ${s}` : ""}`,
+  },
   pass: { title: (m) => `Tiketi · mazungumzo ya dakika ${m} · Google Meet`, from: "Kutoka", you: "Wewe", to: "Kwenda", growth: "Ukuaji", with: "Na", date: "Tarehe", seat: "Kiti", continue: "Endelea", confirmed: "Imethibitishwa" },
 };
 

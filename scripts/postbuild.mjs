@@ -12,7 +12,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { config, en } from "../src/content/site.js";
 import { posts } from "../src/content/informed.js";
 import { legal } from "../src/content/legal.js";
-import { caseStudies, hasPage, version as contentVersion } from "../src/content/cms.js";
+import { caseStudies, clients, hasPage, version as contentVersion } from "../src/content/cms.js";
 import * as generated from "../src/content/cms.generated.js";
 // Google tags: from the portal (Admin → Settings → Google tags) when set there, else site.js.
 import { tags } from "../src/content/tags.js";
@@ -242,6 +242,28 @@ for (const c of casePages) {
   }));
 }
 
+// ---- Client pages (served at /clients/<slug>): the client, its case studies and the work done
+const casesFor = (cl) => caseStudies.filter((c) => c.client?.slug === cl.slug || (cl.caseStudies || []).includes(c.slug));
+const clientPages = clients.filter((cl) => cl.slug);
+for (const cl of clientPages) {
+  const cs = casesFor(cl);
+  const work = (cl.projects || []).map((p) => `${p.name} (${p.year})`);
+  const description = cl.description || `${cl.name} and ${SITE_NAME}: ${cs.length ? cs.map((c) => c.title).join("; ") : work.join("; ") || "client since " + (cl.years || "")}`.slice(0, 300);
+  write(`clients/${cl.slug}.html`, page({
+    path: `/clients/${cl.slug}`,
+    title: `${cl.name} · Client${SUFFIX}`,
+    description,
+    image: absUrl(cl.logo) || OG,
+    ld: [{
+      "@context": "https://schema.org", "@type": "AboutPage", name: `${cl.name} · ${SITE_NAME}`, url: `${SITE}/clients/${cl.slug}`, description,
+      about: { "@type": "Organization", name: cl.name, url: cl.website || undefined, logo: absUrl(cl.logo) || undefined },
+      isPartOf: { "@id": `${SITE}/#website` },
+      hasPart: cs.filter(hasPage).map((c) => ({ "@type": "Article", headline: c.title, url: `${SITE}/work/${c.slug}` })),
+    }, crumbs([["Home", "/"], ["Clients", "/#clients"], [cl.name, `/clients/${cl.slug}`]])],
+    noscript: `<p>${link("/#clients", "← All clients")}</p><h1>${esc(cl.name)}</h1>${cl.description ? `<p>${esc(cl.description)}</p>` : ""}${cl.years ? `<p>Working together: ${esc(cl.years)}</p>` : ""}<h2>Case studies</h2><ul>${cs.map((c) => `<li>${hasPage(c) ? link(`/work/${c.slug}`, c.title) : esc(c.title)}</li>`).join("") || "<li>Coming soon</li>"}</ul>${work.length ? `<h2>Work done</h2><ul>${work.map((w) => `<li>${esc(w)}</li>`).join("")}</ul>` : ""}`,
+  }));
+}
+
 // ---- Case-studies hub (served at /work): every case study, with or without a page of its own
 const caseHref = (c) => (hasPage(c) ? `/work/${c.slug}` : "/work");
 const workMeta = pageMeta("work", `${en.work.hubTitle}${SUFFIX}`, en.work.hubIntro);
@@ -295,6 +317,7 @@ const urls = [
   { loc: "/terms", lastmod: legal.en.terms.effective, priority: "0.3" },
   ...sorted.filter((p) => !p.seo?.noindex && !p.seo?.canonical).map((p) => ({ loc: `/informed/${p.slug}`, lastmod: modified(p), priority: "0.6" })),
   ...casePages.filter((c) => !c.seo?.noindex && !c.seo?.canonical).map((c) => ({ loc: `/work/${c.slug}`, lastmod: modified(c), priority: "0.6" })),
+  ...clientPages.map((cl) => ({ loc: `/clients/${cl.slug}`, lastmod: casesFor(cl).map(modified).filter(Boolean).sort().at(-1) || today, priority: "0.5" })),
 ];
 write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -450,4 +473,4 @@ write("_headers", `/assets/*
   Cache-Control: no-store
 `);
 
-console.log(`postbuild: ${posts.length + casePages.length + 6} pages, ${redirects.length + portalRedirects.length + dynamic.length} redirects, sitemap ${urls.length} URLs, llms.txt${fullOn ? " + llms-full.txt" : ""}, robots from ${SEO?.robots ? "portal" : "defaults"}, content version ${contentVersion}`);
+console.log(`postbuild: ${posts.length + casePages.length + clientPages.length + 6} pages, ${redirects.length + portalRedirects.length + dynamic.length} redirects, sitemap ${urls.length} URLs, llms.txt${fullOn ? " + llms-full.txt" : ""}, robots from ${SEO?.robots ? "portal" : "defaults"}, content version ${contentVersion}`);

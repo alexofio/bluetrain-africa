@@ -1,20 +1,22 @@
 import { clients as cmsClients } from "../content/cms";
 import { useLang } from "../lib/i18n";
 import ClientLogo from "./ui/ClientLogo";
+import { clientHref } from "./ClientPage";
 import { Reveal, RevealItem } from "./ui/Reveal";
 import Words from "./redesign/Words";
 
 function ClientMark({ client, duplicate }) {
   return (
     <li aria-hidden={duplicate || undefined} className={`bt-logo-hover shrink-0 px-8 sm:px-10 ${duplicate ? "motion-reduce:hidden" : ""}`}>
-      {client.logo ? (
-        <ClientLogo src={client.logo} alt={client.name} className="h-7 w-auto" />
-      ) : (
-        // Typeset fallback until approved monochrome logo files are supplied
-        <span className="whitespace-nowrap font-display text-2xl font-semibold tracking-[-0.02em] text-white/35 transition-colors duration-300 hover:text-white">
-          {client.name}
-        </span>
-      )}
+      <a href={clientHref(client)} tabIndex={duplicate ? -1 : undefined} className="block">
+        {client.logo ? (
+          <ClientLogo src={client.logo} alt={client.name} className="h-7 w-auto" />
+        ) : (
+          <span className="whitespace-nowrap font-display text-2xl font-semibold tracking-[-0.02em] text-white/35 transition-colors duration-300 hover:text-white">
+            {client.name}
+          </span>
+        )}
+      </a>
     </li>
   );
 }

@@ -4,6 +4,7 @@ import { clients } from "../content/cms";
 import { industryLabel } from "../content/cms";
 import { useLang } from "../lib/i18n";
 import ClientLogo from "./ui/ClientLogo";
+import { clientHref } from "./ClientPage";
 import { Reveal, RevealItem } from "./ui/Reveal";
 
 // Logos come from the Bluetrain Portal and are only sent once the client's logo permission is recorded there.
@@ -27,7 +28,9 @@ function Tile({ client, sector }) {
 
   return (
     <RevealItem className="[perspective:900px]">
-      <motion.div
+      <motion.a
+        href={clientHref(client)}
+        aria-label={client.name}
         ref={ref}
         onPointerMove={onMove}
         onPointerLeave={onLeave}
@@ -48,7 +51,7 @@ function Tile({ client, sector }) {
           </span>
         )}
         <span className="relative mt-2 text-[0.72rem] uppercase tracking-[0.12em] text-steel transition-colors group-hover:text-brand-bright [transform:translateZ(20px)]">{sector}</span>
-      </motion.div>
+      </motion.a>
     </RevealItem>
   );
 }
