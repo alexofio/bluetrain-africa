@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { useReadStats } from "../../lib/readStats";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { posts, loc } from "../../content/informed";
 import { config } from "../../content/site";
@@ -21,6 +22,8 @@ export default function InformedPost({ slug, draft }) {
   useEffect(() => {
     if (post) document.title = `${loc(post, lang, "title")} | Bluetrain Informed`;
   }, [post, lang]);
+  const articleRef = useRef(null);
+  useReadStats("informed", draft ? null : post?.slug, lang, articleRef); // portal Statistics (anonymous)
 
   if (!post) {
     return (
@@ -42,7 +45,7 @@ export default function InformedPost({ slug, draft }) {
   const englishBody = lang === "sw" && !swBody && ui.englishOnly;
 
   return (
-    <article className="relative pb-24 pt-28 sm:pt-32" data-bt-item="informed" data-bt-slug={post.slug}>
+    <article ref={articleRef} className="relative pb-24 pt-28 sm:pt-32" data-bt-item="informed" data-bt-slug={post.slug}>
       {/* reading progress, pinned under the floating nav */}
       <motion.div
         aria-hidden

@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { useReadStats } from "../lib/readStats";
 import { motion } from "framer-motion";
 import { caseStudies, cloc } from "../content/cms";
 import { config } from "../content/site";
@@ -20,6 +21,8 @@ export default function CaseStudy({ slug, draft }) {
   useEffect(() => {
     if (c) document.title = `${cloc(c, lang, "title")} | Bluetrain Africa`;
   }, [c, lang]);
+  const articleRef = useRef(null);
+  useReadStats("work", draft ? null : c?.slug, lang, articleRef); // portal Statistics (anonymous)
 
   if (!c) {
     return (
@@ -33,7 +36,7 @@ export default function CaseStudy({ slug, draft }) {
   const period = c.period ? [month(c.period.start, lang), month(c.period.end, lang)].filter(Boolean).join(" – ") : "";
 
   return (
-    <article className="relative pb-24 pt-28 sm:pt-32" data-bt-item="case_study" data-bt-slug={c.slug}>
+    <article ref={articleRef} className="relative pb-24 pt-28 sm:pt-32" data-bt-item="case_study" data-bt-slug={c.slug}>
       <div className="container-site">
         <a href={to("#/work")} className="inline-flex items-center gap-2 text-sm text-silver/70 transition-colors hover:text-white">
           <span aria-hidden>←</span> {w.back}
