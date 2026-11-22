@@ -19,6 +19,8 @@ import InformedPost from "./components/informed/InformedPost";
 import Contact from "./components/Contact";
 import BluetrainWay from "./components/redesign/BluetrainWay";
 import Creators from "./components/redesign/Creators";
+import CreatorsPage from "./components/redesign/CreatorsPage";
+import { redesign } from "./content/redesign";
 import Journey from "./components/redesign/Journey";
 import Booking from "./components/Booking";
 import CaseStudy from "./components/CaseStudy";
@@ -83,6 +85,7 @@ export default function App() {
     if (route.name === "home") document.title = t.meta.title;
     if (route.name === "workIndex") document.title = `${t.work.hubTitle} | Bluetrain Africa`;
     if (route.name === "informed") document.title = "Bluetrain Informed | Market notes and campaign lessons from Africa";
+    if (route.name === "creators") document.title = `${redesign[lang].creatorsPage.title} | Bluetrain Africa`;
     if (route.name === "book") document.title = `${t.ui.book.title} | Bluetrain Africa`;
     if (route.name === "legal") document.title = `${(legal[lang] || legal.en)[route.doc].title} | Bluetrain Africa`;
     if (route.name === "notfound") document.title = `${t.ui.notFound.title} | Bluetrain Africa`;
@@ -125,6 +128,7 @@ export default function App() {
               {route.name === "workIndex" && <Work hub />}
               {route.name === "work" && <CaseStudy slug={route.slug} draft={drafts[`work:${route.slug}`]} />}
               {route.name === "preview" && <Preview token={route.token} lang={route.lang} />}
+              {route.name === "creators" && <CreatorsPage />}
               {route.name === "book" && <Booking preselect={route.with} />}
               {route.name === "legal" && <Legal doc={route.doc} />}
               {route.name === "notfound" && <NotFound />}
