@@ -27,7 +27,7 @@ export default function ClientTicker() {
   const clients = cmsClients;
   const loop = [...clients, ...clients];
   return (
-    <section id="about" className="bt-intro relative py-24 lg:py-32">
+    <section id="about" className="bt-intro bt-white relative py-24 lg:py-32">
       <Reveal className="container-site grid gap-10 lg:grid-cols-12">
         <RevealItem as="h2" className="font-display text-display-md font-bold text-white lg:col-span-5">
           {about.heading}
