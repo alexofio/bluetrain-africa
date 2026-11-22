@@ -5,8 +5,8 @@ import { to } from "../../lib/router";
 const REEL_BG = ["from-[#2E8EFF] to-[#102A43]", "from-[#F2B544] to-[#7a4a10]", "from-[#167D8D] to-[#0B1C2E]"];
 
 /**
- * Creators (Next Gen Influencer). Launches with the showcase only; "Request creators" opens the
- * contact brief tagged Creators. The roster and creator sign-up switch on when the Portal module ships.
+ * Creators (Next Gen Influencer). "Request creators" opens the contact brief tagged Creators;
+ * "Creator sign-up" goes to the page for creators (/creators), which leads to influencers.bluetrain.africa.
  */
 export default function Creators() {
   const { lang } = useLang();
@@ -22,7 +22,7 @@ export default function Creators() {
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <a href={to("#contact")} onClick={() => { try { sessionStorage.setItem("bt-intent", "creators"); } catch { /* storage blocked */ } }} className="rounded-full bg-white px-6 py-3.5 font-display font-semibold text-navy">{c.request} →</a>
-            <span className="rounded-full border border-dashed border-white/25 px-5 py-3.5 text-sm text-steel">{c.signup}</span>
+            <a href={to("#/creators")} className="rounded-full border border-white/25 px-6 py-3.5 font-display font-semibold text-white transition-colors hover:border-brand-bright/60 hover:bg-white/5">{c.signup} →</a>
           </div>
         </div>
 

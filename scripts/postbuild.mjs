@@ -12,6 +12,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { config, en } from "../src/content/site.js";
 import { posts } from "../src/content/informed.js";
 import { legal } from "../src/content/legal.js";
+import { redesign, creatorPortal } from "../src/content/redesign.js";
 import { caseStudies, clients, hasPage, version as contentVersion } from "../src/content/cms.js";
 import * as generated from "../src/content/cms.generated.js";
 // Google tags: from the portal (Admin → Settings → Google tags) when set there, else site.js.
@@ -281,6 +282,17 @@ write("work.html", page({
 // ---- Draft previews (/preview?token=…): one page, never indexed; the editor in the portal frames it.
 write("preview.html", page({ path: "/preview", title: "Draft preview | Bluetrain Africa", description: "Draft preview.", noindex: true }));
 
+// ---- For creators (served at /creators; the buttons lead to the Bluetrain Influencer Portal)
+{
+  const c = redesign.en.creatorsPage;
+  write("creators.html", page({
+    path: "/creators",
+    ...pageMeta("creators", `${c.title}${SUFFIX}`, c.description),
+    ld: [crumbs([["Home", "/"], [c.title, "/creators"]]), ...faqLd(c.faqs)],
+    noscript: `<h1>${esc(c.heading)}</h1><p>${esc(c.body)}</p><p>${link(creatorPortal.join, c.join)} · ${link(creatorPortal.home, c.signin)}</p><h2>${esc(c.stepsHeading)}</h2><ol>${c.steps.map((x) => `<li><strong>${esc(x.title)}.</strong> ${esc(x.body)}</li>`).join("")}</ol><h2>${esc(c.needHeading)}</h2><ul>${c.needs.map((x) => `<li><strong>${esc(x.title)}.</strong> ${esc(x.body)}</li>`).join("")}</ul><h2>${esc(c.faqHeading)}</h2>${c.faqs.map((f) => `<h3>${esc(f.q)}</h3><p>${esc(f.a)}</p>`).join("")}`,
+  }));
+}
+
 // ---- Discovery-call booking (served at /book; people and times load from the Bluetrain Portal)
 write("book.html", page({
   path: "/book",
@@ -311,6 +323,7 @@ const urls = [
   { loc: "/", lastmod: today, priority: "1.0" },
   { loc: "/informed", lastmod: sorted[0]?.date ?? today, priority: "0.8" },
   { loc: "/work", lastmod: caseStudies.map(modified).filter(Boolean).sort().at(-1) || today, priority: "0.8" },
+  { loc: "/creators", lastmod: today, priority: "0.7" },
   { loc: "/book", lastmod: today, priority: "0.7" },
   { loc: "/company-profile/", lastmod: today, priority: "0.6" },
   { loc: "/privacy", lastmod: legal.en.privacy.effective, priority: "0.3" },
@@ -365,6 +378,7 @@ write("llms.txt", [
   "## Optional",
   ...(fullOn ? [line("Full text of every article and case study", "/llms-full.txt")] : []),
   line("This index", "/llms.txt"),
+  line(redesign.en.creatorsPage.title, "/creators", redesign.en.creatorsPage.description),
   line("Book a discovery call", "/book", "30 minutes with the team"),
   line("Company profile", "/company-profile/"),
   line("Privacy Policy", "/privacy"),
